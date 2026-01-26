@@ -13,8 +13,7 @@ dependencies = [
     "django-filter",
     "django-allauth[mfa]",
     "dj-database-url",
-    "django-csp",
-    "stripe",
+    "django-csp",    
     "cloudinary",
     "django-cloudinary-storage",
     "psycopg",
@@ -31,7 +30,9 @@ dev = [
     "django-stubs",
     "djangorestframework-stubs",
     "types-requests",
-    "types-stripe",
+    "pytest",
+    "pytest-django",
+    "factory-boy",
 ]
 
 [tool.ruff]

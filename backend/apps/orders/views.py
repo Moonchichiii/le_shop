@@ -11,7 +11,8 @@ from backend.apps.cart.cart import Cart
 from .models import Order
 from .paypal import capture_order, create_order
 from .services import reserve_stock_and_create_pending_order
-from .signing import sign_order_id, unsign_order_id
+from .signing import sign_order_id, unsign_order_id, unsign_order_track_id
+from .tracking_services import get_or_create_tracking
 
 
 @require_http_methods(["GET", "POST"])
@@ -146,6 +147,9 @@ def paypal_return(request: HttpRequest) -> HttpResponse:
         order.paypal_capture_id = capture_id
         order.save(update_fields=["status", "paypal_capture_id"])
 
+        # Ensure tracking exists immediately after payment capture (idempotent)
+        get_or_create_tracking(order)
+
     # 3. Clear Cart (Success)
     Cart(request).clear()
 
@@ -199,3 +203,54 @@ def orders_list(request):
         .order_by("-created_at")
     )
     return render(request, "orders/orders_list.html", {"orders": orders})
+
+
+@login_required
+def order_track(request, order_id: int) -> HttpResponse:
+    order = get_object_or_404(
+        Order.objects.prefetch_related("items", "items__product"),
+        id=order_id,
+        user=request.user,
+    )
+
+    tracking = get_or_create_tracking(order)
+    if tracking is None:
+        messages.info(request, "Payment not confirmed yet.")
+        return redirect("orders_list")
+
+    events = tracking.events.all()
+
+    return render(
+        request,
+        "orders/order_track.html",
+        {"order": order, "tracking": tracking, "events": events},
+    )
+
+
+def guest_order_track(request, token: str) -> HttpResponse:
+    order_id = unsign_order_track_id(token, max_age_seconds=60 * 60 * 24 * 30)
+    if not order_id:
+        raise Http404("Invalid or expired tracking link.")
+
+    order = get_object_or_404(
+        Order.objects.prefetch_related("items", "items__product"), id=order_id
+    )
+
+    # If the order belongs to a registered user, do not allow token-only access.
+    if order.user_id and (
+        not request.user.is_authenticated or order.user_id != request.user.id
+    ):
+        raise Http404()
+
+    tracking = get_or_create_tracking(order)
+    if tracking is None:
+        # Don't create tracking for unpaid orders; for guests we just 404
+        raise Http404("Tracking not available.")
+
+    events = tracking.events.all()
+
+    return render(
+        request,
+        "orders/order_track.html",
+        {"order": order, "tracking": tracking, "events": events},
+    )
