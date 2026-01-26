@@ -27,12 +27,20 @@ class TestTrackingService:
             order=paid_order, new_status=OrderTracking.FulfillmentStatus.PACKED
         )
         assert len(issues) == 0
+
+        # FIX: Mypy needs this check before accessing .status
+        assert tracking is not None
+
         assert tracking.status == OrderTracking.FulfillmentStatus.PACKED
         assert tracking.packed_at is not None
 
         # Verify Audit Log
         assert tracking.events.count() == 1
         event = tracking.events.first()
+
+        # FIX: Mypy needs this check before accessing .from_status
+        assert event is not None
+
         assert event.from_status == "processing"
         assert event.to_status == "packed"
 

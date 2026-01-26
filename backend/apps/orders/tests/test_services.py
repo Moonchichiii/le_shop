@@ -65,8 +65,15 @@ class TestOrderServices:
             cart_with_item, email="a@b.com"
         )
 
+        # FIX: Mypy needs to know order is real before accessing .items
+        assert order is not None
+
         assert order.items.count() == 1
         item = order.items.first()
+
+        # FIX: Mypy needs to know item is real before accessing .qty
+        assert item is not None
+
         assert item.qty == 1
         assert item.unit_price == 100.00
         assert item.line_total == 100.00
