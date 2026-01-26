@@ -1,0 +1,13 @@
+{
+  "name": "le-shop",
+  "type": "module",
+  "scripts": {
+    "dev": "tailwindcss -i ./frontend/src/app.css -o ./backend/static/css/output.css --watch",
+    "build": "tailwindcss -i ./frontend/src/app.css -o ./backend/static/css/output.css --minify"
+  },
+  "dependencies": {
+    "@tailwindcss/cli": "^4.0.0-alpha.16",
+    "tailwindcss": "^4.0.0-alpha.16",
+    "tailwindcss-animate": "^1.0.7"
+  }
+}

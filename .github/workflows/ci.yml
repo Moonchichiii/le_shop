@@ -1,0 +1,50 @@
+name: The Enforcer (CI)
+# Last Updated: 2026-01-23 21:21:43
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  quality-check:
+    name:  Quality Gate (Python 3.13 + Bun)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: Setup Python 3.13
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+
+      - name: Install backend dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -e .[dev]
+
+      # FIX: Run bun install in root
+      - name: Install frontend dependencies
+        run: bun install
+
+      - name: Ruff check
+        run: ruff check .
+
+      - name: MyPy check
+        run: mypy .
+
+      - name: Check migrations
+        run: python manage.py makemigrations --check --dry-run
+
+      # FIX: Run build in root
+      - name: Build Tailwind v4
+        run: bun run build

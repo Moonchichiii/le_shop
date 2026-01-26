@@ -1,0 +1,38 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>{% block title %}Arti Corner | Handmade{% endblock %}</title>
+  <meta name="description" content="{% block meta_description %}Unique Handmade Ceramics & Furniture{% endblock %}">
+
+  {% block preload %}
+    <link rel="preload" href="{% static 'fonts/Boska-Variable.woff2' %}" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="{% static 'fonts/Satoshi-Variable.woff2' %}" as="font" type="font/woff2" crossorigin>
+  {% endblock %}
+
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+  <link rel="icon" href="{% static 'favicon.ico' %}">
+
+  {% block head_extra %}{% endblock %}
+</head>
+
+<body class="bg-arti-bg text-arti-dark font-sans antialiased selection:bg-[#2A2A2A] selection:text-white pb-24 md:pb-0">
+
+  {% include "includes/header.html" %}
+
+  <main class="min-h-screen relative w-full overflow-hidden pt-24 md:pt-28">
+    {% block content %}{% endblock %}
+  </main>
+
+  {% include "includes/mobile_nav.html" %}
+  {% include "includes/search_modal.html" %}
+  {% include "includes/footer.html" %}
+  {# Scripts at the bottom = better perceived performance #}
+  <script defer src="https://unpkg.com/htmx.org@1.9.10"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+  {% block scripts %}{% endblock %}
+</body>
+</html>

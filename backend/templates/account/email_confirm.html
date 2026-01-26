@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}Confirm email | Arti Corner{% endblock %}
+
+{% block content %}
+<div class="mx-auto max-w-md px-4 sm:px-6 py-12">
+  <p class="text-xs font-bold tracking-[0.22em] text-arti-dark/60 uppercase">Account</p>
+  <h1 class="headline-serif mt-3 text-4xl">Confirm email</h1>
+
+  <div class="mt-8 rounded-3xl border border-arti-dark/10 bg-white p-6 sm:p-7">
+    {% if confirmation %}
+      <p class="text-sm opacity-70">
+        Please confirm that <span class="font-medium">{{ confirmation.email_address.email }}</span> belongs to you.
+      </p>
+
+      <form method="post" action="{% url 'account_confirm_email' confirmation.key %}" class="mt-6">
+        {% csrf_token %}
+        <button class="btn-primary w-full">{% trans "Confirm email" %}</button>
+      </form>
+    {% else %}
+      <p class="text-sm text-red-700">
+        This email confirmation link is invalid or has expired.
+      </p>
+
+      <div class="mt-6">
+        <a href="{% url 'account_login' %}" class="btn-primary w-full text-center inline-flex justify-center">
+          Back to sign in
+        </a>
+      </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

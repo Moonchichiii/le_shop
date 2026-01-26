@@ -1,0 +1,47 @@
+@import "tailwindcss";
+@plugin "tailwindcss-animate";
+
+@layer base {
+  @font-face {
+    font-family: "Boska";
+    src: url("/static/fonts/Boska-Variable.woff2") format("woff2");
+    font-weight: 200 900;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: "Satoshi";
+    src: url("/static/fonts/Satoshi-Variable.woff2") format("woff2");
+    font-weight: 300 900;
+    font-display: swap;
+  }
+}
+
+@theme {
+  --font-serif: "Boska", serif;
+  --font-sans: "Satoshi", sans-serif;
+
+  --color-arti-bg: #fdfcf8;
+  --color-arti-dark: #1a1a1a;
+}
+
+@layer components {
+  .nav-glass {
+    @apply bg-white/80 backdrop-blur-md border-t border-white/20 shadow-2xl shadow-black/5;
+  }
+
+  .btn-primary {
+    @apply flex items-center justify-center gap-2 px-8 py-4 bg-arti-dark text-white rounded-full font-medium tracking-wide transition-all duration-300 hover:scale-[1.02] active:scale-95 hover:shadow-lg hover:shadow-arti-dark/20;
+  }
+
+  .btn-outline {
+    @apply flex items-center justify-center gap-2 px-8 py-4 border border-arti-dark/20 text-arti-dark rounded-full font-medium tracking-wide transition-all duration-300 hover:bg-arti-dark/5 hover:border-arti-dark;
+  }
+
+  .headline-serif {
+    font-family: var(--font-serif);
+    font-variation-settings: "wght" 600;
+  }
+}
+
+[x-cloak] { display: none !important; }

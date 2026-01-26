@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}Sign in | Arti Corner{% endblock %}
+
+{% block content %}
+<div class="mx-auto max-w-md px-4 sm:px-6 py-12">
+  <p class="text-xs font-bold tracking-[0.22em] text-arti-dark/60 uppercase">Account</p>
+  <h1 class="headline-serif mt-3 text-4xl">Sign in</h1>
+
+  <div class="mt-8 rounded-3xl border border-arti-dark/10 bg-white p-6 sm:p-7">
+    <form method="post" action="{% url 'account_login' %}" class="space-y-4">
+      {% csrf_token %}
+      {{ form.non_field_errors }}
+
+      <div>
+        <label class="text-sm opacity-70" for="id_login">Email</label>
+        {{ form.login }}
+      </div>
+
+      <div>
+        <label class="text-sm opacity-70" for="id_password">Password</label>
+        {{ form.password }}
+      </div>
+
+      <button class="btn-primary w-full">Sign in</button>
+
+      <div class="flex items-center justify-between text-sm">
+        <a class="underline opacity-70 hover:opacity-100" href="{% url 'account_reset_password' %}">
+          Forgot password?
+        </a>
+        <a class="underline opacity-70 hover:opacity-100" href="{% url 'account_signup' %}">
+          Create account
+        </a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

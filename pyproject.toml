@@ -1,0 +1,60 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "le-shop"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = [
+    "django>=5.1",
+    "python-decouple",
+    "djangorestframework",    
+    "django-filter",
+    "django-allauth[mfa]",
+    "dj-database-url",
+    "django-csp",
+    "stripe",
+    "cloudinary",
+    "django-cloudinary-storage",
+    "psycopg",
+    "gunicorn",
+    "django-unfold",
+    "whitenoise",
+
+]
+
+[project.optional-dependencies]
+dev = [
+    "ruff",
+    "mypy",
+    "django-stubs",
+    "djangorestframework-stubs",
+    "types-requests",
+    "types-stripe",
+]
+
+[tool.ruff]
+exclude = [".git", ".venv", "migrations", "node_modules", "backend/static"]
+line-length = 88
+target-version = "py313"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "UP", "B", "SIM"]
+ignore = []
+
+[tool.mypy]
+python_version = "3.13"
+check_untyped_defs = true
+disallow_untyped_defs = false
+ignore_missing_imports = true
+plugins = ["mypy_django_plugin.main"]
+
+[tool.django-stubs]
+django_settings_module = "backend.config.settings"
+
+[tool.setuptools]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["backend*"]

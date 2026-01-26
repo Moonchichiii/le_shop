@@ -1,0 +1,63 @@
+# --- Python & Django ---
+__pycache__/
+*.py[cod]
+*.class
+
+venv/
+env/
+.venv/
+
+db.sqlite3*
+*.log
+local_settings.py
+
+# Build output only (source lives in frontend/src)
+backend/staticfiles/
+
+# Local uploads (Cloudinary used in prod)
+media/
+
+# --- Frontend (Bun & Tailwind) ---
+node_modules/
+.bun/
+#backend/static/css/output.css
+
+# --- Environment & secrets (never commit) ---
+.env
+.env.*
+!.env.example
+
+# --- QA / Tooling ---
+.ruff_cache/
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+.pytest_cache/
+.coverage
+htmlcov/
+coverage.xml
+
+# --- Editors / IDEs ---
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+.cursor/
+.idea/
+
+# --- OS files ---
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+
+# Python build / packaging artifacts
+*.egg-info/
+dist/
+build/
+
+.env

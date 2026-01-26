@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block title %}Shop | Arti Corner{% endblock %}
+
+{% block content %}
+<div class="mx-auto max-w-7xl px-4 sm:px-6 py-12">
+  <div class="flex items-end justify-between gap-6">
+    <div>
+      <p class="text-xs font-bold tracking-[0.22em] text-arti-dark/60 uppercase">Shop</p>
+      <h1 class="headline-serif mt-3 text-4xl md:text-5xl">All Products</h1>
+    </div>
+
+    <form method="get" class="hidden md:flex items-center gap-2">
+      <input
+        type="text"
+        name="q"
+        value="{{ query }}"
+        placeholder="Search..."
+        class="rounded-full border border-arti-dark/15 bg-white px-4 py-2 text-sm w-64"
+      />
+      {% if active_category %}
+        <input type="hidden" name="category" value="{{ active_category }}">
+      {% endif %}
+      <button class="btn-outline px-5 py-2">Search</button>
+    </form>
+  </div>
+
+  <div class="mt-8 flex flex-wrap gap-2">
+    <a href="{% url 'product_list' %}"
+       class="px-4 py-2 rounded-full text-sm border border-arti-dark/15 hover:bg-arti-dark/5 {% if not active_category %}bg-arti-dark/5{% endif %}">
+      All
+    </a>
+    {% for c in categories %}
+      <a href="{% url 'product_list' %}?category={{ c.slug }}"
+         class="px-4 py-2 rounded-full text-sm border border-arti-dark/15 hover:bg-arti-dark/5 {% if active_category == c.slug %}bg-arti-dark/5{% endif %}">
+        {{ c.name }}
+      </a>
+    {% endfor %}
+  </div>
+
+  <div class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+    {% for p in products %}
+      <a href="{{ p.get_absolute_url }}" class="group rounded-3xl border border-arti-dark/10 bg-white overflow-hidden hover:shadow-lg transition">
+        <div class="relative h-64 bg-arti-dark/5">
+          <img
+  src="{{ p.image_url_400 }}"
+  srcset="{{ p.image_url_400 }} 400w, {{ p.image_url_800 }} 800w"
+  sizes="(min-width: 1024px) 360px, (min-width: 640px) 50vw, 100vw"
+  alt="{{ p.name }}"
+  class="absolute inset-0 h-full w-full object-cover group-hover:scale-[1.02] transition"
+  loading="lazy"
+  decoding="async"
+/>
+
+
+        </div>
+        <div class="p-5">
+          <div class="flex items-start justify-between gap-4">
+            <div>
+              <p class="font-medium">{{ p.name }}</p>
+              <p class="text-xs uppercase tracking-widest opacity-60">{{ p.category.name }}</p>
+            </div>
+            <p class="font-medium">€{{ p.price }}</p>
+          </div>
+
+          <div class="mt-4 text-sm opacity-70 line-clamp-2">
+            {{ p.description }}
+          </div>
+
+          <div class="mt-6 flex items-center justify-between">
+            {% if p.is_in_stock %}
+              <span class="text-xs uppercase tracking-widest opacity-60">In stock</span>
+            {% else %}
+              <span class="text-xs uppercase tracking-widest text-red-600">Sold out</span>
+            {% endif %}
+            <span class="text-sm underline opacity-70 group-hover:opacity-100">View</span>
+          </div>
+        </div>
+      </a>
+    {% empty %}
+      <div class="rounded-3xl border border-arti-dark/10 bg-white p-8">
+        <p class="opacity-70">No products yet.</p>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}
