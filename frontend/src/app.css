@@ -1,46 +1,187 @@
 @import "tailwindcss";
 @plugin "tailwindcss-animate";
 
-@layer base {
-  @font-face {
-    font-family: "Boska";
-    src: url("/static/fonts/Boska-Variable.woff2") format("woff2");
-    font-weight: 200 900;
-    font-display: swap;
+@theme {
+  /* ART LEPTIS PALETTE */
+  --color-arti-bg: #FDFBF7;
+  --color-arti-ink: #121212;
+  --color-arti-ink-60: rgba(18,18,18, 0.6);
+  --color-arti-surface: #FFFFFF;
+  --color-arti-mist: #F4F2ED;
+  --color-arti-accent: #FF4F12;
+  --color-arti-accent-hover: #E03E05;
+
+  /* TYPOGRAPHY */
+  --font-serif: "Boska", ui-serif, Georgia, serif;
+  --font-sans: "Satoshi", ui-sans-serif, system-ui, sans-serif;
+
+  /* ANIMATIONS */
+  @keyframes slide-up-fade {
+   0% { transform: translateY(18px); opacity: 0; }
+   100% { transform: translateY(0); opacity: 1; }
   }
 
-  @font-face {
-    font-family: "Satoshi";
-    src: url("/static/fonts/Satoshi-Variable.woff2") format("woff2");
-    font-weight: 300 900;
-    font-display: swap;
+  @keyframes scale-reveal {
+   0% { transform: scale(1.03); opacity: 0; }
+   100% { transform: scale(1); opacity: 1; }
+  }
+
+  @keyframes fade-up {
+    0% { opacity: 0; transform: translateY(15px); }
+    100% { opacity: 1; transform: translateY(0); }
   }
 }
 
-@theme {
-  --font-serif: "Boska", serif;
-  --font-sans: "Satoshi", sans-serif;
+@layer base {
+  @font-face {
+   font-family: "Boska";
+   src: url("/static/fonts/Boska-Variable.woff2") format("woff2");
+   font-weight: 200 900;
+   font-display: swap;
+  }
 
-  --color-arti-bg: #fdfcf8;
-  --color-arti-dark: #1a1a1a;
+  @font-face {
+   font-family: "Satoshi";
+   src: url("/static/fonts/Satoshi-Variable.woff2") format("woff2");
+   font-weight: 300 900;
+   font-display: swap;
+  }
+
+  html { -webkit-tap-highlight-color: transparent; }
+
+  body {
+   background: var(--color-arti-bg);
+   color: var(--color-arti-ink);
+   font-family: var(--font-sans);
+  }
+
+  :where(a, button, input, select, textarea, [role="button"], [tabindex]:not([tabindex="-1"])):focus-visible {
+   outline: 2px solid var(--color-arti-accent);
+   outline-offset: 3px;
+   border-radius: 9999px;
+  }
 }
 
 @layer components {
+  .headline-serif {
+   font-family: var(--font-serif);
+   font-weight: 600;
+   letter-spacing: -0.02em;
+   line-height: 1.1;
+   color: var(--color-arti-ink);
+  }
+
   .nav-glass {
-    @apply bg-white/80 backdrop-blur-md border-t border-white/20 shadow-2xl shadow-black/5;
+   background: rgba(253, 251, 247, 0.95);
+   backdrop-filter: blur(12px);
+   border-bottom: 1px solid rgba(18, 18, 18, 0.05);
   }
 
   .btn-primary {
-    @apply flex items-center justify-center gap-2 px-8 py-4 bg-arti-dark text-white rounded-full font-medium tracking-wide transition-all duration-300 hover:scale-[1.02] active:scale-95 hover:shadow-lg hover:shadow-arti-dark/20;
+   @apply inline-flex items-center justify-center gap-2 rounded-full
+        px-8 py-3.5 text-sm font-bold tracking-wide
+        bg-arti-accent text-white
+        hover:bg-arti-accent-hover hover:-translate-y-0.5 hover:shadow-lg
+        active:translate-y-0 active:scale-95
+        disabled:opacity-50 disabled:cursor-not-allowed;
+   transition: transform 300ms, background-color 300ms, box-shadow 300ms;
+  }
+  .btn-primary:focus-visible {
+   outline: 3px solid color-mix(in srgb, var(--color-arti-accent) 70%, white);
+   outline-offset: 3px;
   }
 
   .btn-outline {
-    @apply flex items-center justify-center gap-2 px-8 py-4 border border-arti-dark/20 text-arti-dark rounded-full font-medium tracking-wide transition-all duration-300 hover:bg-arti-dark/5 hover:border-arti-dark;
+   @apply inline-flex items-center justify-center gap-2 rounded-full
+        border border-arti-ink/20 bg-transparent text-arti-ink
+        px-8 py-3.5 text-sm font-bold
+        transition-all duration-300
+        hover:border-arti-accent hover:text-arti-accent hover:bg-white
+        active:scale-95;
   }
 
-  .headline-serif {
-    font-family: var(--font-serif);
-    font-variation-settings: "wght" 600;
+  .card-hover {
+   @apply transition-all duration-300 ease-out;
+  }
+  @media (hover:hover) {
+   .card-hover:hover { transform: translateY(-4px); }
+  }
+
+  .tap-44 {
+   min-width: 44px;
+   min-height: 44px;
+  }
+
+  .surface {
+   @apply bg-white ring-1 ring-black/5;
+  }
+
+  header .flex.items-center.gap-3 > button[aria-label],
+  header .flex.items-center.gap-3 > a[aria-label],
+  header .flex.items-center.gap-3 > div > button[aria-label],
+  header .flex.items-center.gap-4 > button[aria-label],
+  header .flex.items-center.gap-4 > a[aria-label],
+  header .flex.items-center.gap-4 > div > button[aria-label] {
+   min-width: 44px;
+   min-height: 44px;
+   padding: 10px;
+   border-radius: 9999px;
+   display: inline-flex;
+   align-items: center;
+   justify-content: center;
+   transition: background-color 200ms;
+  }
+
+  header .flex.items-center.gap-3 > button[aria-label]:hover,
+  header .flex.items-center.gap-3 > a[aria-label]:hover,
+  header .flex.items-center.gap-3 > div > button[aria-label]:hover,
+  header .flex.items-center.gap-4 > button[aria-label]:hover,
+  header .flex.items-center.gap-4 > a[aria-label]:hover,
+  header .flex.items-center.gap-4 > div > button[aria-label]:hover {
+   background: rgba(18, 18, 18, 0.05);
+  }
+
+  header .flex.items-center.gap-3 > button[aria-label]:focus-visible,
+  header .flex.items-center.gap-3 > a[aria-label]:focus-visible,
+  header .flex.items-center.gap-3 > div > button[aria-label]:focus-visible,
+  header .flex.items-center.gap-4 > button[aria-label]:focus-visible,
+  header .flex.items-center.gap-4 > a[aria-label]:focus-visible,
+  header .flex.items-center.gap-4 > div > button[aria-label]:focus-visible {
+   outline: 2px solid var(--color-arti-accent);
+   outline-offset: 3px;
+  }
+
+  header svg {
+   display: block;
+  }
+
+  header a[aria-label="Cart"] > span {
+   box-shadow: 0 0 0 2px #FDFBF7;
+  }
+}
+
+@media (min-width: 768px) {
+  .animate-entrance {
+   animation: slide-up-fade 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+  .animate-image {
+   animation: scale-reveal 1.1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+  .delay-100 { animation-delay: 100ms; }
+  .delay-200 { animation-delay: 200ms; }
+  .delay-300 { animation-delay: 300ms; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { 
+   animation-duration: 0.001ms !important; 
+   animation-iteration-count: 1 !important; 
+   transition-duration: 0.001ms !important; 
+   scroll-behavior: auto !important; 
+  }
+  
+  header [aria-controls="mobile-menu"] span {
+    transition-duration: 0.001ms !important;
   }
 }
 

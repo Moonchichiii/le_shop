@@ -1,121 +1,62 @@
-<section class="relative">
-  <div class="mx-auto max-w-7xl px-4 sm:px-6">
-    <div class="grid items-center gap-10 pt-10 md:grid-cols-2 md:pt-14">
+<section class="relative pt-12 md:pt-24 pb-20">
+  <div class="mx-auto max-w-7xl px-6">
+    <div class="grid items-center gap-12 lg:grid-cols-2">
 
-      <!-- Copy -->
-      <div class="order-2 md:order-1">
-        <p class="text-xs font-bold tracking-[0.22em] text-arti-dark/60 uppercase">
-          Arti Corner
+      <!-- Text -->
+      <div class="order-2 lg:order-1">
+        <p class="text-xs font-bold tracking-[0.25em] text-arti-accent uppercase mb-6 animate-[fade-up_0.6s_ease-out]">
+          Inspired by Leptis Minor
         </p>
 
-        <h1 class="headline-serif mt-4 text-5xl leading-[0.95] md:text-7xl">
-          <span class="block">Unique</span>
-          <span class="block italic">Handmade</span>
+        <h1 class="headline-serif text-6xl md:text-7xl lg:text-8xl leading-[0.95] mb-8 animate-[fade-up_0.8s_ease-out]">
+          Sculpted by <br />
+          <span class="italic text-arti-ink-60">Time & Sea.</span>
         </h1>
 
-        <p class="mt-5 max-w-md text-sm leading-relaxed text-arti-dark/70">
-          Each piece tells a story. Handcrafted with decades of mastery, shaped by nature, finished with soul.
+        <p class="text-lg text-arti-ink-60 max-w-md leading-relaxed mb-10 animate-[fade-up_1s_ease-out]">
+          Unique lamps and objects crafted from driftwood and stone. A tribute to the ancient craftsmanship of the Tunisian coast.
         </p>
 
-        <div class="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
-          <a href="#" class="btn-primary w-full sm:w-auto">
-            Shop Now
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-            </svg>
+        <div class="flex flex-col sm:flex-row gap-4 animate-[fade-up_1.2s_ease-out]">
+          <a href="{% url 'product_list' %}" class="btn-primary w-full sm:w-auto">
+            Explore Collection
           </a>
-
-          <a href="#" class="btn-outline w-full sm:w-auto">
-            Our Story
+          
+          <!-- FIXED LINK: Points to the ID #story on the same page -->
+          <a href="#story" class="btn-outline w-full sm:w-auto">
+            Discover the History
           </a>
-        </div>
-
-        <div class="mt-10 hidden md:flex items-center gap-3 opacity-50">
-          <div class="h-px w-10 bg-arti-dark"></div>
-          <span class="text-[10px] uppercase tracking-widest">Scroll</span>
         </div>
       </div>
 
       <!-- Visual -->
-      <div class="order-1 md:order-2">
-        <div class="grid grid-cols-2 gap-3">
-
-          <!-- Big primary image -->
-          <div class="col-span-2 overflow-hidden rounded-3xl bg-arti-dark/5">
-            <div class="relative h-56 sm:h-64 md:h-72">
-              <img
-                src="https://images.unsplash.com/photo-1578749556935-ef88814b29c3?auto=format&fit=crop&w=1600"
-                alt="Featured handcrafted pieces"
-                class="absolute inset-0 h-full w-full object-cover"
-                fetchpriority="high"
-                decoding="async"
-              />
-              <div class="absolute inset-0 bg-linear-to-t from-black/35 to-transparent"></div>
-            </div>
-          </div>
-
-          <!-- Supporting images -->
-          <div class="overflow-hidden rounded-2xl bg-arti-dark/5">
-            <div class="relative h-28 sm:h-32 md:h-36">
-              <img
-                src="https://images.unsplash.com/photo-1615486511484-92e172cc4fe0?auto=format&fit=crop&w=800"
-                alt="Ceramic vases"
-                class="absolute inset-0 h-full w-full object-cover"
-                loading="lazy"
-                decoding="async"
-              />
-            </div>
-          </div>
-
-          <div class="overflow-hidden rounded-2xl bg-arti-dark/5">
-            <div class="relative h-28 sm:h-32 md:h-36">
-              <img
-                src="https://images.unsplash.com/photo-1610701596007-11502861dcfa?auto=format&fit=crop&w=800"
-                alt="Craft details"
-                class="absolute inset-0 h-full w-full object-cover"
-                loading="lazy"
-                decoding="async"
-              />
-            </div>
-          </div>
-
-        </div>
-      </div>
-
-    </div>
-
-    <!-- Featured Collection card (optional, below hero) -->
-    <div class="mt-12 pb-24">
-      <div class="group relative overflow-hidden rounded-3xl">
-        <div class="relative h-[360px] md:h-[420px]">
+      <div class="order-1 lg:order-2">
+        <div class="relative aspect-[4/5] w-full overflow-hidden rounded-[3rem] bg-arti-mist shadow-2xl shadow-arti-ink/5">
           <img
-            src="https://images.unsplash.com/photo-1503602642458-232111445657?auto=format&fit=crop&w=1600"
-            class="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-[1.03]"
-            alt="Organic Forms collection"
-            loading="lazy"
-            decoding="async"
-          />
-          <div class="absolute inset-0 bg-linear-to-t from-black/65 to-transparent"></div>
-        </div>
+  src="https://images.unsplash.com/photo-1595156327660-31627440367a?auto=format&fit=crop&w=900&q=80"
+  srcset="
+    https://images.unsplash.com/photo-1595156327660-31627440367a?auto=format&fit=crop&w=600&q=80 600w,
+    https://images.unsplash.com/photo-1595156327660-31627440367a?auto=format&fit=crop&w=900&q=80 900w,
+    https://images.unsplash.com/photo-1595156327660-31627440367a?auto=format&fit=crop&w=1200&q=80 1200w,
+    https://images.unsplash.com/photo-1595156327660-31627440367a?auto=format&fit=crop&w=1600&q=80 1600w
+  "
+  sizes="(min-width: 1024px) 560px, 100vw"
+  width="1200"
+  height="1500"
+  alt="Driftwood sculpture in light"
+  class="absolute inset-0 h-full w-full object-cover object-center transition duration-1000 hover:scale-105"
+  fetchpriority="high"
+  decoding="async"
+/>
+<div class="absolute inset-0 bg-gradient-to-tr from-black/20 via-black/0 to-white/10" aria-hidden="true"></div>
 
-        <div class="absolute bottom-8 left-8 right-8 text-white md:left-10 md:right-auto md:max-w-md">
-          <p class="text-xs font-bold tracking-widest opacity-80">THE COLLECTION</p>
-          <h2 class="mt-2 font-serif text-4xl">Organic Forms</h2>
-
-          <a href="#"
-             class="mt-4 inline-flex items-center gap-2 text-sm font-medium hover:underline">
-            Explore Collection
-            <span class="rounded-full bg-white/20 p-1">
-              <svg class="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-              </svg>
-            </span>
-          </a>
+          <!-- Badge -->
+          <div class="absolute bottom-6 left-6 bg-white/90 backdrop-blur px-5 py-2 rounded-full text-xs font-bold uppercase tracking-widest shadow-sm">
+            Handcrafted One-of-a-kind
+          </div>
         </div>
       </div>
-    </div>
 
+    </div>
   </div>
 </section>

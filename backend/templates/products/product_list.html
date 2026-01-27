@@ -4,10 +4,12 @@
 
 {% block content %}
 <div class="mx-auto max-w-7xl px-4 sm:px-6 py-12">
-  <div class="flex items-end justify-between gap-6">
+  
+  <!-- Header & Search Logic Intact -->
+  <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
     <div>
-      <p class="text-xs font-bold tracking-[0.22em] text-arti-dark/60 uppercase">Shop</p>
-      <h1 class="headline-serif mt-3 text-4xl md:text-5xl">All Products</h1>
+      <p class="text-xs font-bold tracking-[0.22em] text-arti-accent uppercase">Shop</p>
+      <h1 class="headline-serif mt-3 text-4xl md:text-6xl">Curated Objects</h1>
     </div>
 
     <form method="get" class="hidden md:flex items-center gap-2">
@@ -16,70 +18,92 @@
         name="q"
         value="{{ query }}"
         placeholder="Search..."
-        class="rounded-full border border-arti-dark/15 bg-white px-4 py-2 text-sm w-64"
+        class="rounded-full border border-arti-dark/10 bg-white px-5 py-2.5 text-sm w-64 focus:border-arti-accent focus:ring-1 focus:ring-arti-accent outline-none transition-colors"
       />
       {% if active_category %}
         <input type="hidden" name="category" value="{{ active_category }}">
       {% endif %}
-      <button class="btn-outline px-5 py-2">Search</button>
+      <button class="btn-outline px-6 py-2.5">Search</button>
     </form>
   </div>
 
+  <!-- Category Filters Logic Intact -->
   <div class="mt-8 flex flex-wrap gap-2">
     <a href="{% url 'product_list' %}"
-       class="px-4 py-2 rounded-full text-sm border border-arti-dark/15 hover:bg-arti-dark/5 {% if not active_category %}bg-arti-dark/5{% endif %}">
+       class="px-5 py-2 rounded-full text-sm font-medium border transition-colors duration-300 {% if not active_category %}bg-arti-dark text-white border-arti-dark{% else %}bg-transparent text-arti-dark border-arti-dark/15 hover:border-arti-accent hover:text-arti-accent{% endif %}">
       All
     </a>
     {% for c in categories %}
       <a href="{% url 'product_list' %}?category={{ c.slug }}"
-         class="px-4 py-2 rounded-full text-sm border border-arti-dark/15 hover:bg-arti-dark/5 {% if active_category == c.slug %}bg-arti-dark/5{% endif %}">
+         class="px-5 py-2 rounded-full text-sm font-medium border transition-colors duration-300 {% if active_category == c.slug %}bg-arti-dark text-white border-arti-dark{% else %}bg-transparent text-arti-dark border-arti-dark/15 hover:border-arti-accent hover:text-arti-accent{% endif %}">
         {{ c.name }}
       </a>
     {% endfor %}
   </div>
 
-  <div class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+  <!-- Product Grid -->
+  <div class="mt-12 grid gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
     {% for p in products %}
-      <a href="{{ p.get_absolute_url }}" class="group rounded-3xl border border-arti-dark/10 bg-white overflow-hidden hover:shadow-lg transition">
-        <div class="relative h-64 bg-arti-dark/5">
-          <img
-  src="{{ p.image_url_400 }}"
-  srcset="{{ p.image_url_400 }} 400w, {{ p.image_url_800 }} 800w"
-  sizes="(min-width: 1024px) 360px, (min-width: 640px) 50vw, 100vw"
-  alt="{{ p.name }}"
-  class="absolute inset-0 h-full w-full object-cover group-hover:scale-[1.02] transition"
-  loading="lazy"
-  decoding="async"
-/>
+      <!-- Card Container -->
+      <div class="group flex flex-col">
+        
+        <!-- Image Area + Quick Add Button -->
+        <div class="relative aspect-[3/4] w-full overflow-hidden rounded-[2rem] bg-arti-gray">
+            <a href="{{ p.get_absolute_url }}">
+                <img
+                  src="{{ p.image_url_400 }}"
+                  srcset="{{ p.image_url_400 }} 400w, {{ p.image_url_800 }} 800w"
+                  sizes="(min-width: 1024px) 360px, (min-width: 640px) 50vw, 100vw"
+                  alt="{{ p.name }}"
+                  class="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                  loading="lazy"
+                  decoding="async"
+                />
+            </a>
 
-
+            <!-- QUICK ADD BUTTON (New Feature) -->
+            <!-- Logic: Form posting to cart_add with hidden quantity of 1 -->
+            {% if p.is_in_stock %}
+              <div class="absolute bottom-4 right-4 translate-y-4 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 z-10">
+                <form method="post" action="{% url 'cart_add' p.id %}">
+                  {% csrf_token %}
+                  <input type="hidden" name="qty" value="1">
+                  <button type="submit" 
+                          class="flex h-12 w-12 items-center justify-center rounded-full bg-arti-accent text-white shadow-lg hover:bg-arti-accent-hover hover:scale-110 transition-all focus:outline-none focus:ring-2 focus:ring-white"
+                          title="Quick add to bag">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="12" y1="5" x2="12" y2="19"></line>
+                      <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                  </button>
+                </form>
+              </div>
+            {% else %}
+               <div class="absolute top-4 left-4">
+                 <span class="px-3 py-1 bg-white/90 backdrop-blur text-[10px] font-bold uppercase tracking-widest text-arti-dark rounded-full">
+                   Sold Out
+                 </span>
+               </div>
+            {% endif %}
         </div>
-        <div class="p-5">
+
+        <!-- Info Area -->
+        <div class="mt-5">
           <div class="flex items-start justify-between gap-4">
             <div>
-              <p class="font-medium">{{ p.name }}</p>
-              <p class="text-xs uppercase tracking-widest opacity-60">{{ p.category.name }}</p>
+              <a href="{{ p.get_absolute_url }}">
+                <h3 class="font-serif text-2xl text-arti-dark group-hover:text-arti-accent transition-colors">{{ p.name }}</h3>
+              </a>
+              <p class="text-xs font-bold uppercase tracking-widest text-arti-dark/50 mt-1">{{ p.category.name }}</p>
             </div>
-            <p class="font-medium">€{{ p.price }}</p>
-          </div>
-
-          <div class="mt-4 text-sm opacity-70 line-clamp-2">
-            {{ p.description }}
-          </div>
-
-          <div class="mt-6 flex items-center justify-between">
-            {% if p.is_in_stock %}
-              <span class="text-xs uppercase tracking-widest opacity-60">In stock</span>
-            {% else %}
-              <span class="text-xs uppercase tracking-widest text-red-600">Sold out</span>
-            {% endif %}
-            <span class="text-sm underline opacity-70 group-hover:opacity-100">View</span>
+            <p class="font-medium text-lg text-arti-dark">€{{ p.price }}</p>
           </div>
         </div>
-      </a>
+      </div>
     {% empty %}
-      <div class="rounded-3xl border border-arti-dark/10 bg-white p-8">
-        <p class="opacity-70">No products yet.</p>
+      <div class="col-span-full rounded-3xl border border-dashed border-arti-dark/10 bg-white p-12 text-center">
+        <p class="text-arti-dark/60 text-lg">No products found matching your criteria.</p>
+        <a href="{% url 'product_list' %}" class="btn-outline mt-4">Clear filters</a>
       </div>
     {% endfor %}
   </div>

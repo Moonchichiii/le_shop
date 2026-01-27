@@ -4,6 +4,7 @@ from django.urls import include, path
 from backend.apps.core.views import home
 
 urlpatterns = [
+    path("i18n/", include("django.conf.urls.i18n")),
     path("admin/", admin.site.urls),
     # Root -> Core Logic
     path("", home, name="home"),

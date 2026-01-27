@@ -41,7 +41,12 @@ class ProductAdmin(ModelAdmin):
     ]
     list_editable = ["price", "stock", "is_active", "is_featured", "is_new"]
     list_filter = ["category", "is_active", "is_featured", "is_new", "created_at"]
-    search_fields = ["name", "description", "category__name"]
+    search_fields = [
+        "name",
+        "description",
+        "category__name",
+        "image_alt",
+    ]  # Added search by alt text
     prepopulated_fields = {"slug": ("name",)}
     list_per_page = 25
     ordering = ["category__name", "-created_at"]
@@ -77,7 +82,7 @@ class ProductAdmin(ModelAdmin):
         (
             "Media & Marketing",
             {
-                "fields": ("image", ("is_featured", "is_new")),
+                "fields": ("image", "image_alt", ("is_featured", "is_new")),
             },
         ),
     )

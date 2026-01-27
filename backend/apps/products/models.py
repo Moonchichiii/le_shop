@@ -28,6 +28,15 @@ class Product(models.Model):
 
     image = CloudinaryField("image", folder="le_shop/products")
 
+    # NEW: Mandatory Accessibility Field
+    image_alt = models.CharField(
+        max_length=200,
+        help_text=(
+            "Brief description of the image for screen readers "
+            "(e.g., 'Blue ceramic vase on oak table')."
+        ),
+    )
+
     description: models.TextField = models.TextField()
     price: models.DecimalField = models.DecimalField(
         max_digits=10, decimal_places=2, default=Decimal("0.00")

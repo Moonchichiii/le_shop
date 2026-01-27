@@ -33,6 +33,8 @@ INSTALLED_APPS = [
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
+    "allauth.socialaccount.providers.google",
+    "allauth.socialaccount.providers.facebook",
     "cloudinary",
     "csp",
     "backend.apps.core",
@@ -49,6 +51,7 @@ MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -57,6 +60,16 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "csp.middleware.CSPMiddleware",
 ]
+
+LANGUAGE_CODE = "en"
+
+USE_I18N = True
+
+LANGUAGES = [
+    ("en", "English"),
+    ("fr", "Français"),
+]
+
 
 # URLs / Templates
 ROOT_URLCONF = "backend.config.urls"
@@ -148,6 +161,34 @@ SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 CSRF_TRUSTED_ORIGINS = ["https://your-app.onrender.com"]
 
 
+SOCIALACCOUNT_PROVIDERS = {
+    "google": {
+        "SCOPE": ["profile", "email"],
+        "AUTH_PARAMS": {"access_type": "online"},
+    },
+    "facebook": {
+        "METHOD": "oauth2",
+        "SCOPE": ["email", "public_profile"],
+        "FIELDS": [
+            "id",
+            "email",
+            "name",
+            "first_name",
+            "last_name",
+            "verified",
+            "locale",
+            "timezone",
+            "link",
+            "gender",
+            "updated_time",
+        ],
+        "EXCHANGE_TOKEN": True,
+        "VERIFIED_EMAIL": False,
+        "VERSION": "v17.0",
+    },
+}
+
+
 # Cloudinary / Media
 CLOUDINARY_CLOUD_NAME = config("CLOUDINARY_CLOUD_NAME", default="").strip()
 CLOUDINARY_API_KEY = config("CLOUDINARY_API_KEY", default="").strip()
@@ -208,7 +249,7 @@ CONTENT_SECURITY_POLICY = {
             "'self'",
             "data:",
             "https://res.cloudinary.com",
-            "https://images.unsplash.com",
+            "https://images.unsplash*",
         ],
         "font-src": ["'self'", "data:"],
     }
