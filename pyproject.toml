@@ -19,6 +19,7 @@ dependencies = [
     "psycopg",
     "gunicorn",
     "django-unfold",
+    "PyJWT>=2.8",
     "whitenoise",
 
 ]
