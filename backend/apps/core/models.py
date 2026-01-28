@@ -1,3 +1,4 @@
+import cloudinary.utils
 from cloudinary.models import CloudinaryField
 from django.db import models
 
@@ -32,14 +33,17 @@ class HeroSlide(models.Model):
         if not self.image:
             return ""
 
-        return self.image.build_url(
+        url, options = cloudinary.utils.cloudinary_url(
+            self.image.public_id,
+            format="auto",
+            quality="auto",
             width=1200,
             height=1500,
             crop="fill",
-            quality="auto",
-            format="auto",
             gravity="auto",
+            secure=True,
         )
+        return url
 
 
 class PageSection(models.Model):
@@ -63,29 +67,46 @@ class PageSection(models.Model):
     def get_optimized_url(self, width, height):
         if not self.image:
             return ""
-        return self.image.build_url(
+        url, options = cloudinary.utils.cloudinary_url(
+            self.image.public_id,
+            format="auto",
+            quality="auto",
             width=width,
             height=height,
             crop="fill",
-            quality="auto",
-            format="auto",
             gravity="auto",
+            secure=True,
         )
+        return url
 
     @property
     def history_url(self):
         """Landscape 4:3 ratio for the History/Top section"""
         if not self.image:
             return ""
-        return self.image.build_url(
-            width=1200, height=900, crop="fill", quality="auto", format="auto"
+        url, options = cloudinary.utils.cloudinary_url(
+            self.image.public_id,
+            format="auto",
+            quality="auto",
+            width=1200,
+            height=900,
+            crop="fill",
+            secure=True,
         )
+        return url
 
     @property
     def craft_url(self):
         """Square 1:1 ratio for the Craft/Bottom section"""
         if not self.image:
             return ""
-        return self.image.build_url(
-            width=1200, height=1200, crop="fill", quality="auto", format="auto"
+        url, options = cloudinary.utils.cloudinary_url(
+            self.image.public_id,
+            format="auto",
+            quality="auto",
+            width=1200,
+            height=1200,
+            crop="fill",
+            secure=True,
         )
+        return url
