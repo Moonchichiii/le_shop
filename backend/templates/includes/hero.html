@@ -3,7 +3,7 @@
     <div class="grid items-center gap-12 lg:grid-cols-2">
 
       <!-- Text -->
-      <div class="order-2 lg:order-1">
+      <div>
         <p class="text-xs font-bold tracking-[0.25em] text-arti-accent uppercase mb-6 animate-[fade-up_0.6s_ease-out]">
           Inspired by Leptis Minor
         </p>
@@ -22,7 +22,6 @@
             Explore Collection
           </a>
           
-          <!-- FIXED LINK: Points to the ID #story on the same page -->
           <a href="#story" class="btn-outline w-full sm:w-auto">
             Discover the History
           </a>
@@ -30,30 +29,62 @@
       </div>
 
       <!-- Visual -->
-      <div class="order-1 lg:order-2">
-        <div class="relative aspect-[4/5] w-full overflow-hidden rounded-[3rem] bg-arti-mist shadow-2xl shadow-arti-ink/5">
-          <img
-  src="https://images.unsplash.com/photo-1595156327660-31627440367a?auto=format&fit=crop&w=900&q=80"
-  srcset="
-    https://images.unsplash.com/photo-1595156327660-31627440367a?auto=format&fit=crop&w=600&q=80 600w,
-    https://images.unsplash.com/photo-1595156327660-31627440367a?auto=format&fit=crop&w=900&q=80 900w,
-    https://images.unsplash.com/photo-1595156327660-31627440367a?auto=format&fit=crop&w=1200&q=80 1200w,
-    https://images.unsplash.com/photo-1595156327660-31627440367a?auto=format&fit=crop&w=1600&q=80 1600w
-  "
-  sizes="(min-width: 1024px) 560px, 100vw"
-  width="1200"
-  height="1500"
-  alt="Driftwood sculpture in light"
-  class="absolute inset-0 h-full w-full object-cover object-center transition duration-1000 hover:scale-105"
-  fetchpriority="high"
-  decoding="async"
-/>
-<div class="absolute inset-0 bg-gradient-to-tr from-black/20 via-black/0 to-white/10" aria-hidden="true"></div>
-
-          <!-- Badge -->
-          <div class="absolute bottom-6 left-6 bg-white/90 backdrop-blur px-5 py-2 rounded-full text-xs font-bold uppercase tracking-widest shadow-sm">
-            Handcrafted One-of-a-kind
-          </div>
+      <div>
+        <div 
+          id="hero-carousel" 
+          class="relative w-full 
+                 aspect-square md:aspect-[4/5] 
+                 min-h-[350px] md:min-h-[600px] 
+                 overflow-hidden 
+                 rounded-[2rem] md:rounded-[3rem] 
+                 bg-arti-mist shadow-2xl shadow-arti-ink/5 
+                 cursor-grab active:cursor-grabbing touch-none"
+        >
+          
+          {% if hero_slides %}
+            
+            <!-- 1. SLIDES LOOP -->
+            {% for slide in hero_slides %}
+              <div class="hero-slide absolute inset-0 h-full w-full bg-arti-mist
+                          {% if forloop.first %}z-10 opacity-100 visible{% else %}opacity-0 invisible{% endif %}">
+                
+                <img
+                  src="{{ slide.image_url }}"
+                  class="h-full w-full object-cover object-center"
+                  alt="{{ slide.alt_text }}"
+                  width="1200"
+                  height="1500"
+                  loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
+                />
+                
+                <!-- Gradient Overlay -->
+                <div class="absolute inset-0 bg-gradient-to-tr from-black/20 via-black/0 to-white/10"></div>
+                
+                <!-- Dynamic Badge -->
+                <div class="absolute bottom-4 left-4 md:bottom-6 md:left-6 bg-white/90 backdrop-blur px-4 py-2 md:px-5 md:py-2 rounded-full text-[10px] md:text-xs font-bold uppercase tracking-widest shadow-sm z-10">
+                  {{ slide.title }}
+                </div>
+              </div>
+            {% endfor %}
+      
+            <!-- 2. NAVIGATION DOTS LOOP -->
+            <div class="absolute top-6 right-6 flex flex-col gap-2 z-20 pointer-events-none">
+              {% for slide in hero_slides %}
+                <div class="nav-dot w-2 h-2 rounded-full bg-white shadow-md transition-all duration-300
+                            {% if forloop.first %}opacity-100 scale-125{% else %}opacity-50{% endif %}">
+                </div>
+              {% endfor %}
+            </div>
+      
+          {% else %}
+            
+            <!-- FALLBACK (If no images are uploaded in Admin yet) -->
+            <div class="absolute inset-0 flex items-center justify-center bg-gray-100 text-gray-400">
+              <p>No slides active</p>
+            </div>
+      
+          {% endif %}
+      
         </div>
       </div>
 

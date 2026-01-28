@@ -238,6 +238,7 @@ CONTENT_SECURITY_POLICY = {
             "'self'",
             "https://cdn.jsdelivr.net",
             "https://unpkg.com",
+            "https://cdnjs.cloudflare.com",
             "'unsafe-inline'",
             "'unsafe-eval'",
         ],
@@ -249,7 +250,8 @@ CONTENT_SECURITY_POLICY = {
             "'self'",
             "data:",
             "https://res.cloudinary.com",
-            "https://images.unsplash*",
+            "https://images.unsplash.com",
+            "https://www.transparenttextures.com",
         ],
         "font-src": ["'self'", "data:"],
     }
