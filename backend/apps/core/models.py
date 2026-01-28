@@ -12,8 +12,6 @@ class HeroSlide(models.Model):
         default=0, help_text="Lower numbers appear first"
     )
     is_active = models.BooleanField(default=True)
-
-    # Optional: Alt text for SEO/Accessibility
     alt_text = models.CharField(max_length=200, default="Artisan Object")
 
     class Meta:
@@ -36,9 +34,9 @@ class HeroSlide(models.Model):
 
         return self.image.build_url(
             width=1200,
-            height=1500,  # Aspect ratio 4:5
+            height=1500,
             crop="fill",
             quality="auto",
             format="auto",
-            gravity="auto",  # Focuses on the most interesting part of image
+            gravity="auto",
         )
