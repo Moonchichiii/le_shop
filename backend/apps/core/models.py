@@ -35,7 +35,7 @@ class HeroSlide(models.Model):
 
         url, options = cloudinary.utils.cloudinary_url(
             self.image.public_id,
-            format="auto",
+            fetch_format="auto",
             quality="auto",
             width=1200,
             height=1500,
@@ -63,13 +63,13 @@ class PageSection(models.Model):
     def __str__(self):
         return self.get_section_type_display()
 
-    # Optional helper (can be kept for future use)
+    # Optional helper
     def get_optimized_url(self, width, height):
         if not self.image:
             return ""
         url, options = cloudinary.utils.cloudinary_url(
             self.image.public_id,
-            format="auto",
+            fetch_format="auto",
             quality="auto",
             width=width,
             height=height,
@@ -86,7 +86,7 @@ class PageSection(models.Model):
             return ""
         url, options = cloudinary.utils.cloudinary_url(
             self.image.public_id,
-            format="auto",
+            fetch_format="auto",
             quality="auto",
             width=1200,
             height=900,
@@ -102,7 +102,7 @@ class PageSection(models.Model):
             return ""
         url, options = cloudinary.utils.cloudinary_url(
             self.image.public_id,
-            format="auto",
+            fetch_format="auto",
             quality="auto",
             width=1200,
             height=1200,
