@@ -40,3 +40,52 @@ class HeroSlide(models.Model):
             format="auto",
             gravity="auto",
         )
+
+
+class PageSection(models.Model):
+    SECTION_CHOICES = (
+        ("history", "History Section (Top)"),
+        ("craft", "Craft Section (Bottom)"),
+    )
+
+    section_type = models.CharField(
+        max_length=50,
+        choices=SECTION_CHOICES,
+        unique=True,
+        help_text="Which part of the page is this for?",
+    )
+    image = CloudinaryField("image")
+
+    def __str__(self):
+        return self.get_section_type_display()
+
+    # Optional helper (can be kept for future use)
+    def get_optimized_url(self, width, height):
+        if not self.image:
+            return ""
+        return self.image.build_url(
+            width=width,
+            height=height,
+            crop="fill",
+            quality="auto",
+            format="auto",
+            gravity="auto",
+        )
+
+    @property
+    def history_url(self):
+        """Landscape 4:3 ratio for the History/Top section"""
+        if not self.image:
+            return ""
+        return self.image.build_url(
+            width=1200, height=900, crop="fill", quality="auto", format="auto"
+        )
+
+    @property
+    def craft_url(self):
+        """Square 1:1 ratio for the Craft/Bottom section"""
+        if not self.image:
+            return ""
+        return self.image.build_url(
+            width=1200, height=1200, crop="fill", quality="auto", format="auto"
+        )
