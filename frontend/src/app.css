@@ -2,15 +2,44 @@
 @plugin "tailwindcss-animate";
 
 @theme {
+  /* Primary: soft, desaturated sky – works on white or slate */
+  --color-primary-50: #f0f9ff;
+  --color-primary-100: #e0f2fe;
+  --color-primary-200: #bae6fd;
+  --color-primary-300: #7dd3fc;
+  --color-primary-400: #38bdf8;
+  --color-primary-500: #0ea5e9;
+  --color-primary-600: #0284c7;
+  --color-primary-700: #0369a1;
+  --color-primary-800: #075985;
+  --color-primary-900: #0c4a6e;
+
+  /* Neutral: cool grey for text / chrome */
+  --color-slate-50: #f8fafc;
+  --color-slate-100: #f1f5f9;
+  --color-slate-200: #e2e8f0;
+  --color-slate-300: #cbd5e1;
+  --color-slate-400: #94a3b8;
+  --color-slate-500: #64748b;
+  --color-slate-600: #475569;
+  --color-slate-700: #334155;
+  --color-slate-800: #1e293b;
+  --color-slate-900: #0f172a;
+
+  /* Accent: warm coral for CTAs */
+  --color-accent-400: #fb7185;
+  --color-accent-500: #f43f5e;
+  --color-accent-600: #e11d48;
+
   /* ART LEPTIS PALETTE */
   --color-arti-bg: #FDFBF7;
   --color-arti-ink: #121212;
-  --color-arti-green-bg:#273C2C;
+  --color-arti-green-bg: var(--color-primary-900);
   --color-arti-ink-60: rgba(18,18,18, 0.6);
   --color-arti-surface: #FFFFFF;
   --color-arti-mist: #F4F2ED;
-  --color-arti-accent: #FF4F12;
-  --color-arti-accent-hover: #E03E05;
+  --color-arti-accent: var(--color-accent-500);
+  --color-arti-accent-hover: var(--color-accent-600);
 
   /* TYPOGRAPHY */
   --font-serif: "Boska", ui-serif, Georgia, serif;
@@ -57,7 +86,7 @@
   }
 
   :where(a, button, input, select, textarea, [role="button"], [tabindex]:not([tabindex="-1"])):focus-visible {
-   outline: 2px solid var(--color-arti-accent);
+   outline: 2px solid var(--color-primary-500);
    outline-offset: 3px;
    border-radius: 9999px;
   }
@@ -81,14 +110,14 @@
   .btn-primary {
    @apply inline-flex items-center justify-center gap-2 rounded-full
         px-8 py-3.5 text-sm font-bold tracking-wide
-        bg-arti-accent text-white
-        hover:bg-arti-accent-hover hover:-translate-y-0.5 hover:shadow-lg
+        bg-primary-500 text-white
+        hover:bg-primary-600 hover:-translate-y-0.5 hover:shadow-lg
         active:translate-y-0 active:scale-95
         disabled:opacity-50 disabled:cursor-not-allowed;
    transition: transform 300ms, background-color 300ms, box-shadow 300ms;
   }
   .btn-primary:focus-visible {
-   outline: 3px solid color-mix(in srgb, var(--color-arti-accent) 70%, white);
+   outline: 3px solid color-mix(in srgb, var(--color-primary-500) 70%, white);
    outline-offset: 3px;
   }
 
@@ -148,7 +177,7 @@
   header .flex.items-center.gap-4 > button[aria-label]:focus-visible,
   header .flex.items-center.gap-4 > a[aria-label]:focus-visible,
   header .flex.items-center.gap-4 > div > button[aria-label]:focus-visible {
-   outline: 2px solid var(--color-arti-accent);
+   outline: 2px solid var(--color-primary-500);
    outline-offset: 3px;
   }
 

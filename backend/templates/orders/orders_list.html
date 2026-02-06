@@ -10,7 +10,7 @@
   {% if orders|length == 0 %}
     <div class="mt-10 rounded-3xl border border-arti-dark/10 bg-white p-8">
       <p class="text-arti-dark/70">You don’t have any orders yet.</p>
-      <a href="{% url 'product_list' %}" class="btn-primary mt-6 inline-flex">Browse products</a>
+      <a href="{% url 'product_list' %}" class="btn-primary bg-primary-500 hover:bg-primary-600 text-white mt-6 inline-flex">Browse products</a>
     </div>
   {% else %}
     <div class="mt-10 space-y-4">

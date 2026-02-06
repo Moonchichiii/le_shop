@@ -10,7 +10,7 @@
 
     <!-- Logo -->
     <a href="/" class="font-serif text-2xl font-bold tracking-tight text-arti-ink hover:opacity-80 transition">
-      Art Leptis<span class="text-arti-accent">.</span>
+      Art Leptis<span class="text-primary-600">.</span>
     </a>
 
     <!-- Desktop Nav (no auth links here) -->
@@ -56,7 +56,7 @@
       <div class="hidden md:relative md:block" @click.outside="langOpen = false">
         <button
           type="button"
-          class="inline-flex items-center gap-1.5 text-arti-ink hover:text-arti-accent transition"
+          class="inline-flex items-center gap-1.5 text-arti-ink hover:text-primary-600 transition"
           aria-label="Change language"
           :aria-expanded="langOpen.toString()"
           aria-haspopup="menu"
@@ -183,7 +183,7 @@
       <!-- Mobile Hamburger -->
       <button
         type="button"
-        class="md:hidden relative inline-flex items-center justify-center h-11 w-11 rounded-full text-arti-ink hover:bg-arti-ink/5 transition focus:outline-none focus:ring-2 focus:ring-arti-accent"
+        class="md:hidden relative inline-flex items-center justify-center h-11 w-11 rounded-full text-arti-ink hover:bg-arti-ink/5 transition focus:outline-none focus:ring-2 focus:ring-primary-500"
         @click="mobileOpen = !mobileOpen"
         :aria-expanded="mobileOpen.toString()"
         aria-controls="mobile-menu"

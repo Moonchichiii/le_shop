@@ -21,7 +21,7 @@
         <div>
             <h1 class="headline-serif mt-3 text-4xl">Your Cart</h1>
         </div>
-        <a href="{% url 'product_list' %}" class="text-sm font-bold underline decoration-arti-dark/30 hover:decoration-arti-accent transition-all">
+        <a href="{% url 'product_list' %}" class="text-sm font-bold underline decoration-arti-dark/30 hover:decoration-primary-600 transition-all">
             Continue shopping
         </a>
     </div>
@@ -29,7 +29,7 @@
     {% if cart|length == 0 %}
         <div class="mt-10 rounded-[2rem] border border-arti-dark/10 bg-white p-12 text-center">
             <p class="text-arti-dark/50 text-lg">Your cart is currently empty.</p>
-            <a href="{% url 'product_list' %}" class="btn-primary mt-6">Start Browsing</a>
+            <a href="{% url 'product_list' %}" class="btn-primary bg-primary-500 hover:bg-primary-600 text-white mt-6">Start Browsing</a>
         </div>
     {% else %}
         <div class="mt-10 space-y-6">
@@ -90,7 +90,7 @@
 
                 <form method="post" action="{% url 'checkout_start' %}" class="w-full sm:w-auto">
                     {% csrf_token %}
-                    <button type="submit" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-full bg-arti-accent text-white px-10 py-4 text-sm font-bold tracking-wide transition-all hover:bg-white hover:text-arti-dark hover:scale-105">
+                    <button type="submit" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-full bg-primary-500 hover:bg-primary-600 text-white px-10 py-4 text-sm font-bold tracking-wide transition-all hover:scale-105">
                         Proceed to Checkout
                     </button>
                 </form>

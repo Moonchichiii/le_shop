@@ -13,7 +13,7 @@
 
     <form method="post" action="{% url 'account_logout' %}" class="mt-6 flex flex-col gap-3">
       {% csrf_token %}
-      <button class="btn-primary w-full">{% trans "Sign out" %}</button>
+      <button class="btn-primary bg-primary-500 hover:bg-primary-600 text-white w-full">{% trans "Sign out" %}</button>
       <a href="{% url 'home' %}" class="btn-outline w-full text-center">{% trans "Cancel" %}</a>
     </form>
   </div>

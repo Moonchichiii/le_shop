@@ -16,7 +16,7 @@
 
       <form method="post" action="{% url 'account_confirm_email' confirmation.key %}" class="mt-6">
         {% csrf_token %}
-        <button class="btn-primary w-full">{% trans "Confirm email" %}</button>
+        <button class="btn-primary bg-primary-500 hover:bg-primary-600 text-white w-full">{% trans "Confirm email" %}</button>
       </form>
     {% else %}
       <p class="text-sm text-red-700">
@@ -24,7 +24,7 @@
       </p>
 
       <div class="mt-6">
-        <a href="{% url 'account_login' %}" class="btn-primary w-full text-center inline-flex justify-center">
+        <a href="{% url 'account_login' %}" class="btn-primary bg-primary-500 hover:bg-primary-600 text-white w-full text-center inline-flex justify-center">
           Back to sign in
         </a>
       </div>

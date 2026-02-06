@@ -8,7 +8,7 @@
   <!-- Header & Search Logic Intact -->
   <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
     <div>
-      <p class="text-xs font-bold tracking-[0.22em] text-arti-accent uppercase">Shop</p>
+      <p class="text-xs font-bold tracking-[0.22em] text-primary-600 uppercase">Shop</p>
       <h1 class="headline-serif mt-3 text-4xl md:text-6xl">Curated Objects</h1>
     </div>
 
@@ -18,7 +18,7 @@
         name="q"
         value="{{ query }}"
         placeholder="Search..."
-        class="rounded-full border border-arti-dark/10 bg-white px-5 py-2.5 text-sm w-64 focus:border-arti-accent focus:ring-1 focus:ring-arti-accent outline-none transition-colors"
+        class="rounded-full border border-arti-dark/10 bg-white px-5 py-2.5 text-sm w-64 focus:border-primary-600 focus:ring-1 focus:ring-primary-500 outline-none transition-colors"
       />
       {% if active_category %}
         <input type="hidden" name="category" value="{{ active_category }}">
@@ -30,12 +30,12 @@
   <!-- Category Filters Logic Intact -->
   <div class="mt-8 flex flex-wrap gap-2">
     <a href="{% url 'product_list' %}"
-       class="px-5 py-2 rounded-full text-sm font-medium border transition-colors duration-300 {% if not active_category %}bg-arti-dark text-white border-arti-dark{% else %}bg-transparent text-arti-dark border-arti-dark/15 hover:border-arti-accent hover:text-arti-accent{% endif %}">
+       class="px-5 py-2 rounded-full text-sm font-medium border transition-colors duration-300 {% if not active_category %}bg-arti-dark text-white border-arti-dark{% else %}bg-transparent text-arti-dark border-arti-dark/15 hover:border-primary-600 hover:text-primary-600{% endif %}">
       All
     </a>
     {% for c in categories %}
       <a href="{% url 'product_list' %}?category={{ c.slug }}"
-         class="px-5 py-2 rounded-full text-sm font-medium border transition-colors duration-300 {% if active_category == c.slug %}bg-arti-dark text-white border-arti-dark{% else %}bg-transparent text-arti-dark border-arti-dark/15 hover:border-arti-accent hover:text-arti-accent{% endif %}">
+         class="px-5 py-2 rounded-full text-sm font-medium border transition-colors duration-300 {% if active_category == c.slug %}bg-arti-dark text-white border-arti-dark{% else %}bg-transparent text-arti-dark border-arti-dark/15 hover:border-primary-600 hover:text-primary-600{% endif %}">
         {{ c.name }}
       </a>
     {% endfor %}
@@ -69,7 +69,7 @@
                   {% csrf_token %}
                   <input type="hidden" name="qty" value="1">
                   <button type="submit" 
-                          class="flex h-12 w-12 items-center justify-center rounded-full bg-arti-accent text-white shadow-lg hover:bg-arti-accent-hover hover:scale-110 transition-all focus:outline-none focus:ring-2 focus:ring-white"
+                          class="flex h-12 w-12 items-center justify-center rounded-full bg-primary-500 text-white shadow-lg hover:bg-primary-600 hover:scale-110 transition-all focus:outline-none focus:ring-2 focus:ring-white"
                           title="Quick add to bag">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                       <line x1="12" y1="5" x2="12" y2="19"></line>
@@ -92,7 +92,7 @@
           <div class="flex items-start justify-between gap-4">
             <div>
               <a href="{{ p.get_absolute_url }}">
-                <h3 class="font-serif text-2xl text-arti-dark group-hover:text-arti-accent transition-colors">{{ p.name }}</h3>
+                <h3 class="font-serif text-2xl text-arti-dark group-hover:text-primary-600 transition-colors">{{ p.name }}</h3>
               </a>
               <p class="text-xs font-bold uppercase tracking-widest text-arti-dark/50 mt-1">{{ p.category.name }}</p>
             </div>
