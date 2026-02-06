@@ -1,0 +1,107 @@
+{% load static %}
+
+<!-- About / Story Section -->
+<div id="story" class="pt-20 md:pt-32 pb-24 bg-arti-bg border-t border-arti-ink/5">
+    
+    <!-- Header -->
+    <div class="max-w-4xl mx-auto px-6 text-center mb-20">
+        <p class="text-xs font-bold tracking-[0.25em] text-primary-600 uppercase mb-4 animate-[fade-up_0.5s_ease-out]">The Origins</p>
+        <h2 class="headline-serif text-5xl md:text-7xl mb-6">From Ancient Port<br>to Modern Studio</h2>
+        <p class="text-xl text-arti-ink-60 leading-relaxed text-balance">
+            Where the history of <strong>Leptis Minor</strong> meets the organic beauty of driftwood and light.
+        </p>
+    </div>
+
+    <!-- 1. History Section (Top) -->
+    <section class="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-16 items-center mb-24">
+        <!-- Image Column -->
+        <div class="order-2 md:order-1">
+             <div class="rounded-[2.5rem] overflow-hidden aspect-[4/3] bg-arti-mist shadow-2xl shadow-arti-ink/5">
+                 {% if sections.history %}
+                     <img
+                       src="{{ cloudinary_url(sections.history.image, 320, '4:3') }}"
+                       srcset="
+                         {{ cloudinary_url(sections.history.image, 320, '4:3') }} 320w,
+                         {{ cloudinary_url(sections.history.image, 640, '4:3') }} 640w,
+                         {{ cloudinary_url(sections.history.image, 1024, '4:3') }} 1024w
+                       "
+                       sizes="(max-width: 640px) 100vw, 50vw"
+                       loading="lazy"
+                       alt="Mediterranean coast history"
+                       class="w-full h-auto block"
+                     >
+                 {% else %}
+                     <!-- Fallback gray box if image not uploaded yet -->
+                     <div class="w-full h-full bg-gray-200 flex items-center justify-center text-gray-400 text-sm">
+                         Upload 'history' in Admin
+                     </div>
+                 {% endif %}
+            </div>
+        </div>
+
+        <!-- Text Column -->
+        <div class="order-1 md:order-2">
+            <h3 class="headline-serif text-3xl mb-6">The Spirit of Leptis</h3>
+            <div class="space-y-4 text-arti-ink-60 leading-relaxed text-lg">
+                <p>
+                    Leptis Minor was an ancient maritime powerhouse on the Tunisian coast. Founded by the Libyans and chosen by the Carthaginians for its secure harbor, it became a thriving center of trade and culture.
+                </p>
+                <p>
+                    Ceramics, olive oil, and art flowed through its port, linking Africa to the Roman Empire. It was a place where artisans thrived, creating objects that were both functional and beautiful.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 2. The Craft Section (Bottom / Dad's Work) -->
+    <section class="bg-[var(--color-arti-green-bg)] text-[var(--color-arti-bg)] py-20 md:py-24 rounded-[3rem] mx-4 relative overflow-hidden">
+        <!-- Texture Overlay -->
+        <div class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')]"></div>
+
+        <div class="relative max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-16 items-center">
+            
+            <!-- Text Column -->
+            <div class="order-2 md:order-1">
+                <h3 class="font-serif text-3xl md:text-5xl mb-6 text-white">Shaped by Nature</h3>
+                <div class="space-y-4 text-white/70 leading-relaxed text-lg">
+                    <p>
+                        Today, we channel that heritage into <strong>Art Leptis</strong>. Every piece in our collection—whether it is a lamp sculpted from driftwood found on the shore, or a ceramic vessel—is handmade.
+                    </p>
+                    <p>
+                        Like the ancient artisans of Leptis, we do not force the material. We listen to the wood, the stone, and the clay. We create objects that bring the warmth of the Mediterranean sun into your home.
+                    </p>
+                </div>
+                <div class="mt-10">
+                    <a href="{% url 'product_list' %}" class="inline-flex items-center gap-2 text-primary-600 font-bold hover:text-white transition">
+                        View the works
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Image Column -->
+            <div class="order-1 md:order-2 rounded-[2rem] overflow-hidden aspect-square bg-white/5 border border-white/10">
+                 {% if sections.craft %}
+                     <img
+                       src="{{ cloudinary_url(sections.craft.image, 320, '4:3') }}"
+                       srcset="
+                         {{ cloudinary_url(sections.craft.image, 320, '4:3') }} 320w,
+                         {{ cloudinary_url(sections.craft.image, 640, '4:3') }} 640w,
+                         {{ cloudinary_url(sections.craft.image, 1024, '4:3') }} 1024w
+                       "
+                       sizes="(max-width: 640px) 100vw, 50vw"
+                       loading="lazy"
+                       alt="Handcrafted detail"
+                       class="w-full h-auto block"
+                     >
+                 {% else %}
+                     <!-- Fallback gray box -->
+                     <div class="w-full h-full bg-white/10 flex items-center justify-center text-white/50 text-sm">
+                         Upload 'craft' in Admin
+                     </div>
+                 {% endif %}
+            </div>
+        </div>
+    </section>
+
+</div>

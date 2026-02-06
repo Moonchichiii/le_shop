@@ -2,8 +2,8 @@
   "name": "le-shop",
   "type": "module",
   "scripts": {
-    "dev": "tailwindcss -i ./frontend/src/app.css -o ./backend/static/css/output.css --watch",
-    "build": "tailwindcss -i ./frontend/src/app.css -o ./backend/static/css/output.css --minify"
+    "dev": "tailwindcss -i ./frontend/src/app.css -o ./src/static/css/output.css --watch",
+    "build": "tailwindcss -i ./frontend/src/app.css -o ./src/static/css/output.css --minify"
   },
   "dependencies": {
     "@tailwindcss/cli": "^4.0.0-alpha.16",

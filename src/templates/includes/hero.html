@@ -1,0 +1,97 @@
+<section class="relative pt-12 md:pt-24 pb-20">
+  <div class="mx-auto max-w-7xl px-6">
+    <div class="grid items-center gap-12 lg:grid-cols-2">
+
+      <!-- Text -->
+      <div>
+        <p class="text-xs font-bold tracking-[0.25em] text-primary-600 uppercase mb-6 animate-[fade-up_0.6s_ease-out]">
+          Inspired by Leptis Minor
+        </p>
+
+        <h1 class="headline-serif text-6xl md:text-7xl lg:text-8xl leading-[0.95] mb-8 animate-[fade-up_0.8s_ease-out]">
+          Sculpted by <br />
+          <span class="italic text-arti-ink-60">Time & Sea.</span>
+        </h1>
+
+        <p class="text-lg text-arti-ink-60 max-w-md leading-relaxed mb-10 animate-[fade-up_1s_ease-out]">
+          Unique lamps and objects crafted from driftwood and stone. A tribute to the ancient craftsmanship of the Tunisian coast.
+        </p>
+
+        <div class="flex flex-col sm:flex-row gap-4 animate-[fade-up_1.2s_ease-out]">
+          <a href="{% url 'product_list' %}" class="btn-primary bg-primary-500 hover:bg-primary-600 text-white w-full sm:w-auto">
+            Explore Collection
+          </a>
+          
+          <a href="#story" class="btn-outline w-full sm:w-auto">
+            Discover the History
+          </a>
+        </div>
+      </div>
+
+      <!-- Visual -->
+      <div>
+        <div 
+          id="hero-carousel" 
+          class="relative w-full 
+                 aspect-square md:aspect-[4/5] 
+                 min-h-[350px] md:min-h-[600px] 
+                 overflow-hidden 
+                 rounded-[2rem] md:rounded-[3rem] 
+                 bg-arti-mist shadow-2xl shadow-arti-ink/5 
+                 cursor-grab active:cursor-grabbing touch-none"
+        >
+          
+          {% if hero_slides %}
+            
+            <!-- 1. SLIDES LOOP -->
+            {% for slide in hero_slides %}
+              <div class="hero-slide absolute inset-0 h-full w-full bg-arti-mist
+                          {% if forloop.first %}z-10 opacity-100 visible{% else %}opacity-0 invisible{% endif %}">
+                
+                <img
+                  src="{{ cloudinary_url(slide.image, 320, '4:3') }}"
+                  srcset="
+                    {{ cloudinary_url(slide.image, 320, '4:3') }} 320w,
+                    {{ cloudinary_url(slide.image, 640, '4:3') }} 640w,
+                    {{ cloudinary_url(slide.image, 1024, '4:3') }} 1024w
+                  "
+                  sizes="(max-width: 640px) 100vw, 50vw"
+                  loading="lazy"
+                  alt="{{ slide.alt_text }}"
+                  class="w-full h-auto block"
+                >
+                
+                <!-- Gradient Overlay -->
+                <div class="absolute inset-0 bg-gradient-to-tr from-black/20 via-black/0 to-white/10"></div>
+                
+                <!-- Dynamic Badge -->
+                <div class="absolute bottom-4 left-4 md:bottom-6 md:left-6 bg-white/90 backdrop-blur px-4 py-2 md:px-5 md:py-2 rounded-full text-[10px] md:text-xs font-bold uppercase tracking-widest shadow-sm z-10">
+                  {{ slide.title }}
+                </div>
+              </div>
+            {% endfor %}
+      
+            <!-- 2. NAVIGATION DOTS LOOP -->
+            <div class="absolute top-6 right-6 flex flex-col gap-2 z-20 pointer-events-none">
+              {% for slide in hero_slides %}
+                <div class="nav-dot w-2 h-2 rounded-full bg-white shadow-md transition-all duration-300
+                            {% if forloop.first %}opacity-100 scale-125{% else %}opacity-50{% endif %}">
+                </div>
+              {% endfor %}
+            </div>
+      
+          {% else %}
+            
+            <!-- FALLBACK (If no images are uploaded in Admin yet) -->
+            <div class="absolute inset-0 flex items-center justify-center bg-gray-100 text-gray-400">
+              <p>No slides active</p>
+            </div>
+      
+          {% endif %}
+      
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>

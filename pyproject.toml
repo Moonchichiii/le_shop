@@ -36,27 +36,39 @@ dev = [
     "factory-boy",
 ]
 
+[tool.uv]
+dev-dependencies = [
+    "ruff",
+    "mypy",
+    "django-stubs",
+    "djangorestframework-stubs",
+    "types-requests",
+    "pytest",
+    "pytest-django",
+    "factory-boy",
+]
+
 [tool.ruff]
-exclude = [".git", ".venv", "migrations", "node_modules", "backend/static"]
+exclude = [".git", ".venv", "migrations", "node_modules", "src/static"]
 line-length = 88
-target-version = "py313"
+target-version = "py312"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "N", "UP", "B", "SIM"]
 ignore = []
 
 [tool.mypy]
-python_version = "3.13"
+python_version = "3.12"
 check_untyped_defs = true
 disallow_untyped_defs = false
 ignore_missing_imports = true
 plugins = ["mypy_django_plugin.main"]
 
 [tool.django-stubs]
-django_settings_module = "backend.config.settings"
+django_settings_module = "le_shop.settings"
 
 [tool.setuptools]
 
 [tool.setuptools.packages.find]
-where = ["."]
-include = ["backend*"]
+where = ["src"]
+include = ["apps*", "le_shop*"]
