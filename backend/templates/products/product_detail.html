@@ -1,64 +1,109 @@
-{% extends "base.html" %}
-
-{% block title %}{{ product.name }} | Arti Corner{% endblock %}
-
-{% block content %}
-<div class="mx-auto max-w-6xl px-4 sm:px-6 py-12">
-  <a href="{% url 'product_list' %}" class="text-sm underline opacity-70 hover:opacity-100">Back to shop</a>
-
-  <div class="mt-6 grid gap-10 md:grid-cols-2">
-    <div class="rounded-3xl overflow-hidden bg-arti-dark/5">
-      <img
-  src="{{ product.image_url_auto }}"
-  srcset="
-    {{ product.image_url_800 }} 800w,
-    {{ product.image_url_1200 }} 1200w
-  "
-  sizes="(min-width: 768px) 50vw, 100vw"
-  alt="{{ product.name }}"
-  class="w-full h-130 object-cover"
-  fetchpriority="high"
-  decoding="async"
-/>
-
+<!-- MOBILE BOTTOM BAR -->
+<nav
+  class="md:hidden fixed bottom-6 left-4 right-4 z-50 nav-glass rounded-3xl h-18 flex items-center justify-around px-2 pb-1"
+  x-data="{ accountOpen: false }"
+  @keydown.escape.window="accountOpen = false"
+>
+  <!-- Home -->
+  <a href="/" class="flex flex-col items-center gap-1 p-2 w-16 group">
+    <div class="relative">
+      <svg class="w-6 h-6 text-arti-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+      </svg>
+      <span class="absolute -bottom-2 left-1/2 -translate-x-1/2 w-1 h-1 bg-arti-dark rounded-full"></span>
     </div>
+    <span class="text-[10px] font-medium opacity-100">Home</span>
+  </a>
 
-    <div>
-      <p class="text-xs font-bold tracking-[0.22em] text-arti-dark/60 uppercase">{{ product.category.name }}</p>
-      <h1 class="headline-serif mt-3 text-5xl">{{ product.name }}</h1>
+  <!-- Search (opens modal) -->
+  <button
+    type="button"
+    @click="$dispatch('open-search'); accountOpen = false"
+    class="flex flex-col items-center gap-1 p-2 w-16 opacity-60 hover:opacity-100 transition"
+    aria-label="Search"
+  >
+    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+    </svg>
+    <span class="text-[10px] font-medium">Search</span>
+  </button>
 
-      <p class="mt-5 text-sm leading-relaxed opacity-70">{{ product.description }}</p>
+  <!-- Bag -->
+  <a
+    href="{% url 'cart_detail' %}"
+    class="flex flex-col items-center gap-1 p-2 w-16 opacity-60 hover:opacity-100 transition relative"
+    @click="accountOpen = false"
+  >
+    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+    </svg>
+    <span class="text-[10px] font-medium">Bag</span>
 
-      <div class="mt-8 flex items-center justify-between">
-        <p class="headline-serif text-3xl">€{{ product.price }}</p>
-        {% if product.is_in_stock %}
-          <span class="text-xs uppercase tracking-widest opacity-60">In stock</span>
-        {% else %}
-          <span class="text-xs uppercase tracking-widest text-red-600">Sold out</span>
-        {% endif %}
-      </div>
+    {% if cart and cart|length > 0 %}
+      <span class="absolute top-2 right-3 min-w-5 h-5 px-1 rounded-full bg-orange-400 text-[10px] font-bold flex items-center justify-center">
+        {{ cart|length }}
+      </span>
+    {% endif %}
+  </a>
 
-      <div class="mt-8">
-        {% if product.is_in_stock %}
-          <form method="post" action="{% url 'cart_add' product.id %}" class="flex flex-col sm:flex-row gap-3 sm:items-center">
-            {% csrf_token %}
-            <input
-  name="qty"
-  type="number"
-  min="1"
-  max="{{ product.stock }}"
-  value="1"
-  class="w-full sm:w-28 rounded-2xl border border-arti-dark/15 px-4 py-3 text-sm"
-/>
+  <!-- Account (drop-up trigger) -->
+  <div class="relative" @click.outside="accountOpen = false">
+    <button
+      type="button"
+      class="flex flex-col items-center gap-1 p-2 w-16 opacity-60 hover:opacity-100 transition"
+      aria-label="Account"
+      :aria-expanded="accountOpen.toString()"
+      aria-haspopup="menu"
+      @click="accountOpen = !accountOpen"
+    >
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+      </svg>
+      <span class="text-[10px] font-medium">
+        {% if request.user.is_authenticated %}Account{% else %}Sign in{% endif %}
+      </span>
+    </button>
 
-            <button class="btn-primary w-full sm:w-auto">Add to cart</button>
-            <a href="{% url 'cart_detail' %}" class="btn-outline w-full sm:w-auto">View cart</a>
-          </form>
-        {% else %}
-          <button class="btn-outline w-full" disabled>Sold out</button>
-        {% endif %}
-      </div>
+    <!-- Drop-up panel -->
+    <div
+      x-show="accountOpen"
+      x-transition.opacity
+      x-cloak
+      class="absolute bottom-21 right-0 w-56 rounded-3xl border border-arti-dark/10 bg-white shadow-2xl overflow-hidden"
+      role="menu"
+      style="display:none"
+    >
+      {% if request.user.is_authenticated %}
+        <div class="px-4 py-3 border-b border-arti-dark/10">
+          <p class="text-xs uppercase tracking-widest opacity-60">Signed in</p>
+          <p class="text-sm font-medium truncate">{{ request.user.email }}</p>
+        </div>
+
+        <a href="#" class="block px-4 py-3 text-sm hover:bg-arti-dark/5" role="menuitem" @click="accountOpen=false">
+          Account
+        </a>
+        <a href="{% url 'orders_list' %}" class="block px-4 py-3 text-sm hover:bg-arti-dark/5" role="menuitem" @click="accountOpen=false">
+          Orders
+        </a>
+
+        <form method="post" action="{% url 'account_logout' %}" class="border-t border-arti-dark/10">
+          {% csrf_token %}
+          <button type="submit" class="w-full text-left px-4 py-3 text-sm hover:bg-arti-dark/5">
+            Sign out
+          </button>
+        </form>
+      {% else %}
+        <a href="{% url 'account_login' %}" class="block px-4 py-3 text-sm hover:bg-arti-dark/5" role="menuitem" @click="accountOpen=false">
+          Sign in
+        </a>
+        <a href="{% url 'account_signup' %}" class="block px-4 py-3 text-sm hover:bg-arti-dark/5" role="menuitem" @click="accountOpen=false">
+          Create account
+        </a>
+      {% endif %}
     </div>
   </div>
-</div>
-{% endblock %}
+</nav>

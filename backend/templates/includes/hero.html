@@ -1,103 +1,112 @@
-<section class="relative pt-10 md:pt-20 pb-24 md:pb-32">
+<section class="relative pt-10 md:pt-16 pb-18 md:pb-24">
   <div class="mx-auto max-w-7xl px-6">
-    <!-- off-grid structural line crossing the whole hero -->
-    <div class="hero-crosshair" aria-hidden="true"></div>
 
-    <div class="grid gap-10 lg:gap-14 lg:grid-cols-[1.15fr_.85fr] items-start">
-      <!-- TEXT BLOCK -->
-      <div class="relative lg:pt-8">
-        <!-- small system meta (keep it, but make it sharp) -->
-        <div class="flex items-center gap-4">
-          <p class="hero-kicker">
-            INDEX / 001 • LEPTIS MINOR STUDY
-          </p>
-          <span class="hero-kicker-rule" aria-hidden="true"></span>
-        </div>
+    <!-- subtle top spine (premium, not gimmicky) -->
+    <div class="relative">
+      <div class="absolute left-0 right-0 top-6 h-px bg-arti-rule"></div>
+      <div class="absolute left-0 top-6 h-0.75 w-28 bg-arti-signal-500"></div>
+    </div>
 
-        <!-- headline with intentional awkward breaks -->
-        <h1 class="hero-title mt-8">
+    <div class="mt-10 grid items-start gap-10 lg:grid-cols-[1.05fr_1.35fr] lg:gap-16">
+
+      <!-- TEXT -->
+      <div class="relative">
+        <p class="hero-kicker">
+          LEPTIS MINOR / HANDMADE OBJECTS
+        </p>
+
+        <h1 class="hero-title mt-6">
           Sculpted by<br />
           <span class="hero-title-muted">Time &amp; Sea.</span>
         </h1>
 
-        <!-- copy block (narrow, not "nice") -->
-        <p class="hero-copy mt-8">
-          Unique lamps and objects crafted from driftwood and stone.
-          A tribute to ancient craftsmanship — rebuilt for now.
+        <p class="hero-copy mt-6">
+          Unique lamps and objects crafted from driftwood and stone — modern forms,
+          old-world patience.
         </p>
 
-        <!-- actions: brutal + text-only -->
-        <div class="mt-10 flex flex-col sm:flex-row sm:items-center gap-5">
-          <a href="{% url 'product_list' %}" class="btn-primary w-full sm:w-auto">
+        <div class="mt-10 flex flex-col sm:flex-row gap-3 sm:items-center">
+          <a href="{% url 'product_list' %}" class="btn-primary w-full sm:w-auto px-7 py-3">
             Explore Collection
           </a>
 
-          <a href="#story" class="hero-link w-full sm:w-auto">
-            Discover the History
+          <a href="#story" class="hero-link w-full sm:w-auto justify-center sm:justify-start">
+            Discover the Story
           </a>
         </div>
 
-        <!-- small blue micro-marker (structural, not decorative) -->
-        <div class="hero-marker mt-12" aria-hidden="true"></div>
+        <!-- micro accent -->
+        <div class="mt-10 h-0.75 w-14 bg-arti-signal-500"></div>
       </div>
 
-      <!-- VISUAL BLOCK -->
-      <div class="relative lg:pt-2">
+      <!-- VISUAL -->
+      <div class="relative">
         <div
           id="hero-carousel"
-          class="plate plate--signal relative w-full aspect-square md:aspect-[4/5] overflow-hidden touch-none"
+          class="plate plate--signal relative w-full aspect-4/5 overflow-hidden bg-arti-mist cursor-grab active:cursor-grabbing touch-none"
         >
           {% if hero_slides %}
+
+            <!-- SLIDES (JS controls opacity/zIndex) -->
             {% for slide in hero_slides %}
-              <div class="hero-slide absolute inset-0 h-full w-full
-                          {% if forloop.first %}is-active{% endif %}">
+              <div class="hero-slide absolute inset-0 h-full w-full bg-arti-mist
+                          {% if forloop.first %}z-10 opacity-100 visible{% else %}opacity-0 invisible{% endif %}">
                 <img
                   src="{{ slide.image_url }}"
                   class="h-full w-full object-cover object-center"
                   alt="{{ slide.alt_text }}"
-                  width="1200"
-                  height="1500"
+                  width="1400"
+                  height="1750"
                   loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
                   decoding="async"
                 />
+                <!-- premium veil (subtle) -->
+                <div class="absolute inset-0 bg-black/5"></div>
               </div>
             {% endfor %}
 
-            <!-- Brutal pagination: 01 / 05 + blue progress line -->
-            <div class="hero-pagination" aria-hidden="true">
-              <div class="hero-pagination__top">
-                <span class="hero-pagination__cur">01</span>
-                <span class="hero-pagination__sep">/</span>
-                <span class="hero-pagination__tot">
-                  {{ hero_slides|length|stringformat:"02d" }}
-                </span>
-              </div>
-              <div class="hero-pagination__bar">
-                <span class="hero-pagination__fill"></span>
-              </div>
+            <!-- DOTS (KEEP for your JS) -->
+            <div class="absolute top-5 right-5 flex flex-col gap-2 z-20 pointer-events-none">
+              {% for slide in hero_slides %}
+                <div class="nav-dot w-2.5 h-2.5 bg-white/80 border border-black/10 transition-all duration-300
+                            {% if forloop.first %}opacity-100 scale-125{% else %}opacity-45{% endif %}">
+                </div>
+              {% endfor %}
+            </div>
+
+            <!-- Brutal commerce label (not "system/archive") -->
+            <div class="absolute left-4 bottom-4 z-20 bg-[color-mix(in_srgb,var(--color-arti-paper)_92%,transparent)]
+                        border border-arti-rule px-4 py-3">
+              <p class="text-[11px] font-extrabold tracking-[0.22em] uppercase text-arti-ink/70">
+                Featured Drop
+              </p>
+              <p class="mt-1 text-sm text-arti-ink/70">
+                {{ hero_slides.0.title }}
+              </p>
             </div>
 
           {% else %}
-            <div class="absolute inset-0 flex items-center justify-center bg-[var(--color-arti-mist)]">
-              <p class="text-sm opacity-50 tracking-[0.18em] uppercase">No slides active</p>
+            <div class="absolute inset-0 flex items-center justify-center bg-arti-mist text-arti-ink/40">
+              <p class="text-sm tracking-wide">No slides active</p>
             </div>
           {% endif %}
         </div>
 
+        <!-- Caption row (clean, no gimmicks) -->
         {% if hero_slides %}
-          <!-- caption: museum label energy, but minimal -->
-          <div class="mt-4 flex items-start justify-between gap-8">
-            <p class="hero-caption">
-              <span class="hero-caption__label">Plate</span>
+          <div class="mt-4 flex items-start justify-between gap-10">
+            <div class="hero-caption">
+              <span class="hero-caption__label">Featured</span>
               <span class="hero-caption__value">{{ hero_slides.0.title }}</span>
-            </p>
+            </div>
 
-            <p class="hero-caption hero-caption--right">
-              <span class="hero-caption__label">Signal</span>
-              <span class="hero-caption__value">Active</span>
-            </p>
+            <div class="hero-caption hero-caption--right">
+              <span class="hero-caption__label">Made for</span>
+              <span class="hero-caption__value">Modern homes</span>
+            </div>
           </div>
         {% endif %}
+
       </div>
     </div>
   </div>

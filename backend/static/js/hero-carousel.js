@@ -1,5 +1,3 @@
-// static/js/hero-carousel.js
-
 document.addEventListener('DOMContentLoaded', () => {
   // Ensure GSAP and Observer are loaded
   if (typeof gsap === 'undefined' || typeof Observer === 'undefined') {

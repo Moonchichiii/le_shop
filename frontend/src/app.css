@@ -216,7 +216,7 @@
   .btn-primary {
     @apply inline-flex items-center justify-center gap-2
       px-8 py-3.5 text-sm font-bold tracking-[0.16em] uppercase
-      text-[var(--color-arti-paper)]
+      text-(--color-arti-paper)
       active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed;
     border-radius: 2px;
     background: var(--color-arti-ink);
