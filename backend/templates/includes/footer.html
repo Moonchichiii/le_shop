@@ -1,43 +1,76 @@
-<footer class="bg-[var(--color-arti-green-bg)] text-[#FDFBF7] py-20 px-6 pb-32 md:pb-20 mt-auto">
-    <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12 border-b border-white/10 pb-16">
+<footer class="bg-arti-bg text-arti-ink border-t border-arti-rule mt-auto">
+    <div class="mx-auto max-w-7xl px-6 py-18 md:py-20">
+        <!-- Index row -->
+        <div class="flex items-end justify-between gap-8">
+            <div>
+                <p class="label">ARCHIVE / FOOTER • INDEX 004</p>
+                <div class="rule mt-4 w-56"></div>
+            </div>
 
-        <!-- Brand -->
-        <div class="col-span-1 md:col-span-2 space-y-6">
-            <h2 class="font-serif text-3xl text-white">Art Leptis<span class="text-arti-accent">.</span></h2>
-            <p class="opacity-60 text-sm max-w-sm leading-relaxed">
-                Curated handmade objects for the modern home. Sustainable, unique, and timeless.
-            </p>
+            <div class="hidden md:block text-right">
+                
+            </div>
         </div>
 
-        <!-- Shop -->
-        <nav aria-label="Footer shop links">
-            <h3 class="font-bold mb-6 text-xs uppercase tracking-widest text-white">Shop</h3>
-            <ul class="space-y-3 opacity-60 text-sm">
-                <li><a href="{% url 'product_list' %}" class="hover:text-white transition">New Arrivals</a></li>
-                <li><a href="{% url 'product_list' %}" class="hover:text-white transition">Ceramics</a></li>
-                <li><a href="{% url 'product_list' %}" class="hover:text-white transition">Furniture</a></li>
-            </ul>
-        </nav>
+        <!-- Main grid (intentional asymmetry) -->
+        <div class="mt-14 grid gap-12 md:grid-cols-12">
+            <!-- Brand / statement -->
+            <div class="md:col-span-6">
+                <h2 class="headline-serif text-4xl md:text-5xl leading-[0.95]">
+                    Art Leptis<span class="signal">.</span>
+                </h2>
 
-        <!-- Company -->
-        <nav aria-label="Footer company links">
-            <h3 class="font-bold mb-6 text-xs uppercase tracking-widest text-white">Company</h3>
-            <ul class="space-y-3 opacity-60 text-sm">
-                <!-- Points to the Story section on Home -->
-                <li><a href="/#story" class="hover:text-white transition">Our Story</a></li>
-                <li><a href="#" class="hover:text-white transition">Contact</a></li>
-                <li><a href="#" class="hover:text-white transition">Shipping</a></li>
-            </ul>
-        </nav>
+                <p class="mt-6 max-w-lg text-sm leading-relaxed opacity-70">
+                    A coastal archive. A material study. A gallery system that happens to sell objects.
+                </p>
 
-    </div>
+                <!-- Stamp / coordinate system (tight, not "banner") -->
+                <div class="mt-8 inline-flex items-center gap-3 px-4 py-3">              
+                    
+                </div>
+            </div>
 
-    <!-- Footer Bottom -->
-    <div class="max-w-7xl mx-auto pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-white/30">
-        <p>&copy; 2026 Art Leptis. All rights reserved.</p>
-        
-        <a href="https://www.nordiccodeworks.com" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors">
-            Website made by Nordic Code Works
-        </a>
+            <!-- Links -->
+            <div class="md:col-span-6 md:pl-10">
+                <div class="grid grid-cols-2 gap-10 md:grid-cols-3">
+                    <nav aria-label="Footer shop links">
+                        <p class="label mb-5">SHOP</p>
+                        <ul class="space-y-3 text-sm">
+                            <li><a href="{% url 'product_list' %}" class="footer-link">New Arrivals</a></li>
+                            <li><a href="{% url 'product_list' %}" class="footer-link">Ceramics</a></li>
+                            <li><a href="{% url 'product_list' %}" class="footer-link">Furniture</a></li>
+                        </ul>
+                    </nav>
+
+                    <nav aria-label="Footer system links">
+                        <p class="label mb-5">SYSTEM</p>
+                        <ul class="space-y-3 text-sm">
+                            <li><a href="/#story" class="footer-link">Our Story</a></li>
+                            <li><a href="#" class="footer-link">Contact</a></li>
+                            <li><a href="#" class="footer-link">Shipping</a></li>
+                        </ul>
+                    </nav>
+
+                    <nav aria-label="Footer legal links" class="hidden md:block">
+                        <p class="label mb-5">LEGAL</p>
+                        <ul class="space-y-3 text-sm">
+                            <li><a href="#" class="footer-link">Privacy</a></li>
+                            <li><a href="#" class="footer-link">Terms</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom -->
+        <div class="mt-14 pt-8 border-t border-arti-rule flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+            <p class="text-xs opacity-60">© 2026 Art Leptis. All rights reserved.</p>
+
+            <a href="https://www.nordiccodeworks.com"
+                 target="_blank" rel="noopener noreferrer"
+                 class="text-xs footer-link">
+                Website made by Nordic Code Works
+            </a>
+        </div>
     </div>
 </footer>

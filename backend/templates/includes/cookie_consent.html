@@ -1,0 +1,39 @@
+{% with cc=request.COOKIES.al_cookie_consent_v1 %}
+<div id="cookie-root" class="artleptis">
+  {% if not cc %}
+    <div id="cookie-overlay" class="cc-overlay" role="dialog" aria-modal="true">
+      <div class="cc-sheet">
+        <div class="caption">SYSTEM / CONSENT • #01</div>
+        <h2 class="headline-serif mt-4 text-4xl">ENTER THE ARCHIVE?</h2>
+        <p class="mt-4 text-sm opacity-70 max-w-prose">
+          Essential cookies keep checkout working. Optional cookies help improve the archive. No dark patterns.
+        </p>
+
+        <div class="mt-6 flex flex-wrap gap-3">
+          <button class="btn-brutal-ghost"
+            hx-post="{% url 'cookie_reject' %}"
+            hx-target="#cookie-root"
+            hx-swap="outerHTML"
+            hx-headers='{"X-CSRFToken":"{{ csrf_token }}"}'>
+            Reject
+          </button>
+
+          <button class="btn-brutal"
+            hx-post="{% url 'cookie_accept' %}"
+            hx-target="#cookie-root"
+            hx-swap="outerHTML"
+            hx-headers='{"X-CSRFToken":"{{ csrf_token }}"}'>
+            Accept
+          </button>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
+  <!-- Always render glyph (hidden until consent is set OR overlay is dismissed) -->
+  <button id="cookie-glyph" class="cc-glyph" type="button" aria-label="Cookie preferences">
+    <span class="cc-glyph__ring" aria-hidden="true"></span>
+    <span class="cc-glyph__icon" aria-hidden="true">🍪</span>
+  </button>
+</div>
+{% endwith %}

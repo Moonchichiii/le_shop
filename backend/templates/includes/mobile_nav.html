@@ -1,6 +1,6 @@
 <!-- MOBILE BOTTOM BAR -->
 <nav
-  class="md:hidden fixed bottom-6 left-4 right-4 z-50 nav-glass rounded-3xl h-[72px] flex items-center justify-around px-2 pb-1"
+  class="md:hidden fixed bottom-6 left-4 right-4 z-50 nav-glass rounded-3xl h-18 flex items-center justify-around px-2 pb-1"
   x-data="{ accountOpen: false }"
   @keydown.escape.window="accountOpen = false"
 >
@@ -73,7 +73,7 @@
       x-show="accountOpen"
       x-transition.opacity
       x-cloak
-      class="absolute bottom-[84px] right-0 w-56 rounded-3xl border border-arti-dark/10 bg-white shadow-2xl overflow-hidden"
+      class="absolute bottom-21 right-0 w-56 rounded-3xl border border-arti-dark/10 bg-white shadow-2xl overflow-hidden"
       role="menu"
       style="display:none"
     >
