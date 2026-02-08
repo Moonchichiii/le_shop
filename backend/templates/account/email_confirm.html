@@ -1,34 +1,53 @@
 {% extends "base.html" %}
 {% load i18n %}
 
-{% block title %}Confirm email | Arti Corner{% endblock %}
+{% block title %}Confirm email | Art Leptis{% endblock %}
 
 {% block content %}
-<div class="mx-auto max-w-md px-4 sm:px-6 py-12">
-  <p class="text-xs font-bold tracking-[0.22em] text-arti-dark/60 uppercase">Account</p>
-  <h1 class="headline-serif mt-3 text-4xl">Confirm email</h1>
+<section class="artleptis">
+  <div class="mx-auto max-w-md px-4 sm:px-6 py-section-sm">
 
-  <div class="mt-8 rounded-3xl border border-arti-dark/10 bg-white p-6 sm:p-7">
-    {% if confirmation %}
-      <p class="text-sm opacity-70">
-        Please confirm that <span class="font-medium">{{ confirmation.email_address.email }}</span> belongs to you.
-      </p>
+    <div class="reveal-up">
+      <span class="label">Account</span>
+      <h1 class="headline-serif mt-3 text-4xl">Confirm email</h1>
+    </div>
 
-      <form method="post" action="{% url 'account_confirm_email' confirmation.key %}" class="mt-6">
-        {% csrf_token %}
-        <button class="btn-primary w-full">{% trans "Confirm email" %}</button>
-      </form>
-    {% else %}
-      <p class="text-sm text-red-700">
-        This email confirmation link is invalid or has expired.
-      </p>
+    <div class="mt-8 border border-rule bg-paper p-6 sm:p-8 reveal-up">
+      {% if confirmation %}
+        <span class="text-meta block mb-4">Verification</span>
 
-      <div class="mt-6">
+        <p class="text-sm leading-relaxed text-ink-60">
+          Please confirm that
+          <span class="font-semibold text-ink">{{ confirmation.email_address.email }}</span>
+          belongs to you.
+        </p>
+
+        <div class="rule mt-6 mb-6"></div>
+
+        <form method="post" action="{% url 'account_confirm_email' confirmation.key %}">
+          {% csrf_token %}
+          <button class="btn-primary w-full">{% trans "Confirm email" %}</button>
+        </form>
+      {% else %}
+        <span class="text-meta block mb-4">Error — Link expired</span>
+
+        <p class="text-sm leading-relaxed text-ink-60">
+          This email confirmation link is invalid or has expired.
+        </p>
+
+        <div class="rule mt-6 mb-6"></div>
+
         <a href="{% url 'account_login' %}" class="btn-primary w-full text-center inline-flex justify-center">
           Back to sign in
         </a>
-      </div>
-    {% endif %}
+      {% endif %}
+    </div>
+
+    <div class="mt-4 flex items-center justify-between">
+      <span class="text-meta">SEC. Verification</span>
+      <span class="text-meta">Art Leptis</span>
+    </div>
+
   </div>
-</div>
+</section>
 {% endblock %}

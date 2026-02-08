@@ -34,6 +34,7 @@ dev = [
     "pytest",
     "pytest-django",
     "factory-boy",
+    "pytest-playwright",
 ]
 
 [tool.ruff]

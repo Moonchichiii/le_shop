@@ -1,21 +1,40 @@
 {% extends "base.html" %}
 {% load i18n %}
 
-{% block title %}Sign out | Arti Corner{% endblock %}
+{% block title %}Sign out | Art Leptis{% endblock %}
 
 {% block content %}
-<div class="mx-auto max-w-md px-4 sm:px-6 py-12">
-  <p class="text-xs font-bold tracking-[0.22em] text-arti-dark/60 uppercase">Account</p>
-  <h1 class="headline-serif mt-3 text-4xl">Sign out</h1>
+<section class="artleptis">
+  <div class="mx-auto max-w-md px-4 sm:px-6 py-section-sm">
 
-  <div class="mt-8 rounded-3xl border border-arti-dark/10 bg-white p-6 sm:p-7">
-    <p class="text-sm opacity-70">{% trans "Are you sure you want to sign out?" %}</p>
+    <div class="reveal-up">
+      <span class="label">Account</span>
+      <h1 class="headline-serif mt-3 text-4xl">Sign out</h1>
+    </div>
 
-    <form method="post" action="{% url 'account_logout' %}" class="mt-6 flex flex-col gap-3">
-      {% csrf_token %}
-      <button class="btn-primary w-full">{% trans "Sign out" %}</button>
-      <a href="{% url 'home' %}" class="btn-outline w-full text-center">{% trans "Cancel" %}</a>
-    </form>
+    <div class="mt-8 border border-rule bg-paper p-6 sm:p-8 reveal-up">
+      <span class="text-meta block mb-4">Confirm action</span>
+
+      <p class="text-sm leading-relaxed text-ink-60">
+        {% trans "Are you sure you want to sign out?" %}
+      </p>
+
+      <div class="rule mt-6 mb-6"></div>
+
+      <form method="post" action="{% url 'account_logout' %}" class="flex flex-col gap-3">
+        {% csrf_token %}
+        <button class="btn-primary w-full">{% trans "Sign out" %}</button>
+        <a href="{% url 'home' %}" class="btn-outline w-full text-center inline-flex justify-center">
+          {% trans "Cancel" %}
+        </a>
+      </form>
+    </div>
+
+    <div class="mt-4 flex items-center justify-between">
+      <span class="text-meta">SEC. Auth</span>
+      <span class="text-meta">Art Leptis</span>
+    </div>
+
   </div>
-</div>
+</section>
 {% endblock %}
