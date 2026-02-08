@@ -1,23 +1,22 @@
-{% if messages %}
-  <div
-    class="mx-auto max-w-7xl px-4 sm:px-6 mt-6"
-    data-testid="flash"
-    role="status"
-    aria-live="polite"
-    aria-label="Notifications"
-  >
-    <ul class="flex flex-col gap-2">
-      {% for message in messages %}
-        <li
-          class="px-5 py-3 text-sm flex items-center gap-3 border border-rule bg-mist text-ink
-                 {% if 'error' in message.tags %}text-red-700{% endif %}"
-          data-level="{{ message.level_tag }}"
-        >
-          <span class="text-meta shrink-0">{{ message.level_tag|upper }}</span>
-          <span class="rule w-px h-4 shrink-0"></span>
-          <span>{{ message }}</span>
-        </li>
-      {% endfor %}
-    </ul>
-  </div>
-{% endif %}
+<div
+  class="mx-auto max-w-7xl px-4 sm:px-6 mt-6"
+  data-testid="flash"
+  role="status"
+  aria-live="polite"
+  aria-label="Notifications"
+  {% if not messages %}hidden aria-hidden="true"{% endif %}
+>
+  <ul class="flex flex-col gap-2">
+    {% for message in messages %}
+      <li
+        class="px-5 py-3 text-sm flex items-center gap-3 border border-rule bg-mist text-ink
+               {% if 'error' in message.tags or 'danger' in message.tags %}text-red-700{% endif %}"
+        data-level="{{ message.level_tag }}"
+      >
+        <span class="text-meta shrink-0">{{ message.level_tag|upper }}</span>
+        <span class="rule w-px h-4 shrink-0"></span>
+        <span>{{ message }}</span>
+      </li>
+    {% endfor %}
+  </ul>
+</div>

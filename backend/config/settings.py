@@ -102,9 +102,6 @@ DATABASES = {
     )
 }
 
-
-# Auth / Allauth
-
 # Auth / Allauth
 
 SITE_ID = 1

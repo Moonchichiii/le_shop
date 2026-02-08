@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load i18n %}
+{% load socialaccount %}
 
 {% block title %}Sign in | Art Leptis{% endblock %}
 
@@ -16,13 +17,6 @@
       <form method="post" action="{% url 'account_login' %}" class="space-y-5">
         {% csrf_token %}
 
-        {% if form.non_field_errors %}
-          <div class="border border-rule bg-mist p-3">
-            <span class="text-meta block mb-1">Error</span>
-            <div class="text-sm text-ink-80">{{ form.non_field_errors }}</div>
-          </div>
-        {% endif %}
-
         <div>
           <label class="text-meta block mb-2" for="id_login">Email</label>
           {{ form.login }}
@@ -33,9 +27,7 @@
           {{ form.password }}
         </div>
 
-        <button class="btn-primary w-full">Sign in</button>
-
-        <div class="rule"></div>
+        <button type="submit" class="btn-primary w-full">Sign in</button>
 
         <div class="flex items-center justify-between">
           <a
@@ -52,6 +44,32 @@
           </a>
         </div>
       </form>
+
+      <div class="rule mt-6"></div>
+
+      <div class="mt-4 space-y-2">
+        {% get_providers as socialaccount_providers %}
+        {% if socialaccount_providers %}
+          {% for provider in socialaccount_providers %}
+            {% if provider.id == "google" %}
+              <a href="{% provider_login_url provider.id %}" class="btn-outline w-full text-center inline-flex justify-center">
+                Continue with Google
+              </a>
+            {% elif provider.id == "facebook" %}
+              <a href="{% provider_login_url provider.id %}" class="btn-outline w-full text-center inline-flex justify-center">
+                Continue with Facebook
+              </a>
+            {% endif %}
+          {% endfor %}
+        {% endif %}
+      </div>
+
+      <div class="rule mt-6"></div>
+
+      <a href="{% url 'account_login' %}?method=code"
+         class="btn-outline w-full text-center inline-flex justify-center mt-4">
+        Email me a login code
+      </a>
     </div>
 
     <div class="mt-4 flex items-center justify-between">
