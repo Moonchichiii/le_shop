@@ -318,9 +318,12 @@
     display: block;
   }
 
-  header a[aria-label="Cart"] > span {
-    box-shadow: 0 0 0 2px var(--color-paper);
-  }
+  header a[aria-label="Cart"] > span[data-testid="cart-count"] {
+  box-shadow: 0 0 0 2px var(--color-paper);
+}
+
+
+
 
   /* ================================
      BUTTONS

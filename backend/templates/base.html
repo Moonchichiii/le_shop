@@ -21,7 +21,7 @@
 <body class="bg-paper text-ink font-sans antialiased selection:bg-signal-500 selection:text-white pb-24 md:pb-0 flex flex-col min-h-screen">
 
   {% include "includes/header.html" %}
-
+  {% include "includes/flash.html" %}
   <main class="grow w-full relative pt-24 md:pt-28 overflow-x-hidden">
     <div class="{% block artefact_scope %}artleptis{% endblock %}">
       {% block content %}{% endblock %}

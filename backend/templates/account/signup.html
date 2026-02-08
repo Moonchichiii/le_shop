@@ -23,20 +23,18 @@
           </div>
         {% endif %}
 
-        <div>
-          <label class="text-meta block mb-2" for="id_email">Email</label>
-          {{ form.email }}
-        </div>
-
-        <div>
-          <label class="text-meta block mb-2" for="id_password1">Password</label>
-          {{ form.password1 }}
-        </div>
-
-        <div>
-          <label class="text-meta block mb-2" for="id_password2">Confirm password</label>
-          {{ form.password2 }}
-        </div>
+        <!-- Render fields manually or rely on iteration if naming varies -->
+        {% for field in form %}
+          <div>
+            <label class="text-meta block mb-2" for="{{ field.id_for_label }}">
+              {{ field.label }}
+            </label>
+            {{ field }}
+            {% if field.errors %}
+              <p class="mt-1 text-xs text-red-600">{{ field.errors.0 }}</p>
+            {% endif %}
+          </div>
+        {% endfor %}
 
         <button class="btn-primary w-full">Create account</button>
 

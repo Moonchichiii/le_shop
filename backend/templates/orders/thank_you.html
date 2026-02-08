@@ -1,17 +1,32 @@
 {% extends "base.html" %}
-{% block title %}Order Confirmed | Arti Corner{% endblock %}
+{% load i18n %}
+
+{% block title %}Order Confirmed | Art Leptis{% endblock %}
 
 {% block content %}
-<div class="mx-auto max-w-lg px-4 sm:px-6 py-12">
-  <p class="text-xs font-bold tracking-[0.22em] text-arti-dark/60 uppercase">Success</p>
-  <h1 class="headline-serif mt-3 text-4xl">Payment confirmed</h1>
-  <p class="mt-3 text-sm opacity-70">
-    Thanks! Your order <strong>#{{ order.id }}</strong> is being processed.
-  </p>
+<section class="artleptis">
+  <div class="mx-auto max-w-lg px-4 sm:px-6 py-section-sm text-center">
+    
+    <div class="reveal-up">
+      <span class="label text-signal-500">Confirmed</span>
+      <h1 class="headline-serif mt-3 text-5xl">Payment accepted</h1>
+      
+      <div class="rule w-16 mx-auto mt-6 mb-6"></div>
+      
+      <p class="text-ink-60 leading-relaxed text-lg">
+        Thank you. Order <strong>#{{ order.id }}</strong> has been queued for processing.
+      </p>
+    </div>
 
-  <div class="mt-8 flex gap-3">
-    <a href="{% url 'product_list' %}" class="btn-primary">Continue shopping</a>
-    <a href="{% url 'cart_detail' %}" class="btn-outline">Back to cart</a>
+    <div class="mt-10 flex flex-col sm:flex-row gap-4 justify-center reveal-up">
+      <a href="{% url 'product_list' %}" class="btn-primary">
+        Continue Shopping
+      </a>
+      <a href="{% url 'cart_detail' %}" class="btn-outline">
+        Return to Cart
+      </a>
+    </div>
+    
   </div>
-</div>
+</section>
 {% endblock %}

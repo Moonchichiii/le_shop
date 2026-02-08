@@ -1,95 +1,113 @@
 {% extends "base.html" %}
+{% load i18n %}
 
-{% block title %}Order #{{ order.id }} Tracking | Arti Corner{% endblock %}
+{% block title %}Tracking #{{ order.id }} | Art Leptis{% endblock %}
 
 {% block content %}
-<div class="mx-auto max-w-3xl px-4 sm:px-6 py-12">
+<section class="artleptis">
+  <div class="mx-auto max-w-3xl px-4 sm:px-6 py-section-sm">
 
-  <div class="flex items-end justify-between gap-6">
-    <div>
-      <p class="text-xs font-bold tracking-[0.22em] text-arti-dark/60 uppercase">Order tracking</p>
-      <h1 class="headline-serif mt-3 text-4xl">Order #{{ order.id }}</h1>
-      <p class="mt-2 text-sm opacity-70">
-        Payment status:
-        <span class="font-medium">{{ order.get_status_display }}</span>
-      </p>
+    <!-- Header -->
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 reveal-up">
+      <div>
+        <span class="label">Order Tracking</span>
+        <h1 class="headline-serif mt-3 text-4xl">Reference #{{ order.id }}</h1>
+        <div class="mt-2 inline-flex items-center gap-2">
+          <span class="w-2 h-2 bg-signal-500"></span>
+          <span class="text-sm font-bold uppercase tracking-wider">{{ order.get_status_display }}</span>
+        </div>
+      </div>
+
+      {% if request.user.is_authenticated %}
+        <a href="{% url 'orders_list' %}" class="footer-link text-xs uppercase font-bold tracking-widest">
+          Back to orders
+        </a>
+      {% endif %}
     </div>
 
-    {% if request.user.is_authenticated %}
-      <a href="{% url 'orders_list' %}" class="text-sm underline opacity-70 hover:opacity-100">Back to orders</a>
-    {% endif %}
-  </div>
+    <!-- Fulfillment Status -->
+    <div class="border border-rule bg-paper mb-12 reveal-up">
+      <div class="p-6 border-b border-rule flex justify-between items-center bg-mist/30">
+        <span class="text-meta">Current Status</span>
+        <span class="font-serif text-xl">{{ tracking.get_status_display }}</span>
+      </div>
 
-  <div class="mt-8 rounded-3xl border border-arti-dark/10 bg-white p-6 sm:p-7">
-    <p class="text-xs uppercase tracking-widest opacity-60">Fulfillment</p>
-    <p class="mt-2 text-2xl font-medium">{{ tracking.get_status_display }}</p>
-
-    <div class="mt-6 grid gap-3 text-sm opacity-80">
-      <div class="flex items-center justify-between">
-        <span>Processing</span>
-        <span>{% if tracking.processing_at %}{{ tracking.processing_at|date:"Y-m-d H:i" }}{% else %}-{% endif %}</span>
-      </div>
-      <div class="flex items-center justify-between">
-        <span>Packed</span>
-        <span>{% if tracking.packed_at %}{{ tracking.packed_at|date:"Y-m-d H:i" }}{% else %}-{% endif %}</span>
-      </div>
-      <div class="flex items-center justify-between">
-        <span>Shipped</span>
-        <span>{% if tracking.shipped_at %}{{ tracking.shipped_at|date:"Y-m-d H:i" }}{% else %}-{% endif %}</span>
-      </div>
-      <div class="flex items-center justify-between">
-        <span>Delivered</span>
-        <span>{% if tracking.delivered_at %}{{ tracking.delivered_at|date:"Y-m-d H:i" }}{% else %}-{% endif %}</span>
+      <!-- Timeline Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-rule">
+        <div class="p-4 text-center">
+          <span class="text-[10px] font-bold uppercase tracking-widest block opacity-50 mb-1">Processing</span>
+          <span class="font-mono text-xs">{% if tracking.processing_at %}{{ tracking.processing_at|date:"d/m H:i" }}{% else %}—{% endif %}</span>
+        </div>
+        <div class="p-4 text-center">
+          <span class="text-[10px] font-bold uppercase tracking-widest block opacity-50 mb-1">Packed</span>
+          <span class="font-mono text-xs">{% if tracking.packed_at %}{{ tracking.packed_at|date:"d/m H:i" }}{% else %}—{% endif %}</span>
+        </div>
+        <div class="p-4 text-center">
+          <span class="text-[10px] font-bold uppercase tracking-widest block opacity-50 mb-1">Shipped</span>
+          <span class="font-mono text-xs">{% if tracking.shipped_at %}{{ tracking.shipped_at|date:"d/m H:i" }}{% else %}—{% endif %}</span>
+        </div>
+        <div class="p-4 text-center">
+          <span class="text-[10px] font-bold uppercase tracking-widest block opacity-50 mb-1">Delivered</span>
+          <span class="font-mono text-xs">{% if tracking.delivered_at %}{{ tracking.delivered_at|date:"d/m H:i" }}{% else %}—{% endif %}</span>
+        </div>
       </div>
     </div>
 
-    <div class="mt-8 border-t border-arti-dark/10 pt-6">
-      <p class="text-xs uppercase tracking-widest opacity-60">Shipping</p>
-
-      {% if tracking.carrier or tracking.tracking_number %}
-        <div class="mt-3 space-y-2 text-sm">
-          {% if tracking.carrier %}
-            <p><span class="opacity-60">Carrier:</span> <span class="font-medium">{{ tracking.carrier }}</span></p>
-          {% endif %}
-          {% if tracking.tracking_number %}
-            <p><span class="opacity-60">Tracking number:</span> <span class="font-medium">{{ tracking.tracking_number }}</span></p>
+    <!-- Shipping Details & Notes -->
+    <div class="grid md:grid-cols-2 gap-8 mb-12 reveal-up">
+      
+      <!-- Left: Carrier Info -->
+      <div>
+        <h3 class="headline-serif text-xl mb-4">Logistics</h3>
+        <div class="border-l border-rule pl-4 space-y-4">
+          {% if tracking.carrier or tracking.tracking_number %}
+            <div>
+              <span class="text-meta block mb-1">Carrier</span>
+              <span class="text-sm font-medium">{{ tracking.carrier|default:"-" }}</span>
+            </div>
+            <div>
+              <span class="text-meta block mb-1">Tracking Number</span>
+              <span class="font-mono text-sm">{{ tracking.tracking_number|default:"-" }}</span>
+            </div>
+          {% else %}
+            <p class="text-sm text-ink-60 italic">Tracking details pending shipment.</p>
           {% endif %}
         </div>
-      {% else %}
-        <p class="mt-3 text-sm opacity-70">
-          Tracking details will appear once your order has shipped.
-        </p>
-      {% endif %}
+      </div>
 
+      <!-- Right: Notes -->
       {% if tracking.delivery_notes %}
-        <div class="mt-5 rounded-2xl bg-arti-dark/5 p-4 text-sm">
-          <p class="text-xs uppercase tracking-widest opacity-60 mb-2">Delivery notes</p>
-          <p class="opacity-80">{{ tracking.delivery_notes }}</p>
+      <div>
+        <h3 class="headline-serif text-xl mb-4">Delivery Notes</h3>
+        <div class="bg-mist p-4 border border-rule">
+          <p class="text-sm font-mono">{{ tracking.delivery_notes }}</p>
         </div>
+      </div>
       {% endif %}
     </div>
-  </div>
 
-  {% if events %}
-    <div class="mt-8 rounded-3xl border border-arti-dark/10 bg-white p-6 sm:p-7">
-      <p class="text-xs uppercase tracking-widest opacity-60">History</p>
-      <div class="mt-4 space-y-3 text-sm">
+    <!-- History Log -->
+    {% if events %}
+    <div class="border-t border-rule pt-8 reveal-up">
+      <h3 class="label mb-6">Activity Log</h3>
+      <div class="space-y-0">
         {% for ev in events %}
-          <div class="flex items-start justify-between gap-6 border-b border-arti-dark/10 pb-3 last:border-0 last:pb-0">
-            <div class="min-w-0">
-              <p class="font-medium">
-                {{ ev.from_status|default:"-" }} → {{ ev.to_status }}
+          <div class="flex gap-6 py-3 border-b border-rule last:border-0 hover:bg-mist/20 transition-colors">
+            <span class="font-mono text-xs text-ink-60 shrink-0 w-24 pt-0.5">{{ ev.created_at|date:"Y-m-d H:i" }}</span>
+            <div>
+              <p class="text-sm font-bold">
+                {{ ev.from_status|default:"Draft" }} → {{ ev.to_status }}
               </p>
               {% if ev.note %}
-                <p class="mt-1 opacity-70">{{ ev.note }}</p>
+                <p class="text-xs text-ink-60 mt-1">{{ ev.note }}</p>
               {% endif %}
             </div>
-            <p class="shrink-0 opacity-60">{{ ev.created_at|date:"Y-m-d H:i" }}</p>
           </div>
         {% endfor %}
       </div>
     </div>
-  {% endif %}
+    {% endif %}
 
-</div>
+  </div>
+</section>
 {% endblock %}

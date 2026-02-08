@@ -103,20 +103,25 @@
           />
         </svg>
 
-        {% if cart and cart|length > 0 %}
+        {# Contract: always present count element, hidden when empty #}
         <span
-          class="absolute top-1 right-1 min-w-[20px] h-5 px-1
+          data-testid="cart-count"
+          class="absolute top-1 right-1 min-w-5 h-5 px-1
                  bg-signal-500 text-white text-[10px] font-bold
                  flex items-center justify-center"
           style="border-radius: 2px"
+          {% if not cart or cart|length == 0 %}hidden{% endif %}
         >
           {{ cart|length }}
         </span>
-        {% else %}
+
+        {# Optional: dot when empty (decorative) #}
         <span
+          data-testid="cart-dot"
           class="absolute top-1.5 right-1.5 w-2 h-2 bg-signal-500"
+          {% if cart and cart|length > 0 %}hidden{% endif %}
+          aria-hidden="true"
         ></span>
-        {% endif %}
       </a>
 
       <!-- Language Switcher (DESKTOP) -->

@@ -1,33 +1,63 @@
 {% extends "base.html" %}
+{% load i18n %}
 
-{% block title %}Checkout | Arti Corner{% endblock %}
+{% block title %}Checkout | Art Leptis{% endblock %}
 
 {% block content %}
-<div class="mx-auto max-w-lg px-4 sm:px-6 py-12">
-  <p class="text-xs font-bold tracking-[0.22em] text-arti-dark/60 uppercase">Checkout</p>
-  <h1 class="headline-serif mt-3 text-4xl">Continue as guest</h1>
-  <p class="mt-3 text-sm opacity-70">
-    Enter your email so we can send your receipt and order updates.
-  </p>
+<section class="artleptis">
+  <div class="mx-auto max-w-lg px-4 sm:px-6 py-section-sm">
 
-  <form method="post" class="mt-8 space-y-4">
-    {% csrf_token %}
-    <label class="sr-only" for="email">Email</label>
-    <input
-      id="email"
-      name="email"
-      type="email"
-      required
-      autocomplete="email"
-      class="w-full rounded-2xl border border-arti-dark/15 bg-white px-4 py-3 text-sm"
-      placeholder="you@example.com"
-    />
-    <button type="submit" class="btn-primary w-full">Continue to payment</button>
-
-    <div class="flex items-center justify-between text-sm">
-      <a href="{% url 'cart_detail' %}" class="underline opacity-70 hover:opacity-100">Back to cart</a>
-      <a href="{% url 'account_login' %}" class="underline opacity-70 hover:opacity-100">Sign in instead</a>
+    <div class="reveal-up">
+      <span class="label">Checkout</span>
+      <h1 class="headline-serif mt-3 text-4xl">Continue as guest</h1>
     </div>
-  </form>
-</div>
+
+    <div class="mt-8 border border-rule bg-paper p-6 sm:p-8 reveal-up">
+      <span class="text-meta block mb-4">Identification</span>
+
+      <p class="text-sm leading-relaxed text-ink-60">
+        Enter your email to receive your receipt and tracking number.
+      </p>
+
+      <div class="rule mt-6 mb-6"></div>
+
+      <form method="post" class="space-y-5">
+        {% csrf_token %}
+        
+        <div>
+          <label class="text-meta block mb-2" for="email">Email Address</label>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            required
+            autocomplete="email"
+            class="w-full border border-rule bg-transparent px-4 py-3 text-sm focus:outline-none focus:border-ink transition-colors"
+            placeholder="you@example.com"
+            style="border-radius: 0;"
+          />
+        </div>
+
+        <button type="submit" class="btn-primary w-full">
+          Continue to payment
+        </button>
+
+        <div class="flex items-center justify-between pt-2">
+          <a href="{% url 'cart_detail' %}" class="text-[11px] font-bold uppercase tracking-[0.12em] text-ink-60 border-b border-rule pb-0.5 hover:text-ink hover:border-ink transition-colors">
+            Back to cart
+          </a>
+          <a href="{% url 'account_login' %}" class="text-[11px] font-bold uppercase tracking-[0.12em] text-ink-60 border-b border-rule pb-0.5 hover:text-ink hover:border-ink transition-colors">
+            Sign in instead
+          </a>
+        </div>
+      </form>
+    </div>
+
+    <div class="mt-4 flex items-center justify-between">
+      <span class="text-meta">SEC. Checkout</span>
+      <span class="text-meta">Art Leptis</span>
+    </div>
+
+  </div>
+</section>
 {% endblock %}
