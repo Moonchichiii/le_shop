@@ -113,8 +113,8 @@ AUTHENTICATION_BACKENDS = [
 
 # --- Allauth Settings ---
 
-# ACCOUNT_LOGIN_METHODS = {"email"}
-ACCOUNT_LOGIN_METHODS = {"username", "email"}
+ACCOUNT_LOGIN_METHODS = {"email"}
+# ACCOUNT_LOGIN_METHODS = {"username", "email"}
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 ACCOUNT_SIGNUP_FIELDS = [
     "email*",

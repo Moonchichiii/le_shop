@@ -90,7 +90,7 @@ def test_smart_stock_ui_feedback(page: Page, live_server):
     page.fill("input[name='qty']", "5")
 
     # 1. Click "Add to cart" (POST -> redirect)
-    with page.expect_response("**/cart/add/**") as response_info:
+    with page.expect_response("**/cart/add/**"):
         page.locator("input[name='qty']").locator("xpath=../../..").locator(
             "button"
         ).click()
