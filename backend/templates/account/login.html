@@ -1,6 +1,5 @@
 {% extends "base.html" %}
-{% load i18n %}
-{% load socialaccount %}
+{% load i18n socialaccount %}
 
 {% block title %}Sign in | Art Leptis{% endblock %}
 
@@ -24,7 +23,11 @@
 
         <div>
           <label class="text-meta block mb-2" for="id_password">Password</label>
-          {{ form.password }}
+          <input type="password"
+                 name="password"
+                 placeholder="••••••••"
+                 data-testid="password"
+                 class="w-full rounded-2xl border border-arti-dark/15 bg-white px-4 py-3 text-sm focus:border-arti-dark focus:ring-0">
         </div>
 
         <button type="submit" class="btn-primary w-full">Sign in</button>

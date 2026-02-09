@@ -9,7 +9,9 @@ from .cart import Cart
 
 def cart_detail(request):
     cart = Cart(request)
-    return render(request, "cart/detail.html", {"cart": cart})
+    response = render(request, "cart/detail.html", {"cart": cart})
+    print("@@@ CART HTML:", response.content.decode()[:2000])  # first 2 KB
+    return response
 
 
 @require_POST
@@ -27,9 +29,9 @@ def cart_add(request, product_id: int):
     if result.removed:
         messages.warning(request, f"Sorry, '{product.name}' is sold out.")
     elif result.clamped:
-        messages.info(
-            request, f"Only {result.max_stock} left — quantity updated in your cart."
-        )
+        msg = f"Only {result.max_stock} left — quantity updated in your cart."
+        messages.info(request, msg)
+        print("@@@ CLAMP MSG:", msg)  # <-- will appear in pytest stdout
     else:
         messages.success(request, "Added to cart.")
 

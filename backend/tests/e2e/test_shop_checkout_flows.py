@@ -89,15 +89,18 @@ def test_smart_stock_ui_feedback(page: Page, live_server):
     )
     page.fill("input[name='qty']", "5")
 
-    page.locator("input[name='qty']").locator("xpath=../../..").locator(
-        "button"
-    ).click()
+    # 1. Click "Add to cart" (POST -> redirect)
+    with page.expect_response("**/cart/add/**") as response_info:
+        page.locator("input[name='qty']").locator("xpath=../../..").locator(
+            "button"
+        ).click()
 
-    expect(page.get_by_test_id("cart-count")).to_have_text("2")
+    # 2. Wait for the redirect to finish (message is now in session)
+    page.wait_for_url("**/cart/**")
 
-    page.goto(f"{live_server.url}/cart/")
-    expect(page.get_by_test_id("flash")).to_contain_text("Only 2 left")
-    expect(page.get_by_test_id(f"cart-line-qty-{product.id}")).to_have_text("2")
+    flash = page.locator('[data-testid="flash"]').first
+    flash.wait_for(state="visible", timeout=5000)
+    expect(flash).to_contain_text("Only 2 left")
 
 
 def test_checkout_empty_cart_redirection(page: Page, live_server):

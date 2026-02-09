@@ -18,7 +18,7 @@ def create_verified_user(
 
 def create_product(name="Test Item", price=Decimal("50.00"), stock=5, slug="test-item"):
     cat, _ = Category.objects.get_or_create(name="Decor", slug="decor")
-    return Product.objects.create(
+    product = Product.objects.create(
         name=name,
         slug=slug,
         price=price,
@@ -26,4 +26,6 @@ def create_product(name="Test Item", price=Decimal("50.00"), stock=5, slug="test
         category=cat,
         is_active=True,
         image_alt="Test Image",
+        image="le_shop/placeholder",
     )
+    return product

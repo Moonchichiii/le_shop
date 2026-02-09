@@ -18,16 +18,23 @@ class StyledLoginForm(LoginForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+        # 1. Base styling
         for field in self.fields.values():
             field.widget.attrs["class"] = INPUT
 
+        # 2. Placeholder for email/username
         if "login" in self.fields:
             self.fields["login"].widget.attrs["placeholder"] = "you@example.com"
 
+        # 3. Password widget override (order matters)
         for name, field in self.fields.items():
             if is_password_widget(field.widget) or "password" in name:
                 field.widget = forms.PasswordInput(
-                    attrs={"class": INPUT, "placeholder": "••••••••"}
+                    attrs={
+                        "class": INPUT,
+                        "placeholder": "••••••••",
+                        "data-testid": "password",
+                    }
                 )
 
 
