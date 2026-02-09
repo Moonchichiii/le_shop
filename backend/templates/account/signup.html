@@ -7,54 +7,133 @@
 <section class="artleptis">
   <div class="mx-auto max-w-md px-4 sm:px-6 py-section-sm">
 
-    <div class="reveal-up">
-      <span class="label">Account</span>
-      <h1 class="headline-serif mt-3 text-4xl">Create account</h1>
+    {# ── Header ── #}
+    <div class="reveal-up text-center">
+      <span class="label">Join Art Leptis</span>
+      <h1 class="headline-serif mt-3 text-4xl">
+        Create your account
+      </h1>
+      <p class="text-body mt-3 mx-auto max-w-xs">
+        Start collecting unique handcrafted pieces from the
+        Mediterranean coast.
+      </p>
     </div>
 
-    <div class="mt-8 border border-rule bg-paper p-6 sm:p-8 reveal-up">
-      <form method="post" action="{% url 'account_signup' %}" class="space-y-5">
+    {# ── Card ── #}
+    <div
+      class="mt-8 bg-surface shadow-sm p-6 sm:p-8 reveal-up"
+      style="border-radius: var(--radius-lg)"
+    >
+      <form
+        method="post"
+        action="{% url 'account_signup' %}"
+        class="space-y-5"
+      >
         {% csrf_token %}
 
         {% if form.non_field_errors %}
-          <div class="border border-rule bg-mist p-3">
-            <span class="text-meta block mb-1">Error</span>
-            <div class="text-sm text-ink-80">{{ form.non_field_errors }}</div>
+          <div
+            class="border-l-[3px] border-red-600 bg-cream/60
+                   px-4 py-3"
+            style="border-radius: var(--radius-md)"
+          >
+            <p class="text-sm font-medium text-red-700">
+              {{ form.non_field_errors }}
+            </p>
           </div>
         {% endif %}
 
-        <!-- Render fields manually or rely on iteration if naming varies -->
         {% for field in form %}
           <div>
-            <label class="text-meta block mb-2" for="{{ field.id_for_label }}">
+            <label
+              class="block text-sm font-medium text-ink-60 mb-1.5"
+              for="{{ field.id_for_label }}"
+            >
               {{ field.label }}
             </label>
             {{ field }}
             {% if field.errors %}
-              <p class="mt-1 text-xs text-red-600">{{ field.errors.0 }}</p>
+              <p class="mt-1 text-xs text-red-600">
+                {{ field.errors.0 }}
+              </p>
             {% endif %}
           </div>
         {% endfor %}
 
         <button class="btn-primary w-full">Create account</button>
-
-        <div class="rule"></div>
-
-        <p class="text-sm text-ink-60">
-          Already have an account?
-          <a
-            class="font-bold text-ink border-b border-rule pb-0.5 hover:border-ink transition-colors duration-200"
-            href="{% url 'account_login' %}"
-          >
-            Sign in
-          </a>
-        </p>
       </form>
-    </div>
 
-    <div class="mt-4 flex items-center justify-between">
-      <span class="text-meta">SEC. Registration</span>
-      <span class="text-meta">Art Leptis</span>
+      {# ── How it works ── #}
+      <div
+        class="mt-6 bg-cream/60 px-4 py-4"
+        style="border-radius: var(--radius-md)"
+      >
+        <p class="text-xs font-semibold text-ink-40 uppercase
+                  tracking-widest mb-3">
+          How it works
+        </p>
+        <ol class="space-y-2.5">
+          <li class="flex items-start gap-3 text-sm text-ink-60">
+            <span
+              class="flex-shrink-0 w-5 h-5 bg-ink text-paper
+                     text-[10px] font-bold flex items-center
+                     justify-center rounded-full mt-0.5"
+            >
+              1
+            </span>
+            <span>
+              After signing up, we'll send a
+              <strong class="text-ink font-semibold">
+                confirmation link
+              </strong>
+              to your email.
+            </span>
+          </li>
+          <li class="flex items-start gap-3 text-sm text-ink-60">
+            <span
+              class="flex-shrink-0 w-5 h-5 bg-ink text-paper
+                     text-[10px] font-bold flex items-center
+                     justify-center rounded-full mt-0.5"
+            >
+              2
+            </span>
+            <span>
+              Click the link to verify your address and activate
+              your account.
+            </span>
+          </li>
+          <li class="flex items-start gap-3 text-sm text-ink-60">
+            <span
+              class="flex-shrink-0 w-5 h-5 bg-ink text-paper
+                     text-[10px] font-bold flex items-center
+                     justify-center rounded-full mt-0.5"
+            >
+              3
+            </span>
+            <span>
+              For future logins, just enter your email — we'll
+              send you a
+              <strong class="text-ink font-semibold">
+                magic login code
+              </strong>
+              instead of a password. No passwords to remember.
+            </span>
+          </li>
+        </ol>
+      </div>
+
+      <div class="rule mt-6"></div>
+
+      <p class="text-sm text-ink-60 mt-5 text-center">
+        Already have an account?
+        <a
+          class="font-semibold text-ink hover:text-blue-700
+                 transition-colors"
+          href="{% url 'account_login' %}"
+        >
+          Sign in
+        </a>
+      </p>
     </div>
 
   </div>

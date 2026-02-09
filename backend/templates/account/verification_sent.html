@@ -1,39 +1,102 @@
 {% extends "base.html" %}
 {% load i18n %}
 
-{% block title %}Verify your email | Art Leptis{% endblock %}
+{% block title %}Check your email | Art Leptis{% endblock %}
 
 {% block content %}
 <section class="artleptis">
   <div class="mx-auto max-w-md px-4 sm:px-6 py-section-sm">
 
-    <div class="reveal-up">
-      <span class="label">Account</span>
-      <h1 class="headline-serif mt-3 text-4xl">Verify your email</h1>
+    <div class="reveal-up text-center">
+      <span class="label">Almost there</span>
+      <h1 class="headline-serif mt-3 text-4xl">
+        Check your inbox
+      </h1>
     </div>
 
-    <div class="mt-8 border border-rule bg-paper p-6 sm:p-8 reveal-up">
-      <span class="text-meta block mb-4">Status — Pending</span>
+    <div
+      class="mt-8 bg-surface shadow-sm p-6 sm:p-8 reveal-up"
+      style="border-radius: var(--radius-lg)"
+    >
+      {# ── Icon ── #}
+      <div class="flex justify-center mb-5">
+        <div
+          class="w-14 h-14 bg-blue-50 flex items-center
+                 justify-center rounded-full"
+        >
+          <svg
+            class="w-7 h-7 text-blue-600"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M21.75 6.75v10.5a2.25 2.25 0
+                 01-2.25 2.25h-15a2.25 2.25 0
+                 01-2.25-2.25V6.75m19.5 0A2.25
+                 2.25 0 0019.5 4.5h-15a2.25
+                 2.25 0 00-2.25 2.25m19.5 0v.243a2.25
+                 2.25 0 01-1.07 1.916l-7.5 4.615a2.25
+                 2.25 0 01-2.36 0L3.32 8.91a2.25
+                 2.25 0 01-1.07-1.916V6.75"
+            />
+          </svg>
+        </div>
+      </div>
 
-      <p class="text-sm leading-relaxed text-ink-60">
-        We've sent you a verification email. Please click the link inside it to activate your account.
+      <p
+        class="text-sm leading-relaxed text-ink-60 text-center"
+      >
+        We've sent a verification link to your email address.
+        Please click the link to activate your account.
       </p>
 
-      <div class="rule mt-6 mb-6"></div>
+      {# ── Tips ── #}
+      <div
+        class="mt-6 bg-cream/60 px-4 py-4"
+        style="border-radius: var(--radius-md)"
+      >
+        <p class="text-xs font-semibold text-ink-40 uppercase
+                  tracking-widest mb-2.5">
+          Didn't get it?
+        </p>
+        <ul class="space-y-1.5 text-sm text-ink-60">
+          <li class="flex items-start gap-2">
+            <span class="text-ink-40 mt-0.5">•</span>
+            Check your spam or promotions folder
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="text-ink-40 mt-0.5">•</span>
+            Make sure you entered the correct email
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="text-ink-40 mt-0.5">•</span>
+            Try signing up again to resend the link
+          </li>
+        </ul>
+      </div>
+
+      <div class="rule mt-6 mb-5"></div>
 
       <div class="flex flex-col gap-3">
-        <a href="{% url 'account_login' %}" class="btn-primary w-full text-center inline-flex justify-center">
+        <a
+          href="{% url 'account_login' %}"
+          class="btn-primary w-full text-center inline-flex
+                 justify-center"
+        >
           Back to sign in
         </a>
-        <a href="{% url 'home' %}" class="btn-outline w-full text-center inline-flex justify-center">
-          Go home
+        <a
+          href="{% url 'home' %}"
+          class="btn-outline w-full text-center inline-flex
+                 justify-center"
+        >
+          Continue browsing
         </a>
       </div>
-    </div>
-
-    <div class="mt-4 flex items-center justify-between">
-      <span class="text-meta">SEC. Verification</span>
-      <span class="text-meta">Art Leptis</span>
     </div>
 
   </div>

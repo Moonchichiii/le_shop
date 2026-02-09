@@ -1,5 +1,4 @@
 from allauth.account.forms import LoginForm, SignupForm
-from django import forms
 
 INPUT = (
     "w-full rounded-2xl border border-arti-dark/15 bg-white px-4 py-3 text-sm "
@@ -7,85 +6,52 @@ INPUT = (
 )
 
 
-def is_password_widget(widget: forms.Widget) -> bool:
-    return (
-        isinstance(widget, forms.PasswordInput)
-        or getattr(widget, "input_type", "") == "password"
-    )
-
-
 class StyledLoginForm(LoginForm):
+    """
+    Passwordless login (email-only).
+
+    Renders the Allauth LoginForm but ensures:
+    - Consistent styling
+    - Email placeholder
+    - No password fields are relied on in templates/tests
+    """
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        # 1. Base styling
         for field in self.fields.values():
             field.widget.attrs["class"] = INPUT
 
-        # 2. Placeholder for email/username
         if "login" in self.fields:
             self.fields["login"].widget.attrs["placeholder"] = "you@example.com"
-
-        # 3. Password widget override (order matters)
-        for name, field in self.fields.items():
-            if is_password_widget(field.widget) or "password" in name:
-                field.widget = forms.PasswordInput(
-                    attrs={
-                        "class": INPUT,
-                        "placeholder": "••••••••",
-                        "data-testid": "password",
-                    }
-                )
 
 
 class StyledSignupForm(SignupForm):
     """
-    Supports two signup modes:
-    - auth_method=code (default): password fields are optional
-    - auth_method=password: password fields are required + must match
+    Passwordless signup (email + optional profile fields).
+
+    We explicitly remove any password fields that Allauth might add,
+    because this project is "magic link / code login" only.
     """
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+        # Style everything
         for field in self.fields.values():
             field.widget.attrs["class"] = INPUT
 
+        # Placeholders
         if "email" in self.fields:
             self.fields["email"].widget.attrs["placeholder"] = "you@example.com"
 
-        # Identify password-ish fields
-        self.password_field_names = [
-            name
-            for name, f in self.fields.items()
-            if is_password_widget(f.widget) or "password" in name
-        ]
+        if "first_name" in self.fields:
+            self.fields["first_name"].widget.attrs["placeholder"] = "First name"
 
-        # Style them + make optional by default
-        for i, name in enumerate(self.password_field_names):
-            placeholder = "Create a password" if i == 0 else "Repeat password"
-            self.fields[name].required = False
-            self.fields[name].widget = forms.PasswordInput(
-                attrs={"class": INPUT, "placeholder": placeholder}
-            )
+        if "last_name" in self.fields:
+            self.fields["last_name"].widget.attrs["placeholder"] = "Last name"
 
-    def clean(self):
-        cleaned = super().clean()
-
-        method = self.data.get("auth_method", "code")  # "code" | "password"
-        if method != "password":
-            return cleaned
-
-        # If user chose password mode, enforce it.
-        pw_values = [
-            cleaned.get(n) for n in self.password_field_names if cleaned.get(n)
-        ]
-        if len(pw_values) < 2:
-            raise forms.ValidationError(
-                "Please create a password (or choose email code sign-in)."
-            )
-
-        if pw_values[0] != pw_values[1]:
-            raise forms.ValidationError("Passwords do not match.")
-
-        return cleaned
+        # Hard remove any password-ish fields if present
+        for name in list(self.fields.keys()):
+            if "password" in name:
+                self.fields.pop(name, None)

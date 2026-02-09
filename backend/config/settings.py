@@ -102,19 +102,20 @@ DATABASES = {
     )
 }
 
-# Auth / Allauth
+# Authentication & Allauth Configuration
+# =====================================
 
+# Site Configuration
 SITE_ID = 1
 
+# Authentication Backends
 AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
     "allauth.account.auth_backends.AuthenticationBackend",
 ]
 
-# --- Allauth Settings ---
-
+# Account Settings - Email-only login
 ACCOUNT_LOGIN_METHODS = {"email"}
-# ACCOUNT_LOGIN_METHODS = {"username", "email"}
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 ACCOUNT_SIGNUP_FIELDS = [
     "email*",
@@ -122,43 +123,37 @@ ACCOUNT_SIGNUP_FIELDS = [
     "last_name",
 ]
 
-# 4. Email Verification
+# Passwordless Configuration
+ACCOUNT_PASSWORD_MIN_LENGTH = 0
+ACCOUNT_PASSWORD_REQUIRED = False
+
+# Email Verification
 ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
+
+# Session & Behavior
 ACCOUNT_LOGOUT_ON_GET = False
 ACCOUNT_SESSION_REMEMBER = True
 
+# URL Redirects
 LOGIN_REDIRECT_URL = "home"
 LOGOUT_REDIRECT_URL = "home"
 ACCOUNT_LOGOUT_REDIRECT_URL = "home"
 
-# 5. Forms
+# Custom Forms
 ACCOUNT_FORMS = {
     "login": "backend.apps.core.allauth_forms.StyledLoginForm",
     "signup": "backend.apps.core.allauth_forms.StyledSignupForm",
 }
 
-# 6. Rate Limits
+# Rate Limiting
 ACCOUNT_RATE_LIMITS = {
     "login_failed": "5/5m",
     "login": "20/5m",
     "signup": "10/1h",
 }
 
-
-SESSION_COOKIE_HTTPONLY = True
-CSRF_COOKIE_HTTPONLY = False
-SESSION_COOKIE_SAMESITE = "Lax"
-CSRF_COOKIE_SAMESITE = "Lax"
-
-
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
-DEFAULT_FROM_EMAIL = "Arti Corner <no-reply@articorner.local>"
-
-SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
-CSRF_TRUSTED_ORIGINS = ["https://your-app.onrender.com"]
-
-
+# Social Account Providers
 SOCIALACCOUNT_PROVIDERS = {
     "google": {
         "SCOPE": ["profile", "email"],
@@ -185,6 +180,20 @@ SOCIALACCOUNT_PROVIDERS = {
         "VERSION": "v17.0",
     },
 }
+
+# Cookie Security
+SESSION_COOKIE_HTTPONLY = True
+CSRF_COOKIE_HTTPONLY = False
+SESSION_COOKIE_SAMESITE = "Lax"
+CSRF_COOKIE_SAMESITE = "Lax"
+
+# Email Configuration
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+DEFAULT_FROM_EMAIL = "Arti Corner <no-reply@articorner.local>"
+
+# Security Headers
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+CSRF_TRUSTED_ORIGINS = ["https://your-app.onrender.com"]
 
 
 # Cloudinary / Media

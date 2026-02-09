@@ -1,6 +1,6 @@
 {% if messages %}
 <div
-  class="mx-auto max-w-7xl px-4 sm:px-6 mt-6"
+  class="mx-auto max-w-7xl px-4 sm:px-6 mt-4"
   data-testid="flash"
   role="status"
   aria-live="polite"
@@ -9,12 +9,46 @@
   <ul class="flex flex-col gap-2">
     {% for message in messages %}
       <li
-        class="px-5 py-3 text-sm flex items-center gap-3 border border-rule bg-mist text-ink flash-{{ message.tags }}
-               {% if 'error' in message.tags or 'danger' in message.tags %}text-red-700{% endif %}"
+        class="px-5 py-3.5 text-sm flex items-center gap-3
+               bg-surface shadow-sm
+               {% if 'error' in message.tags or 'danger' in message.tags %}
+                 border-l-[3px] border-red-600 text-red-700
+               {% elif 'success' in message.tags %}
+                 border-l-[3px] border-moss-600 text-moss-600
+               {% elif 'warning' in message.tags %}
+                 border-l-[3px] border-ember-500 text-ember-500
+               {% else %}
+                 border-l-[3px] border-blue-500 text-ink-80
+               {% endif %}"
+        style="border-radius: var(--radius-md)"
         data-level="{{ message.level_tag }}"
       >
-        <span class="text-meta shrink-0">{{ message.level_tag|upper }}</span>
-        <span class="rule w-px h-4 shrink-0"></span>
+        {% if 'error' in message.tags or 'danger' in message.tags %}
+          <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor"
+               stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M12 9v3.75m9-.75a9 9 0
+                     11-18 0 9 9 0 0118 0zm-9
+                     3.75h.008v.008H12v-.008z"/>
+          </svg>
+        {% elif 'success' in message.tags %}
+          <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor"
+               stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M9 12.75L11.25 15 15
+                     9.75M21 12a9 9 0 11-18
+                     0 9 9 0 0118 0z"/>
+          </svg>
+        {% else %}
+          <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor"
+               stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M11.25 11.25l.041-.02a.75.75
+                     0 011.063.852l-.708 2.836a.75.75
+                     0 001.063.853l.041-.021M21
+                     12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"/>
+          </svg>
+        {% endif %}
         <span>{{ message }}</span>
       </li>
     {% endfor %}

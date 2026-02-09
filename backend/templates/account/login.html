@@ -7,79 +7,77 @@
 <section class="artleptis">
   <div class="mx-auto max-w-md px-4 sm:px-6 py-section-sm">
 
-    <div class="reveal-up">
-      <span class="label">Account</span>
+    {# ── Header ── #}
+    <div class="reveal-up text-center">
+      <span class="label">Welcome back</span>
       <h1 class="headline-serif mt-3 text-4xl">Sign in</h1>
+      <p class="text-body mt-3 mx-auto max-w-xs">
+        Enter your email and we'll send you a secure login link.
+        No password required.
+      </p>
     </div>
 
-    <div class="mt-8 border border-rule bg-paper p-6 sm:p-8 reveal-up">
+    {# ── Card ── #}
+    <div class="mt-8 bg-surface shadow-sm p-6 sm:p-8 reveal-up rounded-lg">
+
       <form method="post" action="{% url 'account_login' %}" class="space-y-5">
         {% csrf_token %}
 
+        {% if form.non_field_errors %}
+          <div class="border-l-4 border-red-600 bg-cream/60 px-4 py-3 rounded-md">
+            <p class="text-sm font-medium text-red-700">
+              {{ form.non_field_errors }}
+            </p>
+          </div>
+        {% endif %}
+
         <div>
-          <label class="text-meta block mb-2" for="id_login">Email</label>
+          <label class="block text-sm font-medium text-ink-60 mb-1.5" for="id_login">
+            Email
+          </label>
           {{ form.login }}
         </div>
 
-        <div>
-          <label class="text-meta block mb-2" for="id_password">Password</label>
-          <input type="password"
-                 name="password"
-                 placeholder="••••••••"
-                 data-testid="password"
-                 class="w-full rounded-2xl border border-arti-dark/15 bg-white px-4 py-3 text-sm focus:border-arti-dark focus:ring-0">
-        </div>
-
-        <button type="submit" class="btn-primary w-full">Sign in</button>
-
-        <div class="flex items-center justify-between">
-          <a
-            class="text-[11px] font-bold uppercase tracking-[0.12em] text-ink-60 border-b border-rule pb-0.5 hover:text-ink hover:border-ink transition-colors duration-200"
-            href="{% url 'account_reset_password' %}"
-          >
-            Forgot password?
-          </a>
-          <a
-            class="text-[11px] font-bold uppercase tracking-[0.12em] text-ink-60 border-b border-rule pb-0.5 hover:text-ink hover:border-ink transition-colors duration-200"
-            href="{% url 'account_signup' %}"
-          >
-            Create account
-          </a>
-        </div>
+        <button type="submit" class="btn-primary w-full">
+          Send login link
+        </button>
       </form>
 
-      <div class="rule mt-6"></div>
-
-      <div class="mt-4 space-y-2">
-        {% get_providers as socialaccount_providers %}
-        {% if socialaccount_providers %}
-          {% for provider in socialaccount_providers %}
-            {% if provider.id == "google" %}
-              <a href="{% provider_login_url provider.id %}" class="btn-outline w-full text-center inline-flex justify-center">
-                Continue with Google
-              </a>
-            {% elif provider.id == "facebook" %}
-              <a href="{% provider_login_url provider.id %}" class="btn-outline w-full text-center inline-flex justify-center">
-                Continue with Facebook
-              </a>
-            {% endif %}
-          {% endfor %}
-        {% endif %}
+      {# ── How it works ── #}
+      <div class="mt-6 bg-cream/60 px-4 py-4 rounded-md">
+        <p class="text-xs font-semibold text-ink-40 uppercase tracking-widest mb-2">
+          How it works
+        </p>
+        <p class="text-sm text-ink-60 leading-relaxed">
+          We'll email you a <strong class="text-ink font-semibold">one-time secure link</strong>.
+          Click it to sign in instantly — no password to remember.
+        </p>
       </div>
 
-      <div class="rule mt-6"></div>
+      {# ── Social login ── #}
+      {% get_providers as socialaccount_providers %}
+      {% if socialaccount_providers %}
+        <div class="rule my-6"></div>
+        <div class="space-y-2">
+          {% for provider in socialaccount_providers %}
+            <a href="{% provider_login_url provider.id %}"
+               class="btn-outline w-full text-center inline-flex justify-center">
+              Continue with {{ provider.name }}
+            </a>
+          {% endfor %}
+        </div>
+      {% endif %}
 
-      <a href="{% url 'account_login' %}?method=code"
-         class="btn-outline w-full text-center inline-flex justify-center mt-4">
-        Email me a login code
-      </a>
+      <div class="rule my-6"></div>
+
+      <div class="text-center">
+        <a href="{% url 'account_signup' %}"
+           class="text-sm font-semibold text-ink hover:text-blue-700 transition-colors">
+          Create account
+        </a>
+      </div>
+
     </div>
-
-    <div class="mt-4 flex items-center justify-between">
-      <span class="text-meta">SEC. Auth</span>
-      <span class="text-meta">Art Leptis</span>
-    </div>
-
   </div>
 </section>
 {% endblock %}
