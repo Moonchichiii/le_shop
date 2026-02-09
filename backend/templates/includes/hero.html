@@ -28,41 +28,42 @@
                  cursor-grab active:cursor-grabbing touch-none reveal-scale"
         >
           <div class="relative aspect-[4/5] md:aspect-[16/10]">
+
             {% if hero_slides %}
-  <!-- 1. SLIDES LOOP (restored) -->
-  {% for slide in hero_slides %}
-    <div
-      class="hero-slide absolute inset-0 h-full w-full bg-mist
-             {% if forloop.first %}z-10 opacity-100 visible{% else %}opacity-0 invisible{% endif %}"
-      data-caption="{{ slide.title|default:slide.alt_text }}"
-    >
-      <img
-        src="{{ slide.image_url }}"
-        alt="{{ slide.alt_text }}"
-        class="h-full w-full object-cover object-center"
-        width="1400"
-        height="1750"
-        loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
-        decoding="{% if forloop.first %}sync{% else %}async{% endif %}"
-        fetchpriority="{% if forloop.first %}high{% else %}auto{% endif %}"
-      >
-    </div>
-  {% endfor %}
+              {# 1. SLIDES LOOP #}
+              {% for slide in hero_slides %}
+                <div
+                  class="hero-slide absolute inset-0 h-full w-full bg-mist
+                         {% if forloop.first %}z-10 opacity-100 visible{% else %}opacity-0 invisible{% endif %}"
+                  data-caption="{{ slide.title|default:slide.alt_text }}"
+                >
+                  <img
+                    src="{{ slide.image_url }}"
+                    alt="{{ slide.alt_text }}"
+                    class="h-full w-full object-cover object-center"
+                    width="1400"
+                    height="1750"
+                    loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
+                    decoding="{% if forloop.first %}sync{% else %}async{% endif %}"
+                    fetchpriority="{% if forloop.first %}high{% else %}auto{% endif %}"
+                  >
+                </div>
+              {% endfor %}
 
-  <!-- 2. NAVIGATION DOTS (optional, if you still want them) -->
-  {% if hero_slides|length > 1 %}
-    <div class="absolute bottom-4 right-4 flex gap-2 z-20">
-      {% for slide in hero_slides %}
-        <div
-          class="nav-dot w-2 h-2 rounded-full bg-paper/80 shadow-md transition-all duration-300
-                 {% if forloop.first %}opacity-100 scale-125{% else %}opacity-50{% endif %}">
-        </div>
-      {% endfor %}
-    </div>
-  {% endif %}
-{% endif %}
+              {# 2. NAVIGATION DOTS #}
+              {% if hero_slides|length > 1 %}
+                <div class="absolute bottom-4 right-4 flex gap-2 z-20">
+                  {% for slide in hero_slides %}
+                    <div
+                      class="nav-dot w-2 h-2 rounded-full bg-paper/80 shadow-md
+                             transition-all duration-300
+                             {% if forloop.first %}opacity-100 scale-125{% else %}opacity-50{% endif %}">
+                    </div>
+                  {% endfor %}
+                </div>
+              {% endif %}
 
-              {# Slide controls — bottom-left inside image #}
+              {# 3. SLIDE CONTROLS #}
               {% if hero_slides|length > 1 %}
                 <div
                   id="hero-controls"
@@ -102,6 +103,7 @@
               {% endif %}
 
             {% else %}
+              {# FALLBACK: No slides #}
               <div class="absolute inset-0 flex items-center justify-center
                           bg-mist text-ink-60">
                 <p class="text-sm tracking-wide">
@@ -109,6 +111,7 @@
                 </p>
               </div>
             {% endif %}
+
           </div>
         </div>
       </div>
