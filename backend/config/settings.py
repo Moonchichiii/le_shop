@@ -16,6 +16,7 @@ ALLOWED_HOSTS = config(
     cast=Csv(),
 )
 
+
 # Applications
 INSTALLED_APPS = [
     "unfold",
@@ -141,8 +142,8 @@ ACCOUNT_LOGOUT_REDIRECT_URL = "core:home"
 
 # Custom Forms
 ACCOUNT_FORMS = {
-    "login": "backend.apps.core.allauth_forms.StyledLoginForm",
-    "signup": "backend.apps.core.allauth_forms.StyledSignupForm",
+    "login": "backend.apps.core.forms.StyledLoginForm",
+    "signup": "backend.apps.core.forms.StyledSignupForm",
 }
 
 # Rate Limiting

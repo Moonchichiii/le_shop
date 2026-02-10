@@ -8,6 +8,7 @@ from backend.tests.e2e.utils import create_product
 
 
 def test_checkout_data_integrity_and_network_efficiency(page: Page, live_server):
+    # Wildcard pattern so Playwright catches the navigation reliably
     page.route(
         "**/*mock-paypal-approve*",
         lambda route: route.fulfill(
@@ -50,7 +51,8 @@ def test_checkout_data_integrity_and_network_efficiency(page: Page, live_server)
     assert order.items.count() == 1
     assert order.paypal_order_id == "FAKE_PAYPAL_ORDER_ID"
 
-    return_url = f"{live_server.url}/paypal/return/?token=FAKE_PAYPAL_ORDER_ID"
+    # Correct route: /orders/paypal/return/
+    return_url = f"{live_server.url}/orders/paypal/return/?token=FAKE_PAYPAL_ORDER_ID"
     page.goto(return_url)
 
     order.refresh_from_db()
@@ -107,6 +109,7 @@ def test_checkout_empty_cart_redirection(page: Page, live_server):
     page.goto(f"{live_server.url}/")
     expect(page.get_by_test_id("cart-count")).to_be_hidden()
 
-    page.goto(f"{live_server.url}/checkout/")
+    # Correct route: /orders/checkout/
+    page.goto(f"{live_server.url}/orders/checkout/")
     expect(page).to_have_url(re.compile(r".*/cart/"))
-    expect(page.locator("body")).to_contain_text("cart is empty")
+    expect(page.locator("body")).to_contain_text("Your cart is empty.")

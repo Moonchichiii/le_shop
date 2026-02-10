@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{# Remove global submit-button forms from account pages #}
+{% block newsletter %}{% endblock %}
+{% block search_modal %}{% endblock %}
+
+{# Optional: also remove cookie banner / footer / mobile nav if they add extra buttons #}
+{% block cookie_consent %}{% endblock %}
+{% block footer %}{% endblock %}
+{% block mobile_nav %}{% endblock %}

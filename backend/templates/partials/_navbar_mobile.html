@@ -4,82 +4,164 @@
   x-data="{ accountOpen: false }"
   @keydown.escape.window="accountOpen = false"
 >
-  <div class="border border-arti-rule bg-[color-mix(in_srgb,var(--color-arti-paper)_92%,transparent)]
-              backdrop-blur-xl shadow-2xl px-2 py-2"
-       style="border-radius:2px">
-
+  <div
+    class="border border-arti-rule
+           bg-[color-mix(in_srgb,var(--color-arti-paper)_92%,transparent)]
+           backdrop-blur-xl shadow-2xl px-2 py-2"
+    style="border-radius: 2px"
+  >
     <div class="grid grid-cols-4 items-center">
       <!-- Home -->
-      <a href="/" class="group relative flex flex-col items-center justify-center gap-1 py-2">
-        <svg class="w-6 h-6 text-arti-ink/80 group-hover:text-arti-ink transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+      <a
+        href="/"
+        class="group relative flex flex-col items-center
+               justify-center gap-1 py-2"
+      >
+        <svg
+          class="w-6 h-6 text-arti-ink/80 group-hover:text-arti-ink
+                 transition"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0
+               001 1h3m10-11l2 2m-2-2v10a1 1 0
+               01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0
+               011-1h2a1 1 0 011 1v4a1 1 0
+               001 1m-6 0h6"
+          />
         </svg>
-        <span class="text-[10px] font-extrabold tracking-[0.18em] uppercase opacity-70">Home</span>
-        <span class="absolute -bottom-0.5 left-1/2 -translate-x-1/2 h-0.75 w-10 bg-arti-signal-500 opacity-0 group-hover:opacity-100 transition"></span>
+        <span
+          class="text-[10px] font-extrabold tracking-[0.18em]
+                 uppercase opacity-70"
+        >
+          Home
+        </span>
+        <span
+          class="absolute -bottom-0.5 left-1/2 -translate-x-1/2
+                 h-0.75 w-10 bg-arti-signal-500 opacity-0
+                 group-hover:opacity-100 transition"
+        ></span>
       </a>
 
-      <!-- Search -->
+      <!-- Shop -->
+      <a
+        href="{% url 'products:product_list' %}"
+        class="group relative flex flex-col items-center
+               justify-center gap-1 py-2"
+      >
+        <svg
+          class="w-6 h-6 text-arti-ink/70 group-hover:text-arti-ink
+                 transition"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M4 6h16M4 10h16M4 14h16M4 18h16"
+          />
+        </svg>
+        <span
+          class="text-[10px] font-extrabold tracking-[0.18em]
+                 uppercase opacity-70"
+        >
+          Shop
+        </span>
+        <span
+          class="absolute -bottom-0.5 left-1/2 -translate-x-1/2
+                 h-0.75 w-10 bg-arti-signal-500 opacity-0
+                 group-hover:opacity-100 transition"
+        ></span>
+      </a>
+
+      <!-- Search (dock) — distinct aria-label avoids strict-mode
+           collisions with the header Search button in Playwright -->
       <button
         type="button"
         @click="$dispatch('open-search'); accountOpen = false"
-        class="group relative flex flex-col items-center justify-center gap-1 py-2"
-        aria-label="Search"
+        class="group relative flex flex-col items-center
+               justify-center gap-1 py-2"
+        aria-label="Search (dock)"
       >
-        <svg class="w-6 h-6 text-arti-ink/70 group-hover:text-arti-ink transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+        <svg
+          class="w-6 h-6 text-arti-ink/70 group-hover:text-arti-ink
+                 transition"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0
+               0114 0z"
+          />
         </svg>
-        <span class="text-[10px] font-extrabold tracking-[0.18em] uppercase opacity-70">Search</span>
-        <span class="absolute -bottom-0.5 left-1/2 -translate-x-1/2 h-0.75 w-10 bg-arti-signal-500 opacity-0 group-hover:opacity-100 transition"></span>
+        <span
+          class="text-[10px] font-extrabold tracking-[0.18em]
+                 uppercase opacity-70"
+        >
+          Search
+        </span>
+        <span
+          class="absolute -bottom-0.5 left-1/2 -translate-x-1/2
+                 h-0.75 w-10 bg-arti-signal-500 opacity-0
+                 group-hover:opacity-100 transition"
+        ></span>
       </button>
-
-      <!-- Bag -->
-      <a
-        href="{% url 'cart_detail' %}"
-        class="group relative flex flex-col items-center justify-center gap-1 py-2"
-        @click="accountOpen = false"
-        aria-label="Bag"
-      >
-        <svg class="w-6 h-6 text-arti-ink/70 group-hover:text-arti-ink transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
-        </svg>
-        <span class="text-[10px] font-extrabold tracking-[0.18em] uppercase opacity-70">Bag</span>
-
-        {% if cart and cart|length > 0 %}
-          <span class="absolute top-1 right-6 min-w-5 h-5 px-1 border border-black/10
-                       bg-arti-signal-500 text-white text-[10px] font-extrabold
-                       flex items-center justify-center"
-                style="border-radius:2px">
-            {{ cart|length }}
-          </span>
-        {% endif %}
-
-        <span class="absolute -bottom-0.5 left-1/2 -translate-x-1/2 h-0.75 w-10 bg-arti-signal-500 opacity-0 group-hover:opacity-100 transition"></span>
-      </a>
 
       <!-- Account -->
       <div class="relative" @click.outside="accountOpen = false">
         <button
           type="button"
-          class="group relative w-full flex flex-col items-center justify-center gap-1 py-2"
+          class="group relative w-full flex flex-col items-center
+                 justify-center gap-1 py-2"
           aria-label="Account"
           :aria-expanded="accountOpen.toString()"
           aria-haspopup="menu"
           @click="accountOpen = !accountOpen"
         >
-          <svg class="w-6 h-6 text-arti-ink/70 group-hover:text-arti-ink transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+          <svg
+            class="w-6 h-6 text-arti-ink/70
+                   group-hover:text-arti-ink transition"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M16 7a4 4 0 11-8 0 4 4 0
+                 018 0zM12 14a7 7 0 00-7 7h14a7
+                 7 0 00-7-7z"
+            />
           </svg>
-          <span class="text-[10px] font-extrabold tracking-[0.18em] uppercase opacity-70">
-            {% if request.user.is_authenticated %}Account{% else %}Sign in{% endif %}
+          <span
+            class="text-[10px] font-extrabold tracking-[0.18em]
+                   uppercase opacity-70"
+          >
+            {% if request.user.is_authenticated %}
+              Account
+            {% else %}
+              Sign in
+            {% endif %}
           </span>
-
-          <span class="absolute -bottom-0.5 left-1/2 -translate-x-1/2 h-0.75 w-10 bg-arti-signal-500
-                       transition"
-                :class="accountOpen ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'"></span>
+          <span
+            class="absolute -bottom-0.5 left-1/2 -translate-x-1/2
+                   h-0.75 w-10 bg-arti-signal-500 transition"
+            :class="accountOpen
+              ? 'opacity-100'
+              : 'opacity-0 group-hover:opacity-100'"
+          ></span>
         </button>
 
         <!-- Drop-up panel -->
@@ -92,41 +174,84 @@
           x-transition:leave-start="opacity-100 translate-y-0"
           x-transition:leave-end="opacity-0 translate-y-2"
           x-cloak
-          class="absolute bottom-16 right-0 w-64 border border-arti-rule
-                 bg-[color-mix(in_srgb,var(--color-arti-paper)_96%,transparent)] shadow-2xl overflow-hidden"
-          style="border-radius:2px"
+          class="absolute bottom-16 right-0 w-64 border
+                 border-arti-rule
+                 bg-[color-mix(in_srgb,var(--color-arti-paper)_96%,transparent)]
+                 shadow-2xl overflow-hidden"
+          style="border-radius: 2px"
           role="menu"
         >
           {% if request.user.is_authenticated %}
             <div class="px-4 py-4 border-b border-arti-rule">
-              <p class="text-[10px] font-extrabold tracking-[0.22em] uppercase opacity-60">Signed in</p>
-              <p class="mt-1 text-sm font-medium truncate">{{ request.user.email }}</p>
-              <div class="mt-3 h-0.75 w-14 bg-arti-signal-500"></div>
+              <p
+                class="text-[10px] font-extrabold
+                       tracking-[0.22em] uppercase opacity-60"
+              >
+                Signed in
+              </p>
+              <p class="mt-1 text-sm font-medium truncate">
+                {{ request.user.email }}
+              </p>
+              <div
+                class="mt-3 h-0.75 w-14 bg-arti-signal-500"
+              ></div>
             </div>
-
-            <a href="#" class="block px-4 py-3 text-sm hover:bg-black/5" role="menuitem" @click="accountOpen=false">
+            <a
+              href="#"
+              class="block px-4 py-3 text-sm hover:bg-black/5"
+              role="menuitem"
+              @click="accountOpen = false"
+            >
               Account
             </a>
-            <a href="{% url 'orders_list' %}" class="block px-4 py-3 text-sm hover:bg-black/5" role="menuitem" @click="accountOpen=false">
+            <a
+              href="{% url 'orders_list' %}"
+              class="block px-4 py-3 text-sm hover:bg-black/5"
+              role="menuitem"
+              @click="accountOpen = false"
+            >
               Orders
             </a>
-
-            <form method="post" action="{% url 'account_logout' %}" class="border-t border-arti-rule">
+            <form
+              method="post"
+              action="{% url 'account_logout' %}"
+              class="border-t border-arti-rule"
+            >
               {% csrf_token %}
-              <button type="submit" class="w-full text-left px-4 py-3 text-sm hover:bg-black/5">
+              <button
+                type="submit"
+                class="w-full text-left px-4 py-3 text-sm
+                       hover:bg-black/5"
+              >
                 Sign out
               </button>
             </form>
           {% else %}
             <div class="px-4 py-4 border-b border-arti-rule">
-              <p class="text-[10px] font-extrabold tracking-[0.22em] uppercase opacity-60">Welcome</p>
-              <div class="mt-3 h-0.75 w-14 bg-arti-signal-500"></div>
+              <p
+                class="text-[10px] font-extrabold
+                       tracking-[0.22em] uppercase opacity-60"
+              >
+                Welcome
+              </p>
+              <div
+                class="mt-3 h-0.75 w-14 bg-arti-signal-500"
+              ></div>
             </div>
-
-            <a href="{% url 'account_login' %}" class="block px-4 py-3 text-sm hover:bg-black/5" role="menuitem" @click="accountOpen=false">
+            <a
+              href="{% url 'account_login' %}"
+              class="block px-4 py-3 text-sm hover:bg-black/5"
+              role="menuitem"
+              @click="accountOpen = false"
+            >
               Sign in
             </a>
-            <a href="{% url 'account_signup' %}" class="block px-4 py-3 text-sm hover:bg-black/5" role="menuitem" @click="accountOpen=false">
+            <a
+              href="{% url 'account_signup' %}"
+              class="block px-4 py-3 text-sm hover:bg-black/5"
+              role="menuitem"
+              @click="accountOpen = false"
+            >
               Create account
             </a>
           {% endif %}

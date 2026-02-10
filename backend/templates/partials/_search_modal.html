@@ -78,7 +78,7 @@
       <div class="max-w-7xl mx-auto px-5 md:px-6">
         <form
           method="get"
-          action="{% url 'product_list' %}"
+          action="{% url 'products:product_list' %}"
           class="flex items-center"
           @submit="open = false"
         >
@@ -113,19 +113,19 @@
       <div class="max-w-7xl mx-auto px-5 md:px-6 py-3
                   flex flex-wrap items-center gap-x-5 gap-y-2">
         <span class="text-meta">{% trans "Popular" %}</span>
-        <a href="{% url 'product_list' %}?q=Lamp" @click="open = false"
+        <a href="{% url 'products:product_list' %}?q=Lamp" @click="open = false"
            class="text-sm text-ink-60 hover:text-ink transition-colors">
           {% trans "Lamp" %}
         </a>
-        <a href="{% url 'product_list' %}?q=Ceramic" @click="open = false"
+        <a href="{% url 'products:product_list' %}?q=Ceramic" @click="open = false"
            class="text-sm text-ink-60 hover:text-ink transition-colors">
           {% trans "Ceramic" %}
         </a>
-        <a href="{% url 'product_list' %}?q=Driftwood" @click="open = false"
+        <a href="{% url 'products:product_list' %}?q=Driftwood" @click="open = false"
            class="text-sm text-ink-60 hover:text-ink transition-colors">
           {% trans "Driftwood" %}
         </a>
-        <a href="{% url 'product_list' %}?q=Sculpture" @click="open = false"
+        <a href="{% url 'products:product_list' %}?q=Sculpture" @click="open = false"
            class="text-sm text-ink-60 hover:text-ink transition-colors">
           {% trans "Sculpture" %}
         </a>

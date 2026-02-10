@@ -31,9 +31,8 @@
       class="max-w-[1400px] mx-auto px-5 md:px-6
              flex items-center relative"
     >
-      {# LEFT — Nav links (desktop) / Logo (mobile) #}
+      {# ── LEFT — Nav links (desktop) / Logo (mobile) ── #}
       <div class="flex items-center gap-1 md:flex-1 min-w-0">
-        {# Logo — visible on mobile only in this slot #}
         <a
           href="/"
           class="md:hidden font-serif text-[1.4rem] font-medium
@@ -43,7 +42,6 @@
           Art Leptis
         </a>
 
-        {# Desktop nav #}
         <nav
           class="hidden md:flex items-center gap-0.5"
           aria-label="Main"
@@ -53,7 +51,7 @@
             <button
               type="button"
               class="header-nav-link inline-flex items-center
-                     gap-1.5"
+                     gap-1.5 text-[0.95rem]"
               @click="shopOpen = !shopOpen"
               :aria-expanded="shopOpen.toString()"
             >
@@ -89,23 +87,28 @@
               role="menu"
             >
               <a
-                href="{% url 'product_list' %}"
+                href="{% url 'products:product_list' %}"
                 class="block px-4 py-3 text-lg font-serif
                        hover:bg-ink-05 transition-colors"
                 style="border-radius: var(--radius-md)"
                 role="menuitem"
               >
-                Shop All
+                Shop
               </a>
             </div>
           </div>
 
-          <a href="/#story" class="header-nav-link">Our Story</a>
+          <a
+            href="/#story"
+            class="header-nav-link text-[0.95rem]"
+          >
+            Our Story
+          </a>
         </nav>
       </div>
 
-      {# CENTER — Logo (desktop only, truly centered) #}       
-              <a
+      {# ── CENTER — Logo (desktop, absolutely centered) ── #}
+      <a
         href="/"
         class="hidden md:block absolute left-1/2 top-1/2
                -translate-x-1/2 -translate-y-1/2
@@ -116,12 +119,12 @@
         Art Leptis
       </a>
 
-      {# RIGHT — Actions #}
+      {# ── RIGHT — Actions ── #}
       <div
         class="flex items-center gap-2 md:gap-3 ml-auto
                md:flex-1 md:justify-end"
       >
-        {# ── Search icon (all sizes) ── #}
+        {# Search icon #}
         <button
           type="button"
           @click="
@@ -134,7 +137,6 @@
           class="header-icon-btn"
           aria-label="Search"
         >
-          {# Magnifying glass (default) #}
           <svg
             x-show="!searchOpen"
             class="w-[19px] h-[19px]"
@@ -150,7 +152,6 @@
                  0114 0z"
             />
           </svg>
-          {# X when search open (desktop hint) #}
           <svg
             x-show="searchOpen"
             x-cloak
@@ -168,37 +169,55 @@
           </svg>
         </button>
 
-        {# ── Cart — circled count (mobile) ── #}
+        {# Cart — mobile icon (SINGLE canonical cart-count) #}
         <a
           href="{% url 'cart_detail' %}"
           class="md:hidden header-icon-btn"
           aria-label="Cart"
         >
+          
           <span
-            class="w-[25px] h-[25px] rounded-full border
-                   border-ink/25 inline-flex items-center
-                   justify-center text-[10px] font-semibold
-                   text-ink-60 leading-none"
+            data-testid="cart-count"
+            {% if cart and cart|length > 0 %}
+              class="w-[25px] h-[25px] rounded-full border
+                     border-ink/25 inline-flex items-center
+                     justify-center text-[10px] font-semibold
+                     text-ink-60 leading-none"
+            {% else %}
+              class="hidden"
+            {% endif %}
           >
-            {{ cart|length|default:"0" }}
+            {{ cart|length }}
           </span>
+
+          {# Visual "0" shown only when cart is empty #}
+          {% if not cart or cart|length == 0 %}
+            <span
+              class="w-[25px] h-[25px] rounded-full border
+                     border-ink/25 inline-flex items-center
+                     justify-center text-[10px] font-semibold
+                     text-ink-60 leading-none"
+            >
+              0
+            </span>
+          {% endif %}
         </a>
 
-        {# ── Cart — text (desktop) ── #}
+        {# Cart — desktop #}
         <a
           href="{% url 'cart_detail' %}"
           class="hidden md:inline-flex items-center gap-0.5
-                 text-[0.8125rem] font-medium text-ink-60
-                 hover:text-ink transition-colors
-                 py-1.5 px-1"
+                 header-nav-link text-[0.95rem]"
         >
           Cart
-          <span class="text-ink-40 ml-0.5">
-            ({{ cart|length|default:"0" }})
-          </span>
+          {% if cart and cart|length > 0 %}
+            <span class="text-ink-40 ml-0.5">
+              ({{ cart|length }})
+            </span>
+          {% endif %}
         </a>
 
-        {# ── Language toggle (desktop) ── #}
+        {# Language toggle (desktop) #}
         <div
           class="hidden md:relative md:block"
           @click.outside="langOpen = false"
@@ -206,7 +225,7 @@
           <button
             type="button"
             class="inline-flex items-center gap-1
-                   text-[0.8125rem] font-medium text-ink-60
+                   text-[0.875rem] font-medium text-ink-60
                    hover:text-ink transition-colors
                    py-1.5 px-1"
             @click="langOpen = !langOpen; accountOpen = false"
@@ -272,7 +291,7 @@
           </div>
         </div>
 
-        {# ── Account icon (desktop) ── #}
+        {# Account icon (desktop) #}
         <div
           class="hidden md:relative md:block"
           @click.outside="accountOpen = false"
@@ -375,7 +394,7 @@
           </div>
         </div>
 
-        {# ── Hamburger (mobile) ── #}
+        {# Hamburger (mobile) #}
         <button
           type="button"
           class="md:hidden header-icon-btn"
@@ -413,7 +432,7 @@
     </div>
   </div>
 
-  {# MOBILE FULL-SCREEN MENU #}
+  {# ── MOBILE FULL-SCREEN MENU ── #}
   <div
     id="mobile-menu"
     x-show="mobileOpen"
@@ -427,7 +446,6 @@
            overflow-y-auto overscroll-contain"
     style="display: none"
   >
-    {# Menu header — mirrors main bar #}
     <div class="border-b border-rule/60 py-3">
       <div class="px-5 flex items-center">
         <a
@@ -446,7 +464,7 @@
               $nextTick(() => $dispatch('open-search'));
             "
             class="header-icon-btn"
-            aria-label="Search"
+            aria-label="Search (mobile)"
           >
             <svg
               class="w-[19px] h-[19px]"
@@ -503,9 +521,7 @@
       </div>
     </div>
 
-    {# Navigation #}
     <nav class="px-5 pt-4" aria-label="Mobile navigation">
-      {# Shop — expandable #}
       <div class="border-b border-rule/40">
         <button
           type="button"
@@ -543,7 +559,7 @@
         <div x-show="mobileShopOpen" x-collapse x-cloak>
           <div class="pb-4 pl-1 space-y-1">
             <a
-              href="{% url 'product_list' %}"
+              href="{% url 'products:product_list' %}"
               @click="mobileOpen = false"
               class="block py-2.5 text-lg text-ink-60
                      hover:text-ink transition-colors"
@@ -554,7 +570,6 @@
         </div>
       </div>
 
-      {# Pages — expandable (like Ceramika) #}
       <div class="border-b border-rule/40">
         <a
           href="/#story"
@@ -577,7 +592,6 @@
         </a>
       </div>
 
-      {# Secondary links #}
       <div class="pt-6 space-y-0.5">
         {% if request.user.is_authenticated %}
           <div
@@ -637,7 +651,6 @@
         {% endif %}
       </div>
 
-      {# Language #}
       <div class="pt-6 pb-10">
         <form method="post" action="{% url 'set_language' %}">
           {% csrf_token %}

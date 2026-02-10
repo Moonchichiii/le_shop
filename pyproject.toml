@@ -22,7 +22,6 @@ dependencies = [
     "django-unfold",
     "PyJWT>=2.8",
     "whitenoise",
-
 ]
 
 [project.optional-dependencies]

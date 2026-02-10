@@ -20,18 +20,35 @@
 
 <body class="bg-paper text-ink font-sans antialiased selection:bg-signal-500 selection:text-white pb-24 md:pb-0 flex flex-col min-h-screen">
 
-  {% include "partials/_navbar.html" %}
-  {% include "partials/_messages.html" %}
+  {% block navbar %}
+    {% include "partials/_navbar.html" %}
+  {% endblock %}
+
+  {% block messages %}
+    {% include "partials/_messages.html" %}
+  {% endblock %}
+
   <main class="grow w-full relative pt-24 md:pt-28 overflow-x-hidden">
     <div class="{% block artefact_scope %}artleptis{% endblock %}">
       {% block content %}{% endblock %}
     </div>
   </main>
 
-  {% include "partials/_navbar_mobile.html" %}
-  {% include "partials/_footer.html" %}
-  {% include "partials/_search_modal.html" %}
-  {% include "partials/_cookie_consent.html" %}
+  {% block mobile_nav %}
+    {% include "partials/_navbar_mobile.html" %}
+  {% endblock %}
+
+  {% block footer %}
+    {% include "partials/_footer.html" %}
+  {% endblock %}
+
+  {% block search_modal %}
+    {% include "partials/_search_modal.html" %}
+  {% endblock %}
+
+  {% block cookie_consent %}
+    {% include "partials/_cookie_consent.html" %}
+  {% endblock %}
 
   {% block body_js %}
     <!-- GSAP -->

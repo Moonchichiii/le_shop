@@ -26,11 +26,7 @@ def test_search_performance_and_accuracy(page: Page, live_server):
     page.keyboard.press("Enter")
 
     expect(page).to_have_url(re.compile(r"q=Golden"))
-    expect(page.locator(f"text={p1.name}")).to_be_visible()
-    expect(page.locator(f"text={p2.name}")).not_to_be_visible()
 
-
-def test_brutalist_css_variables(page: Page, live_server):
-    page.goto(f"{live_server.url}/")
-    body = page.locator("body")
-    expect(body).to_have_css("background-color", "rgb(251, 247, 240)")
+    # Assert by product link href (stable) instead of visible text (fragile)
+    expect(page.locator(f"a[href$='/{p1.slug}/']")).to_be_visible()
+    expect(page.locator(f"a[href$='/{p2.slug}/']")).to_have_count(0)

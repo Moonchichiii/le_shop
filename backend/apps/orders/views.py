@@ -10,7 +10,7 @@ from django.views.decorators.http import require_http_methods
 from backend.apps.cart.services import Cart
 
 from .models import Order
-from .paypal import capture_order, create_order
+from .payments_paypal import capture_order, create_order
 from .services import reserve_stock_and_create_pending_order
 from .signing import sign_order_id, unsign_order_id, unsign_order_track_id
 from .tracking_services import get_or_create_tracking
@@ -36,7 +36,7 @@ def checkout_start(request):
 
     if not user:
         if request.method == "GET":
-            return render(request, "orders/guest_email.html")
+            return render(request, "orders/checkout_guest_email.html")
 
         email = (request.POST.get("email") or "").strip()
         if not email:
@@ -193,7 +193,7 @@ def guest_order_success(request, token: str):
     ):
         raise Http404()
 
-    return render(request, "orders/guest_success.html", {"order": order})
+    return render(request, "orders/order_confirmation_guest.html", {"order": order})
 
 
 @login_required
@@ -274,6 +274,6 @@ def guest_order_track(request, token: str) -> HttpResponse:
 
     return render(
         request,
-        "orders/order_track.html",
+        "orders/order_tracking.html",
         {"order": order, "tracking": tracking, "events": events},
     )
