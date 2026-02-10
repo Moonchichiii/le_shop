@@ -1,4 +1,8 @@
+import logging
+
 from allauth.account.forms import LoginForm, SignupForm
+
+logger = logging.getLogger(__name__)
 
 INPUT = (
     "w-full rounded-2xl border border-arti-dark/15 bg-white px-4 py-3 text-sm "
@@ -7,14 +11,7 @@ INPUT = (
 
 
 class StyledLoginForm(LoginForm):
-    """
-    Passwordless login (email-only).
-
-    Renders the Allauth LoginForm but ensures:
-    - Consistent styling
-    - Email placeholder
-    - No password fields are relied on in templates/tests
-    """
+    """Passwordless login form with consistent styling."""
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -27,21 +24,14 @@ class StyledLoginForm(LoginForm):
 
 
 class StyledSignupForm(SignupForm):
-    """
-    Passwordless signup (email + optional profile fields).
-
-    We explicitly remove any password fields that Allauth might add,
-    because this project is "magic link / code login" only.
-    """
+    """Passwordless signup form with email and optional profile fields."""
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        # Style everything
         for field in self.fields.values():
             field.widget.attrs["class"] = INPUT
 
-        # Placeholders
         if "email" in self.fields:
             self.fields["email"].widget.attrs["placeholder"] = "you@example.com"
 
@@ -51,7 +41,14 @@ class StyledSignupForm(SignupForm):
         if "last_name" in self.fields:
             self.fields["last_name"].widget.attrs["placeholder"] = "Last name"
 
-        # Hard remove any password-ish fields if present
+        removed_fields = []
         for name in list(self.fields.keys()):
-            if "password" in name:
+            if "password" in name.lower():
                 self.fields.pop(name, None)
+                removed_fields.append(name)
+
+        if removed_fields:
+            logger.debug(
+                f"Removed password fields from signup form: {removed_fields}. "
+                "Ensure passwordless auth is configured correctly."
+            )

@@ -10,7 +10,7 @@
   <div class="border-b border-rule">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 py-3 flex items-center">
       <a
-        href="{% url 'product_list' %}"
+        href="{% url 'products:product_list' %}"
         class="inline-flex items-center gap-1.5 text-[10px] font-bold
                uppercase tracking-[0.18em] text-ink-60
                hover:text-ink transition-colors duration-200"
@@ -38,7 +38,7 @@
               {{ product.image_url_1200 }} 1200w
             "
             sizes="(min-width: 768px) 50vw, 100vw"
-            alt="{{ product.name }}"
+            alt="{{ product.image_alt|default:product.name }}"
             class="w-full h-full object-cover"
             fetchpriority="high"
             decoding="async"

@@ -6,7 +6,7 @@ from django.core.exceptions import ValidationError
 from django.db import transaction
 from django.db.models import F
 
-from backend.apps.cart.cart import Cart
+from backend.apps.cart.services import Cart
 from backend.apps.products.models import Product
 
 from .models import Order, OrderItem

@@ -3,7 +3,7 @@ from django.contrib.sessions.middleware import SessionMiddleware
 from django.http import HttpResponse
 from django.test import RequestFactory
 
-from backend.apps.cart.cart import Cart
+from backend.apps.cart.services import Cart
 from backend.apps.products.models import Category, Product
 
 

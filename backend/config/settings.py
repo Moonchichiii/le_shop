@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django.contrib.sites",
+    "django_htmx",
     "rest_framework",
     "django_filters",
     "allauth",
@@ -37,6 +38,7 @@ INSTALLED_APPS = [
     "allauth.socialaccount.providers.facebook",
     "cloudinary",
     "csp",
+    "backend.apps.accounts",
     "backend.apps.core",
     "backend.apps.products",
     "backend.apps.cart",
@@ -52,6 +54,7 @@ MIDDLEWARE = [
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.locale.LocaleMiddleware",
+    "django_htmx.middleware.HtmxMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -123,10 +126,6 @@ ACCOUNT_SIGNUP_FIELDS = [
     "last_name",
 ]
 
-# Passwordless Configuration
-ACCOUNT_PASSWORD_MIN_LENGTH = 0
-ACCOUNT_PASSWORD_REQUIRED = False
-
 # Email Verification
 ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
@@ -136,9 +135,9 @@ ACCOUNT_LOGOUT_ON_GET = False
 ACCOUNT_SESSION_REMEMBER = True
 
 # URL Redirects
-LOGIN_REDIRECT_URL = "home"
-LOGOUT_REDIRECT_URL = "home"
-ACCOUNT_LOGOUT_REDIRECT_URL = "home"
+LOGIN_REDIRECT_URL = "core:home"
+LOGOUT_REDIRECT_URL = "core:home"
+ACCOUNT_LOGOUT_REDIRECT_URL = "core:home"
 
 # Custom Forms
 ACCOUNT_FORMS = {

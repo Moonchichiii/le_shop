@@ -1,0 +1,9 @@
+{% for p in products %}
+  <article class="product-card group reveal-up">
+    ...
+  </article>
+{% empty %}
+  <div class="col-span-full py-20 text-center">
+    ...
+  </div>
+{% endfor %}

@@ -58,7 +58,7 @@ class Product(models.Model):
         return str(self.name)
 
     def get_absolute_url(self) -> str:
-        return reverse("product_detail", kwargs={"slug": self.slug})
+        return reverse("products:product_detail", kwargs={"slug": self.slug})
 
     @property
     def is_in_stock(self) -> bool:

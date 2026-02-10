@@ -1,33 +1,43 @@
-from django.db.models import Q
+from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404, render
 
-from .models import Category, Product
+from .models import Product
+from .selectors import get_active_categories, get_filtered_products
 
 
 def product_list(request):
     category_slug = (request.GET.get("category") or "").strip()
     q = (request.GET.get("q") or "").strip()
 
-    qs = Product.objects.filter(is_active=True).select_related("category")
+    products_qs = get_filtered_products(category_slug=category_slug, query=q)
+    categories = get_active_categories()
 
-    if category_slug:
-        qs = qs.filter(category__slug=category_slug)
+    paginator = Paginator(products_qs, 24)
+    page_obj = paginator.get_page(request.GET.get("page"))
 
-    if q:
-        qs = qs.filter(Q(name__icontains=q) | Q(description__icontains=q))
+    # Build querystring WITHOUT page, for clean pagination links
+    params = request.GET.copy()
+    params.pop("page", None)
+    qs = params.urlencode()
+    if qs:
+        qs += "&"
 
-    categories = Category.objects.all()
+    context = {
+        "page_obj": page_obj,
+        "products": page_obj.object_list,
+        "categories": categories,
+        "active_category": category_slug,
+        "query": q,
+        "qs": qs,
+        "hx_target_id": "products-fragment",
+    }
 
-    return render(
-        request,
-        "products/product_list.html",
-        {
-            "products": qs,
-            "categories": categories,
-            "active_category": category_slug,
-            "query": q,
-        },
+    template = (
+        "products/_list_fragment.html"
+        if getattr(request, "htmx", False)
+        else "products/product_list.html"
     )
+    return render(request, template, context)
 
 
 def product_detail(request, slug: str):

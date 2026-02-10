@@ -1,12 +1,13 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError
+from django.core.paginator import Paginator
 from django.http import Http404, HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views.decorators.http import require_http_methods
 
-from backend.apps.cart.cart import Cart
+from backend.apps.cart.services import Cart
 
 from .models import Order
 from .paypal import capture_order, create_order
@@ -197,12 +198,34 @@ def guest_order_success(request, token: str):
 
 @login_required
 def orders_list(request):
-    orders = (
+    orders_qs = (
         Order.objects.filter(user=request.user)
         .prefetch_related("items", "items__product")
         .order_by("-created_at")
     )
-    return render(request, "orders/orders_list.html", {"orders": orders})
+
+    paginator = Paginator(orders_qs, 10)
+    page_obj = paginator.get_page(request.GET.get("page"))
+
+    params = request.GET.copy()
+    params.pop("page", None)
+    qs = params.urlencode()
+    if qs:
+        qs += "&"
+
+    context = {
+        "page_obj": page_obj,
+        "orders": page_obj.object_list,
+        "qs": qs,
+        "hx_target_id": "orders-fragment",
+    }
+
+    template = (
+        "orders/_list_fragment.html"
+        if getattr(request, "htmx", False)
+        else "orders/order_list.html"
+    )
+    return render(request, template, context)
 
 
 @login_required

@@ -4,14 +4,12 @@ from django.views.decorators.http import require_POST
 
 from backend.apps.products.models import Product
 
-from .cart import Cart
+from .services import Cart
 
 
 def cart_detail(request):
     cart = Cart(request)
-    response = render(request, "cart/detail.html", {"cart": cart})
-    print("@@@ CART HTML:", response.content.decode()[:2000])  # first 2 KB
-    return response
+    return render(request, "cart/cart_detail.html", {"cart": cart})
 
 
 @require_POST
@@ -29,9 +27,10 @@ def cart_add(request, product_id: int):
     if result.removed:
         messages.warning(request, f"Sorry, '{product.name}' is sold out.")
     elif result.clamped:
-        msg = f"Only {result.max_stock} left — quantity updated in your cart."
-        messages.info(request, msg)
-        print("@@@ CLAMP MSG:", msg)  # <-- will appear in pytest stdout
+        messages.info(
+            request,
+            f"Only {result.max_stock} left — quantity updated in your cart.",
+        )
     else:
         messages.success(request, "Added to cart.")
 

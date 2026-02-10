@@ -20,33 +20,35 @@
 
 <body class="bg-paper text-ink font-sans antialiased selection:bg-signal-500 selection:text-white pb-24 md:pb-0 flex flex-col min-h-screen">
 
-  {% include "includes/header.html" %}
-  {% include "includes/flash.html" %}
+  {% include "partials/_navbar.html" %}
+  {% include "partials/_messages.html" %}
   <main class="grow w-full relative pt-24 md:pt-28 overflow-x-hidden">
     <div class="{% block artefact_scope %}artleptis{% endblock %}">
       {% block content %}{% endblock %}
     </div>
   </main>
 
-  {% include "includes/mobile_nav.html" %}
-  {% include "includes/footer.html" %}
-  {% include "includes/search_modal.html" %}
-   {% include "includes/cookie_consent.html" %}
+  {% include "partials/_navbar_mobile.html" %}
+  {% include "partials/_footer.html" %}
+  {% include "partials/_search_modal.html" %}
+  {% include "partials/_cookie_consent.html" %}
 
-  <!-- GSAP -->
-  <script src="https://unpkg.com/gsap@3.12.5/dist/gsap.min.js"></script>
-  <script src="https://unpkg.com/gsap@3.12.5/dist/Observer.min.js"></script>
-  <script src="https://unpkg.com/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+  {% block body_js %}
+    <!-- GSAP -->
+    <script src="https://unpkg.com/gsap@3.12.5/dist/gsap.min.js"></script>
+    <script src="https://unpkg.com/gsap@3.12.5/dist/Observer.min.js"></script>
+    <script src="https://unpkg.com/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
 
-  <!-- Libs -->
-  <script defer src="https://unpkg.com/htmx.org@1.9.10"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <!-- Libs -->
+    <script defer src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
-  <!-- App -->
-  <script src="{% static 'js/scroll-reveal.js' %}"></script>
-  <script src="{% static 'js/hero-carousel.js' %}"></script>
-  <script src="{% static 'js/cookies.js' %}"></script>
+    <!-- App -->
+    <script defer src="{% static 'js/scroll-reveal.js' %}"></script>
+    <script defer src="{% static 'js/hero-carousel.js' %}"></script>
+    <script defer src="{% static 'js/cookie-consent.js' %}"></script>
+  {% endblock %}
 
-  {% block scripts %}{% endblock %}
+  {% block page_js %}{% endblock %}
 </body>
 </html>

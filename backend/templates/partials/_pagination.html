@@ -1,0 +1,58 @@
+{# expects:
+    page_obj
+    optional: qs (encoded querystring WITHOUT page, and with trailing & if non-empty)
+    optional: hx_target_id (e.g. "products-fragment" / "orders-fragment")
+    optional: hx_swap (default "outerHTML")
+    optional: hx_push_url (default true)
+#}
+
+{% if page_obj and page_obj.paginator.num_pages > 1 %}
+    {% with qs=qs|default:"" hx_swap=hx_swap|default:"outerHTML" hx_push_url=hx_push_url|default:True %}
+        <nav class="mt-12 flex items-center justify-center gap-2" aria-label="Pagination">
+
+            {# Previous #}
+            {% if page_obj.has_previous %}
+                {% with prev_url="?"|add:qs|add:"page="|add:page_obj.previous_page_number|stringformat:"s" %}
+                    <a class="btn-outline px-4 py-2"
+                         href="{{ prev_url }}"
+                         {% if hx_target_id %}
+                             hx-get="{{ prev_url }}"
+                             hx-target="#{{ hx_target_id }}"
+                             hx-swap="{{ hx_swap }}"
+                             hx-push-url="{% if hx_push_url %}true{% else %}false{% endif %}"
+                         {% endif %}
+                    >
+                        ← Prev
+                    </a>
+                {% endwith %}
+            {% else %}
+                <span class="btn-outline px-4 py-2 opacity-40 cursor-not-allowed">← Prev</span>
+            {% endif %}
+
+            {# Page indicator #}
+            <span class="text-meta px-3">
+                Page {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
+            </span>
+
+            {# Next #}
+            {% if page_obj.has_next %}
+                {% with next_url="?"|add:qs|add:"page="|add:page_obj.next_page_number|stringformat:"s" %}
+                    <a class="btn-outline px-4 py-2"
+                         href="{{ next_url }}"
+                         {% if hx_target_id %}
+                             hx-get="{{ next_url }}"
+                             hx-target="#{{ hx_target_id }}"
+                             hx-swap="{{ hx_swap }}"
+                             hx-push-url="{% if hx_push_url %}true{% else %}false{% endif %}"
+                         {% endif %}
+                    >
+                        Next →
+                    </a>
+                {% endwith %}
+            {% else %}
+                <span class="btn-outline px-4 py-2 opacity-40 cursor-not-allowed">Next →</span>
+            {% endif %}
+
+        </nav>
+    {% endwith %}
+{% endif %}

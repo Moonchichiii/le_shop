@@ -16,7 +16,7 @@
                     <p class="label">Shopping Cart</p>
                     <h1 class="headline-serif mt-3 text-4xl sm:text-5xl">Your Cart</h1>
                 </div>
-                <a href="{% url 'product_list' %}"
+                <a href="{% url 'products:product_list' %}"
                      class="text-[11px] font-bold uppercase tracking-[0.12em] border-b border-rule pb-0.5 hover:border-ink transition-colors">
                     Continue Shopping
                 </a>
@@ -30,7 +30,7 @@
                 <p class="text-meta">STATUS</p>
                 <p class="text-ink-60 text-lg mt-3">Your cart is currently empty.</p>
                 <div class="rule mx-auto max-w-24 mt-6"></div>
-                <a href="{% url 'product_list' %}" class="btn-primary mt-6">Start Browsing</a>
+                <a href="{% url 'products:product_list' %}" class="btn-primary mt-6">Start Browsing</a>
             </div>
 
         {% else %}

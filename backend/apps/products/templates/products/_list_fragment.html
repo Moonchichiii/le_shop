@@ -1,0 +1,9 @@
+<div id="products-fragment">
+  <div class="mt-10 grid grid-cols-2 gap-x-4 gap-y-8
+              md:grid-cols-3 md:gap-x-6 md:gap-y-10
+              xl:grid-cols-4 xl:gap-x-7 xl:gap-y-12">
+    {% include "products/_grid.html" %}
+  </div>
+
+  {% include "partials/_pagination.html" with page_obj=page_obj qs=qs hx_target_id=hx_target_id %}
+</div>
