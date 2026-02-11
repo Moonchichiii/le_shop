@@ -1,0 +1,17 @@
+{# backend/templates/_base_error.html #}
+{% extends "base.html" %}
+
+{% block title %}{{ status_code }} | Le Shop{% endblock %}
+
+{% block content %}
+<div class="mx-auto max-w-3xl px-4 pt-28 pb-16 text-center">
+  <p class="text-7xl font-semibold tracking-tight">{{ status_code }}</p>
+  <h1 class="mt-4 text-2xl font-semibold">{% block error_title %}Something went wrong{% endblock %}</h1>
+  <p class="mt-2 text-ink-80">{% block error_message %}{{ message|default:"Please try again." }}{% endblock %}</p>
+
+  <div class="mt-8 flex justify-center gap-3">
+    <a href="/" class="px-4 py-2 rounded-md bg-ink text-paper">Home</a>
+    <button type="button" onclick="history.back()" class="px-4 py-2 rounded-md border">Go back</button>
+  </div>
+</div>
+{% endblock %}

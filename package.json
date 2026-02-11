@@ -1,13 +1,13 @@
 {
   "name": "le-shop",
-  "type": "module",
-  "scripts": {
-    "dev": "bunx @tailwindcss/cli -i ./frontend/src/app.css -o ./backend/static/css/output.css --watch",
-    "build": "bunx @tailwindcss/cli -i ./frontend/src/app.css -o ./backend/static/css/output.css --minify"
-  },
   "dependencies": {
     "@tailwindcss/cli": "^4.1.18",
     "tailwindcss": "^4.1.18",
     "tailwindcss-animate": "^1.0.7"
-  }
+  },
+  "scripts": {
+    "dev": "bunx @tailwindcss/cli -i ./frontend/src/app.css -o ./backend/static/css/output.css --watch",
+    "build": "bunx @tailwindcss/cli -i ./frontend/src/app.css -o ./backend/static/css/output.css --minify"
+  },
+  "type": "module"
 }

@@ -13,7 +13,23 @@
   {% endblock %}
 
   <link rel="stylesheet" href="{% static 'css/output.css' %}">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='40' fill='%23FF4F12'/></svg>">
+  <!-- backend/templates/base.html — inside <head> -->
+
+<!-- Favicon: SVG with automatic dark mode support -->
+<link rel="icon" href="{% static 'images/favicon.svg' %}" type="image/svg+xml" />
+
+<!-- Favicon: ICO fallback for legacy browsers -->
+<link rel="icon" href="{% static 'images/favicon.ico' %}" sizes="32x32" />
+
+<!-- Apple Touch Icon: iOS home screen -->
+<link rel="apple-touch-icon" href="{% static 'images/apple-touch-icon.png' %}" />
+
+<!-- Web App Manifest: Android/PWA -->
+<link rel="manifest" href="{% static 'site.webmanifest' %}" />
+
+<!-- Theme color: browser chrome tinting -->
+<meta name="theme-color" content="#014173" media="(prefers-color-scheme: light)" />
+<meta name="theme-color" content="#0a2a3c" media="(prefers-color-scheme: dark)" />
 
   {% block head_extra %}{% endblock %}
 </head>
