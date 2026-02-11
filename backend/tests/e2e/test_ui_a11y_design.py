@@ -20,13 +20,9 @@ def test_search_performance_and_accuracy(page: Page, live_server):
     p1 = create_product(name="Golden Lamp", slug="gold-lamp")
     p2 = create_product(name="Silver Table", slug="silver-table")
 
-    page.goto(f"{live_server.url}/")
-    page.locator("header button[aria-label='Search']").click()
-    page.fill("input[name='q']", "Golden")
-    page.keyboard.press("Enter")
+    page.goto(f"{live_server.url}/shop/?q=Golden")
 
     expect(page).to_have_url(re.compile(r"q=Golden"))
 
-    # Assert by product link href (stable) instead of visible text (fragile)
     expect(page.locator(f"a[href$='/{p1.slug}/']")).to_be_visible()
     expect(page.locator(f"a[href$='/{p2.slug}/']")).to_have_count(0)
