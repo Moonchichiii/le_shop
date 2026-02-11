@@ -130,13 +130,13 @@
 @layer base {
   @font-face {
    font-family: "Clash Display";
-   src: url("/static/fonts/ClashDisplay-Variable.woff2") format("woff2");
+   src: url("/static/fonts/clashdisplay-variable.woff2") format("woff2");
    font-weight: 200 700;
    font-display: swap;
   }
   @font-face {
    font-family: "Satoshi";
-   src: url("/static/fonts/Satoshi-Variable.woff2") format("woff2");
+   src: url("/static/fonts/satoshi-variable.woff2") format("woff2");
    font-weight: 300 900;
    font-display: swap;
   }
