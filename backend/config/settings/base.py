@@ -108,7 +108,6 @@ AUTHENTICATION_BACKENDS = [
     "allauth.account.auth_backends.AuthenticationBackend",
 ]
 
-AUTH_USER_MODEL = "accounts.User"
 
 ACCOUNT_LOGIN_METHODS = {"email"}
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
@@ -242,6 +241,3 @@ MEDIA_ROOT = BASE_DIR / "media"
 
 # Django defaults
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-
-# Unfold admin theme
-from .unfold import *  # noqa: E402,F401,F403
