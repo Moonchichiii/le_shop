@@ -33,6 +33,7 @@ dev = [
     "types-requests",
     "pytest",
     "pytest-django",
+    "pytest-cov",
     "factory-boy",
     "pytest-playwright",
 ]
@@ -55,6 +56,39 @@ plugins = ["mypy_django_plugin.main"]
 
 [tool.django-stubs]
 django_settings_module = "backend.config.settings"
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "backend.config.settings"
+pythonpath = [".", "backend"]
+python_files = ["tests.py", "test_*.py", "*_test.py", "*_tests.py"]
+testpaths = ["backend"]
+norecursedirs = ["node_modules", ".venv", "venv", "staticfiles"]
+markers = [
+  "e2e: End-to-end browser tests",
+]
+addopts = """
+  -ra
+  --nomigrations
+  --reuse-db
+  --cov=backend
+  --cov-report=term-missing:skip-covered
+  --cov-report=html
+  --cov-branch
+"""
+
+[tool.coverage.run]
+branch = true
+source = ["backend"]
+omit = [
+  "*/migrations/*",
+  "*/tests/*",
+  "backend/config/asgi.py",
+  "backend/config/wsgi.py",
+]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true
 
 [tool.setuptools]
 

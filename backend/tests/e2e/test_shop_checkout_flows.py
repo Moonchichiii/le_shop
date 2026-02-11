@@ -23,9 +23,9 @@ def test_checkout_data_integrity_and_network_efficiency(page: Page, live_server)
     add_to_cart_requests = []
     page.on(
         "request",
-        lambda request: add_to_cart_requests.append(request)
-        if "cart/add" in request.url
-        else None,
+        lambda request: (
+            add_to_cart_requests.append(request) if "cart/add" in request.url else None
+        ),
     )
 
     page.goto(f"{live_server.url}{product.get_absolute_url()}")
@@ -49,15 +49,15 @@ def test_checkout_data_integrity_and_network_efficiency(page: Page, live_server)
     assert order.status == "pending"
     assert order.subtotal == price
     assert order.items.count() == 1
-    assert order.paypal_order_id == "FAKE_PAYPAL_ORDER_ID"
+    assert order.provider_order_id == "FAKE_PAYPAL_ORDER_ID"
 
-    # Correct route: /orders/paypal/return/
-    return_url = f"{live_server.url}/orders/paypal/return/?token=FAKE_PAYPAL_ORDER_ID"
+    # Correct route: /orders/payment/return/
+    return_url = f"{live_server.url}/orders/payment/return/?token=FAKE_PAYPAL_ORDER_ID"
     page.goto(return_url)
 
     order.refresh_from_db()
     assert order.status == "paid"
-    assert order.paypal_capture_id is not None
+    assert order.provider_capture_id != ""
     product.refresh_from_db()
     assert product.stock == 9
 

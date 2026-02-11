@@ -1,9 +1,11 @@
 {% for p in products %}
   <article class="product-card group reveal-up">
-    {{ p.name }}
+    <a href="{{ p.get_absolute_url }}" class="block">
+     {{ p.name }}
+   </a>
   </article>
 {% empty %}
   <div class="col-span-full py-20 text-center">
-  {{ p.name }}
+  No products found.
   </div>
 {% endfor %}

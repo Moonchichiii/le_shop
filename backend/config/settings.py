@@ -217,6 +217,8 @@ CLOUDINARY_STORAGE = {
     "PREFIX": "arti_corner/",
 }
 
+PAYMENT_PROVIDER = "backend.apps.orders.payments.providers.paypal.PayPalProvider"
+
 
 PAYPAL_ENV = config("PAYPAL_ENV", default="sandbox")
 PAYPAL_CLIENT_ID = config("PAYPAL_CLIENT_ID", default="")

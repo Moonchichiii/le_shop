@@ -49,13 +49,27 @@ class OrderTrackingEventInline(admin.TabularInline):
 
 @admin.register(Order)
 class OrderAdmin(ModelAdmin):
-    list_display = ("id", "status", "email", "subtotal", "currency", "created_at")
-    list_filter = ("status", "created_at")
-    search_fields = ("id", "email", "paypal_order_id", "paypal_capture_id")
+    list_display = (
+        "id",
+        "status",
+        "payment_provider",
+        "email",
+        "subtotal",
+        "currency",
+        "created_at",
+    )
+    list_filter = ("status", "payment_provider", "created_at")
+    search_fields = (
+        "id",
+        "email",
+        "provider_order_id",
+        "provider_capture_id",
+    )
     ordering = ("-created_at",)
     readonly_fields = (
-        "paypal_order_id",
-        "paypal_capture_id",
+        "payment_provider",
+        "provider_order_id",
+        "provider_capture_id",
         "created_at",
         "updated_at",
     )

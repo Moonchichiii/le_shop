@@ -33,14 +33,19 @@ class Order(models.Model):
         max_digits=10, decimal_places=2, default=Decimal("0.00")
     )
 
-    paypal_order_id = models.CharField(max_length=255, blank=True, unique=True)
-    paypal_capture_id = models.CharField(max_length=255, blank=True, unique=True)
+    # ── Provider-agnostic payment fields ──
+    payment_provider = models.CharField(max_length=50, blank=True, db_index=True)
+    provider_order_id = models.CharField(max_length=255, blank=True, unique=True)
+    provider_capture_id = models.CharField(max_length=255, blank=True, default="")
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self) -> str:
         return f"Order #{self.id} ({self.status})"
+
+
+# ── OrderItem, OrderTracking, OrderTrackingEvent stay identical ──
 
 
 class OrderItem(models.Model):
@@ -58,11 +63,6 @@ class OrderItem(models.Model):
 
 
 class OrderTracking(models.Model):
-    """
-    Fulfillment tracking for an order.
-    Kept separate from Order.status (payment lifecycle).
-    """
-
     class FulfillmentStatus(models.TextChoices):
         PROCESSING = "processing", "Processing"
         PACKED = "packed", "Packed"
@@ -92,29 +92,22 @@ class OrderTracking(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def set_milestone_timestamp(self) -> None:
-        """
-        Records the first time we entered each milestone.
-        Denormalized timestamps allow simple templates/admin without joins.
-        """
         now = timezone.now()
-        if self.status == self.FulfillmentStatus.PROCESSING and not self.processing_at:
-            self.processing_at = now
-        elif self.status == self.FulfillmentStatus.PACKED and not self.packed_at:
-            self.packed_at = now
-        elif self.status == self.FulfillmentStatus.SHIPPED and not self.shipped_at:
-            self.shipped_at = now
-        elif self.status == self.FulfillmentStatus.DELIVERED and not self.delivered_at:
-            self.delivered_at = now
+        field_map = {
+            self.FulfillmentStatus.PROCESSING: "processing_at",
+            self.FulfillmentStatus.PACKED: "packed_at",
+            self.FulfillmentStatus.SHIPPED: "shipped_at",
+            self.FulfillmentStatus.DELIVERED: "delivered_at",
+        }
+        field = field_map.get(self.status)
+        if field and not getattr(self, field):
+            setattr(self, field, now)
 
     def __str__(self) -> str:
         return f"Tracking for Order #{self.order_id} ({self.status})"
 
 
 class OrderTrackingEvent(models.Model):
-    """
-    Append-only audit log of fulfillment state changes.
-    """
-
     tracking = models.ForeignKey(
         OrderTracking, on_delete=models.CASCADE, related_name="events"
     )

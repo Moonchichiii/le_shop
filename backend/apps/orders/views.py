@@ -10,7 +10,7 @@ from django.views.decorators.http import require_http_methods
 from backend.apps.cart.services import Cart
 
 from .models import Order
-from .payments_paypal import capture_order, create_order
+from .payments.services import get_payment_provider
 from .services import reserve_stock_and_create_pending_order
 from .signing import sign_order_id, unsign_order_id, unsign_order_track_id
 from .tracking_services import get_or_create_tracking
@@ -18,19 +18,12 @@ from .tracking_services import get_or_create_tracking
 
 @require_http_methods(["GET", "POST"])
 def checkout_start(request):
-    """
-    1. Collect Email (if guest)
-    2. Reserve Stock (Atomic)
-    3. Create PayPal Order
-    4. Redirect to PayPal
-    """
     cart = Cart(request)
 
     if len(cart) == 0:
         messages.info(request, "Your cart is empty.")
         return redirect("cart_detail")
 
-    # --- Step 1: User/Email ---
     user = request.user if request.user.is_authenticated else None
     email = ""
 
@@ -43,7 +36,6 @@ def checkout_start(request):
             messages.error(request, "Please enter your email to continue.")
             return redirect("checkout_start")
 
-    # --- Step 2: Reserve Stock ---
     try:
         order, issues = reserve_stock_and_create_pending_order(
             cart, user=user, email=email
@@ -52,148 +44,125 @@ def checkout_start(request):
         messages.error(request, str(e))
         return redirect("cart_detail")
 
-    # Handle Stock Issues
     if issues:
         for issue in issues:
             if issue.available <= 0:
                 messages.warning(
-                    request, f"'{issue.product_name}' is no longer available."
+                    request,
+                    f"'{issue.product_name}' is no longer available.",
                 )
             else:
                 messages.warning(
                     request,
-                    (
-                        f"Only {issue.available} left of '{issue.product_name}' — "
-                        "please adjust your quantity."
-                    ),
+                    f"Only {issue.available} left of "
+                    f"'{issue.product_name}' — please adjust your quantity.",
                 )
         return redirect("cart_detail")
 
     assert order is not None
 
-    # --- Step 3: PayPal Integration ---
-    return_url = request.build_absolute_uri(reverse("paypal_return"))
-    cancel_url = request.build_absolute_uri(reverse("paypal_cancel"))
+    return_url = request.build_absolute_uri(reverse("payment_return"))
+    cancel_url = request.build_absolute_uri(reverse("payment_cancel"))
+
+    provider = get_payment_provider()
 
     try:
-        pp_data = create_order(
-            total_eur=str(order.subtotal),
-            reference_id=str(order.id),
+        result = provider.create_payment(
+            order=order,
             return_url=return_url,
             cancel_url=cancel_url,
         )
     except Exception:
-        messages.error(request, "Error connecting to PayPal. Please try again.")
-        # If API fails, we redirect to cart (stock is technically reserved pending
-        # expiry)
+        messages.error(
+            request,
+            "Error connecting to PayPal. Please try again.",
+        )
         return redirect("cart_detail")
 
-    # Save PayPal Order ID
-    order.paypal_order_id = pp_data["id"]
-    order.save(update_fields=["paypal_order_id"])
+    order.payment_provider = provider.slug
+    order.provider_order_id = result.provider_order_id
+    order.save(update_fields=["payment_provider", "provider_order_id"])
 
-    # Find the approval link
-    approval_url = next(
-        (
-            link["href"]
-            for link in pp_data.get("links", [])
-            if link.get("rel") == "approve"
-        ),
-        None,
-    )
-
-    if not approval_url:
-        messages.error(request, "PayPal did not return an approval link.")
+    if not result.redirect_url:
+        messages.error(
+            request,
+            "Payment provider did not return an approval link.",
+        )
         return redirect("cart_detail")
 
-    # Do NOT clear cart yet. Wait for capture.
-    return redirect(approval_url)
+    return redirect(result.redirect_url)
 
 
-def paypal_return(request: HttpRequest) -> HttpResponse:
-    """
-    Callback after user approves payment on PayPal.
-    Captures funds -> Updates Order -> Clears Cart -> Redirects.
-    """
-    paypal_order_id = (request.GET.get("token") or "").strip()
+def payment_return(request: HttpRequest) -> HttpResponse:
+    provider_order_id = (request.GET.get("token") or "").strip()
 
-    if not paypal_order_id:
-        messages.error(request, "Missing PayPal token.")
+    if not provider_order_id:
+        messages.error(request, "Missing payment token.")
         return redirect("cart_detail")
 
-    # 1. Find Order
     try:
-        order = Order.objects.get(paypal_order_id=paypal_order_id)
+        order = Order.objects.get(provider_order_id=provider_order_id)
     except Order.DoesNotExist:
         messages.error(request, "Order not found.")
         return redirect("cart_detail")
 
-    # 2. Capture Payment (if not already paid)
     if order.status != Order.Status.PAID:
+        provider = get_payment_provider()
+
         try:
-            data = capture_order(paypal_order_id)
+            capture = provider.capture_payment(
+                provider_order_id=provider_order_id,
+            )
         except Exception:
-            messages.error(request, "Payment capture failed. Please contact support.")
+            messages.error(
+                request,
+                "Payment capture failed. Please contact support.",
+            )
             return redirect("cart_detail")
 
-        # Extract Capture ID
-        capture_id = ""
-        purchase_units = data.get("purchase_units") or []
-        if purchase_units:
-            captures = purchase_units[0].get("payments", {}).get("captures", [])
-            if captures:
-                capture_id = captures[0].get("id", "")
-
         order.status = Order.Status.PAID
-        order.paypal_capture_id = capture_id
-        order.save(update_fields=["status", "paypal_capture_id"])
+        order.provider_capture_id = capture.capture_id  # ← CaptureResult
+        order.save(update_fields=["status", "provider_capture_id"])
 
-        # Ensure tracking exists immediately after payment capture (idempotent)
         get_or_create_tracking(order)
 
-    # 3. Clear Cart (Success)
     Cart(request).clear()
 
     messages.success(
-        request, f"Payment confirmed! Order #{order.id} is being processed."
+        request,
+        f"Payment confirmed! Order #{order.id} is being processed.",
     )
 
-    # 4. Redirect: Split Logic
     if order.user_id:
-        # Authenticated User -> Standard Account View
         return redirect("orders_list")
 
-    # Guest User -> Signed Token View
     token = sign_order_id(order.id)
     return redirect("guest_order_success", token=token)
 
 
-def paypal_cancel(request: HttpRequest) -> HttpResponse:
+def payment_cancel(request: HttpRequest) -> HttpResponse:
     messages.info(request, "Payment process cancelled.")
     return redirect("cart_detail")
 
 
 def guest_order_success(request, token: str):
-    """
-    Secure view for guests to see their receipt.
-    Validates the token to ensure they are authorized to see this specific order.
-    """
-    order_id = unsign_order_id(token, max_age_seconds=86400)  # Valid for 24h
+    order_id = unsign_order_id(token, max_age_seconds=86400)
 
     if not order_id:
         raise Http404("Invalid or expired order link.")
 
     order = get_object_or_404(Order, id=order_id)
 
-    # Security Check:
-    # If the order belongs to a registered user, ensure the current request
-    # comes from that user. Prevents token leakage or cross-user viewing.
     if order.user_id and (
         not request.user.is_authenticated or order.user_id != request.user.id
     ):
         raise Http404()
 
-    return render(request, "orders/order_confirmation_guest.html", {"order": order})
+    return render(
+        request,
+        "orders/order_confirmation_guest.html",
+        {"order": order},
+    )
 
 
 @login_required
@@ -245,7 +214,7 @@ def order_track(request, order_id: int) -> HttpResponse:
 
     return render(
         request,
-        "orders/order_track.html",
+        "orders/order_tracking.html",
         {"order": order, "tracking": tracking, "events": events},
     )
 
@@ -256,10 +225,10 @@ def guest_order_track(request, token: str) -> HttpResponse:
         raise Http404("Invalid or expired tracking link.")
 
     order = get_object_or_404(
-        Order.objects.prefetch_related("items", "items__product"), id=order_id
+        Order.objects.prefetch_related("items", "items__product"),
+        id=order_id,
     )
 
-    # If the order belongs to a registered user, do not allow token-only access.
     if order.user_id and (
         not request.user.is_authenticated or order.user_id != request.user.id
     ):
@@ -267,7 +236,6 @@ def guest_order_track(request, token: str) -> HttpResponse:
 
     tracking = get_or_create_tracking(order)
     if tracking is None:
-        # Don't create tracking for unpaid orders; for guests we just 404
         raise Http404("Tracking not available.")
 
     events = tracking.events.all()

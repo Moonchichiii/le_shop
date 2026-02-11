@@ -1,3 +1,5 @@
+# backend/apps/orders/payments/providers/paypal.py
+
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -6,29 +8,36 @@ from typing import Any
 import requests
 from django.conf import settings
 
+from backend.apps.orders.models import Order
+from backend.apps.orders.payments.base import (
+    CaptureResult,
+    PaymentProvider,
+    PaymentResult,
+)
+
 
 @dataclass(frozen=True)
-class PayPalConfig:
+class _PayPalConfig:
     base_url: str
     client_id: str
     client_secret: str
 
 
-def _paypal_config() -> PayPalConfig:
-    env = (settings.PAYPAL_ENV or "sandbox").lower()
+def _paypal_config() -> _PayPalConfig:
+    env = (getattr(settings, "PAYPAL_ENV", "sandbox") or "sandbox").lower()
     base_url = (
         "https://api-m.sandbox.paypal.com"
         if env == "sandbox"
         else "https://api-m.paypal.com"
     )
-    return PayPalConfig(
+    return _PayPalConfig(
         base_url=base_url,
         client_id=settings.PAYPAL_CLIENT_ID,
         client_secret=settings.PAYPAL_CLIENT_SECRET,
     )
 
 
-def get_access_token() -> str:
+def _get_access_token() -> str:
     cfg = _paypal_config()
     r = requests.post(
         f"{cfg.base_url}/v1/oauth2/token",
@@ -40,14 +49,15 @@ def get_access_token() -> str:
     return r.json()["access_token"]
 
 
-def create_order(
-    *, total_eur: str, reference_id: str, return_url: str, cancel_url: str
+def _create_paypal_order(
+    *,
+    total_eur: str,
+    reference_id: str,
+    return_url: str,
+    cancel_url: str,
 ) -> dict[str, Any]:
-    """
-    Creates a PayPal order and returns the JSON payload (contains id + links[]).
-    """
     cfg = _paypal_config()
-    token = get_access_token()
+    token = _get_access_token()
 
     payload = {
         "intent": "CAPTURE",
@@ -79,9 +89,9 @@ def create_order(
     return r.json()
 
 
-def capture_order(paypal_order_id: str) -> dict[str, Any]:
+def _capture_paypal_order(paypal_order_id: str) -> dict[str, Any]:
     cfg = _paypal_config()
-    token = get_access_token()
+    token = _get_access_token()
 
     r = requests.post(
         f"{cfg.base_url}/v2/checkout/orders/{paypal_order_id}/capture",
@@ -93,3 +103,50 @@ def capture_order(paypal_order_id: str) -> dict[str, Any]:
     )
     r.raise_for_status()
     return r.json()
+
+
+class PayPalProvider(PaymentProvider):
+    slug = "paypal"
+
+    def create_payment(
+        self,
+        *,
+        order: Order,
+        return_url: str,
+        cancel_url: str,
+    ) -> PaymentResult:
+        data = _create_paypal_order(
+            total_eur=str(order.subtotal),
+            reference_id=str(order.id),
+            return_url=return_url,
+            cancel_url=cancel_url,
+        )
+
+        paypal_id = data["id"]
+
+        # Find the approval redirect link
+        redirect_url: str | None = None
+        for link in data.get("links", []):
+            if link.get("rel") == "approve":
+                redirect_url = link["href"]
+                break
+
+        return PaymentResult(
+            approved=True,
+            provider_order_id=paypal_id,
+            redirect_url=redirect_url,
+        )
+
+    def capture_payment(
+        self,
+        *,
+        provider_order_id: str,
+    ) -> CaptureResult:
+        data = _capture_paypal_order(provider_order_id)
+
+        capture_id = data["purchase_units"][0]["payments"]["captures"][0]["id"]
+
+        return CaptureResult(
+            approved=True,
+            capture_id=capture_id,
+        )
