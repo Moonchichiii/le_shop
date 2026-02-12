@@ -171,7 +171,7 @@ class TestDangerZone:
 
     def test_wrong_confirmation_keeps_account(self, client, user):
         client.force_login(user)
-        resp = client.post(
+        client.post(
             reverse("accounts:danger-zone"),
             {"confirmation": "NOPE"},
         )
