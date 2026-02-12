@@ -44,7 +44,7 @@ def _get_access_token() -> str:
         timeout=20,
     )
     r.raise_for_status()
-    return r.json()["access_token"]
+    return str(r.json()["access_token"])
 
 
 def _create_paypal_order(
@@ -84,7 +84,8 @@ def _create_paypal_order(
         timeout=20,
     )
     r.raise_for_status()
-    return r.json()
+    data: dict[str, Any] = r.json()
+    return data
 
 
 def _capture_paypal_order(paypal_order_id: str) -> dict[str, Any]:
@@ -100,7 +101,8 @@ def _capture_paypal_order(paypal_order_id: str) -> dict[str, Any]:
         timeout=20,
     )
     r.raise_for_status()
-    return r.json()
+    data: dict[str, Any] = r.json()
+    return data
 
 
 class PayPalProvider(PaymentProvider):

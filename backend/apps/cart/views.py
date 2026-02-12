@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
 
@@ -7,13 +8,13 @@ from backend.apps.products.models import Product
 from .services import Cart
 
 
-def cart_detail(request):
+def cart_detail(request: HttpRequest) -> HttpResponse:
     cart = Cart(request)
     return render(request, "cart/cart_detail.html", {"cart": cart})
 
 
 @require_POST
-def cart_add(request, product_id: int):
+def cart_add(request: HttpRequest, product_id: int) -> HttpResponse:
     cart = Cart(request)
     product = get_object_or_404(Product, id=product_id, is_active=True)
 
@@ -38,7 +39,7 @@ def cart_add(request, product_id: int):
 
 
 @require_POST
-def cart_update(request, product_id: int):
+def cart_update(request: HttpRequest, product_id: int) -> HttpResponse:
     cart = Cart(request)
     product = get_object_or_404(Product, id=product_id, is_active=True)
 
@@ -63,7 +64,7 @@ def cart_update(request, product_id: int):
 
 
 @require_POST
-def cart_remove(request, product_id: int):
+def cart_remove(request: HttpRequest, product_id: int) -> HttpResponse:
     cart = Cart(request)
     product = get_object_or_404(Product, id=product_id, is_active=True)
     cart.remove(product)

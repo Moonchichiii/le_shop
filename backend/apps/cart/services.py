@@ -1,6 +1,9 @@
+from collections.abc import Iterator
 from dataclasses import dataclass
 from decimal import Decimal
 from typing import Any
+
+from django.http import HttpRequest
 
 from backend.apps.products.models import Product
 
@@ -17,7 +20,7 @@ class AddResult:
 class Cart:
     SESSION_KEY = "cart"
 
-    def __init__(self, request):
+    def __init__(self, request: HttpRequest):
         self.session = request.session
         cart = self.session.get(self.SESSION_KEY)
         if not cart:
@@ -85,7 +88,7 @@ class Cart:
     def save(self) -> None:
         self.session.modified = True
 
-    def __iter__(self):
+    def __iter__(self) -> Iterator[dict[str, Any]]:
         product_ids = self.cart.keys()
         products = Product.objects.filter(id__in=product_ids, is_active=True)
 
@@ -101,4 +104,6 @@ class Cart:
         return sum(item["qty"] for item in self.cart.values())
 
     def get_total_price(self) -> Decimal:
-        return sum(Decimal(item["price"]) * item["qty"] for item in self.cart.values())
+        return Decimal(
+            sum(Decimal(item["price"]) * item["qty"] for item in self.cart.values())
+        )

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import Any
 
 from django.db import transaction
 
@@ -51,7 +52,7 @@ def get_or_create_tracking(order: Order) -> OrderTracking | None:
 def update_tracking_status(
     *,
     order: Order,
-    actor=None,
+    actor: Any = None,
     new_status: str,
     carrier: str = "",
     tracking_number: str = "",

@@ -1,3 +1,5 @@
+from typing import cast
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError
@@ -7,6 +9,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views.decorators.http import require_http_methods
 
+from backend.apps.accounts.models import User
 from backend.apps.cart.services import Cart
 
 from .models import Order
@@ -17,7 +20,7 @@ from .tracking_services import get_or_create_tracking
 
 
 @require_http_methods(["GET", "POST"])
-def checkout_start(request):
+def checkout_start(request: HttpRequest) -> HttpResponse:
     cart = Cart(request)
 
     if len(cart) == 0:
@@ -145,7 +148,7 @@ def payment_cancel(request: HttpRequest) -> HttpResponse:
     return redirect("cart_detail")
 
 
-def guest_order_success(request, token: str):
+def guest_order_success(request: HttpRequest, token: str) -> HttpResponse:
     order_id = unsign_order_id(token, max_age_seconds=86400)
 
     if not order_id:
@@ -166,9 +169,10 @@ def guest_order_success(request, token: str):
 
 
 @login_required
-def orders_list(request):
+def orders_list(request: HttpRequest) -> HttpResponse:
+    user = cast(User, request.user)
     orders_qs = (
-        Order.objects.filter(user=request.user)
+        Order.objects.filter(user=user)
         .prefetch_related("items", "items__product")
         .order_by("-created_at")
     )
@@ -198,7 +202,7 @@ def orders_list(request):
 
 
 @login_required
-def order_track(request, order_id: int) -> HttpResponse:
+def order_track(request: HttpRequest, order_id: int) -> HttpResponse:
     order = get_object_or_404(
         Order.objects.prefetch_related("items", "items__product"),
         id=order_id,
@@ -219,7 +223,7 @@ def order_track(request, order_id: int) -> HttpResponse:
     )
 
 
-def guest_order_track(request, token: str) -> HttpResponse:
+def guest_order_track(request: HttpRequest, token: str) -> HttpResponse:
     order_id = unsign_order_track_id(token, max_age_seconds=60 * 60 * 24 * 30)
     if not order_id:
         raise Http404("Invalid or expired tracking link.")

@@ -18,5 +18,5 @@ def home(request: HttpRequest) -> HttpResponse:
     return render(request, "pages/home.html", context)
 
 
-def mock_paypal_approve(request):
+def mock_paypal_approve(request: HttpRequest) -> HttpResponse:
     return HttpResponse("<html><body><h1>PayPal Payment Page</h1></body></html>")

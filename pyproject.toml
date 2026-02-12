@@ -7,35 +7,35 @@ name = "le-shop"
 version = "0.1.0"
 requires-python = ">=3.12"
 dependencies = [
-    "django>=5.1",
-    "python-decouple",
-    "djangorestframework",    
-    "django-filter",
-    "django-allauth[mfa]",
-    "dj-database-url",
-    "django-csp",    
-    "django-htmx",
-    "cloudinary",
-    "django-cloudinary-storage",
-    "psycopg",
-    "gunicorn",
-    "django-unfold",
-    "PyJWT>=2.8",
-    "whitenoise",
+  "django>=5.1",
+  "python-decouple",
+  "djangorestframework",    
+  "django-filter",
+  "django-allauth[mfa]",
+  "dj-database-url",
+  "django-csp",    
+  "django-htmx",
+  "cloudinary",
+  "django-cloudinary-storage",
+  "psycopg",
+  "gunicorn",
+  "django-unfold",
+  "PyJWT>=2.8",
+  "whitenoise",
 ]
 
 [project.optional-dependencies]
 dev = [
-    "ruff",
-    "mypy",
-    "django-stubs",
-    "djangorestframework-stubs",
-    "types-requests",
-    "pytest",
-    "pytest-django",
-    "pytest-cov",
-    "factory-boy",
-    "pytest-playwright",
+  "ruff",
+  "mypy",
+  "django-stubs",
+  "djangorestframework-stubs",
+  "types-requests",
+  "pytest",
+  "pytest-django",
+  "pytest-cov",
+  "factory-boy",
+  "pytest-playwright",
 ]
 
 [tool.ruff]
@@ -47,15 +47,73 @@ target-version = "py313"
 select = ["E", "F", "I", "N", "UP", "B", "SIM"]
 ignore = []
 
+# ── Mypy ─────────────────────────────────────────────────────
 [tool.mypy]
 python_version = "3.13"
+plugins = ["mypy_django_plugin.main", "mypy_drf_plugin.main"]
+strict = false
+warn_return_any = true
+warn_unused_configs = true
 check_untyped_defs = true
-disallow_untyped_defs = false
-ignore_missing_imports = true
-plugins = ["mypy_django_plugin.main"]
+disallow_untyped_defs = true
+exclude = ["build/", "migrations/"]
 
 [tool.django-stubs]
 django_settings_module = "backend.config.settings"
+
+# ── Per-module overrides ─────────────────────────────────────
+
+# Custom User model (username = None, custom manager, etc.)
+[[tool.mypy.overrides]]
+module = "backend.apps.accounts.models"
+disable_error_code = [
+  "assignment",
+  "override",
+  "misc",
+  "union-attr",
+  "return-value",
+]
+
+# Tests using factory_boy (.create() returns factory, not model)
+[[tool.mypy.overrides]]
+module = "backend.apps.*.tests.*"
+disable_error_code = [
+  "assignment",
+  "attr-defined",
+  "union-attr",
+  "misc",
+  "no-untyped-def",
+  "no-any-return",
+]
+
+# Top-level test helpers / conftest / e2e (MagicMock, Playwright)
+[[tool.mypy.overrides]]
+module = "backend.tests.*"
+disable_error_code = [
+  "no-untyped-def",
+  "assignment",
+  "misc",
+  "union-attr",
+  "operator",
+]
+
+# Third-party libs without stubs — scoped, not global
+
+[[tool.mypy.overrides]]
+	module = [
+  "factory.*",
+  "allauth.*",
+  "playwright.*",
+  "cloudinary.*",
+  "cloudinary_storage.*",
+  "unfold.*",
+  "django_htmx.*",
+  "decouple.*",
+  "django_filters.*",
+  "dj_database_url.*",
+  "csp.*",
+	]
+	ignore_missing_imports = true
 
 [tool.pytest.ini_options]
 DJANGO_SETTINGS_MODULE = "backend.config.settings"

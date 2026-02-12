@@ -62,7 +62,7 @@ class Product(models.Model):
 
     @property
     def is_in_stock(self) -> bool:
-        return self.stock > 0
+        return bool(self.stock > 0)
 
     def image_url(self, *, width: int | None = None, height: int | None = None) -> str:
         if not self.image:
@@ -83,7 +83,7 @@ class Product(models.Model):
             t.update({"height": height, "crop": "fill", "gravity": "auto"})
 
         url, _ = cloudinary_url(self.image.public_id, transformation=t)
-        return url
+        return str(url)
 
     @property
     def image_url_auto(self) -> str:

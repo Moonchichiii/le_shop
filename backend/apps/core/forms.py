@@ -1,4 +1,5 @@
 import logging
+from typing import Any
 
 from allauth.account.forms import (
     ConfirmLoginCodeForm,
@@ -18,7 +19,7 @@ INPUT = (
 class StyledLoginForm(LoginForm):
     """Passwordless login form with consistent styling."""
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
 
         for field in self.fields.values():
@@ -31,7 +32,7 @@ class StyledLoginForm(LoginForm):
 class StyledSignupForm(SignupForm):
     """Passwordless signup form with email and optional profile fields."""
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
 
         for field in self.fields.values():
@@ -62,7 +63,7 @@ class StyledSignupForm(SignupForm):
 class StyledRequestLoginCodeForm(RequestLoginCodeForm):
     """Styled form for requesting a login code."""
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
         for field in self.fields.values():
             field.widget.attrs["class"] = INPUT
@@ -75,7 +76,7 @@ class StyledRequestLoginCodeForm(RequestLoginCodeForm):
 class StyledConfirmLoginCodeForm(ConfirmLoginCodeForm):
     """Styled form for confirming a login code."""
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
         for field in self.fields.values():
             field.widget.attrs["class"] = INPUT

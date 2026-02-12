@@ -93,11 +93,11 @@ class OrderTracking(models.Model):
 
     def set_milestone_timestamp(self) -> None:
         now = timezone.now()
-        field_map = {
-            self.FulfillmentStatus.PROCESSING: "processing_at",
-            self.FulfillmentStatus.PACKED: "packed_at",
-            self.FulfillmentStatus.SHIPPED: "shipped_at",
-            self.FulfillmentStatus.DELIVERED: "delivered_at",
+        field_map: dict[str, str] = {
+            self.FulfillmentStatus.PROCESSING.value: "processing_at",
+            self.FulfillmentStatus.PACKED.value: "packed_at",
+            self.FulfillmentStatus.SHIPPED.value: "shipped_at",
+            self.FulfillmentStatus.DELIVERED.value: "delivered_at",
         }
         field = field_map.get(self.status)
         if field and not getattr(self, field):

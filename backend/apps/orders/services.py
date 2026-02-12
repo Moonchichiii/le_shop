@@ -1,6 +1,5 @@
-from __future__ import annotations
-
 from dataclasses import dataclass
+from typing import Any
 
 from django.core.exceptions import ValidationError
 from django.db import transaction
@@ -24,7 +23,7 @@ class StockIssue:
 def reserve_stock_and_create_pending_order(
     cart: Cart,
     *,
-    user=None,
+    user: Any = None,
     email: str = "",
 ) -> tuple[Order | None, list[StockIssue]]:
     """

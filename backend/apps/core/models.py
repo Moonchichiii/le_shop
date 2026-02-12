@@ -19,11 +19,11 @@ class HeroSlide(models.Model):
     class Meta:
         ordering = ["order"]
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.title} (Order: {self.order})"
 
     @property
-    def image_url(self):
+    def image_url(self) -> str:
         """
         Returns the Cloudinary URL with optimizations applied:
         - f_auto: Automatically serves WebP/AVIF if browser supports it
@@ -34,7 +34,7 @@ class HeroSlide(models.Model):
         if not self.image:
             return ""
 
-        return self.image.build_url(
+        url = self.image.build_url(
             width=1200,
             height=1500,  # Aspect ratio 4:5
             crop="fill",
@@ -42,3 +42,4 @@ class HeroSlide(models.Model):
             format="auto",
             gravity="auto",  # Focuses on the most interesting part of image
         )
+        return str(url)

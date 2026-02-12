@@ -63,7 +63,7 @@ class ProductAdmin(ModelAdmin):
         return mark_safe(html)
 
     @display(description="Availability", label=True)
-    def status_badge(self, obj: Product):
+    def status_badge(self, obj: Product) -> tuple[str, str]:
         if obj.stock > 0 and obj.is_active:
             return "In Stock", "success"
         if obj.is_active and obj.stock == 0:

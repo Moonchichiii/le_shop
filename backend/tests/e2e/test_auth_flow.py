@@ -104,4 +104,5 @@ def test_security_order_isolation(page: Page, live_server):
 
     # User B should not access User A receipt
     response = page.goto(guest_link)
+    assert response is not None, "No response received from page.goto"
     assert response.status == 404

@@ -36,7 +36,7 @@ def test_checkout_data_integrity_and_network_efficiency(page: Page, live_server)
 
     page.goto(f"{live_server.url}/cart/")
     total_ui = page.locator("p.headline-serif").text_content()
-    assert "150" in total_ui
+    assert total_ui is not None and "150" in total_ui
 
     page.locator("button:has-text('Proceed to Checkout')").click()
 

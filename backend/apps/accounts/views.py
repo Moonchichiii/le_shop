@@ -1,13 +1,19 @@
+from typing import cast
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.http import Http404
+from django.http import Http404, HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 
 from .forms import AddressForm, ProfileForm
-from .models import Address, CustomerProfile
+from .models import Address, CustomerProfile, User
 
 
-def _get_owned_address(*, request, pk: int) -> Address:
+def _get_owned_address(*, request: HttpRequest, pk: int) -> Address:
+    # Ensure user is authenticated for type checking
+    if not request.user.is_authenticated:
+        raise Http404
+
     address = get_object_or_404(Address, pk=pk)
     if address.user_id != request.user.id:
         raise Http404
@@ -15,8 +21,9 @@ def _get_owned_address(*, request, pk: int) -> Address:
 
 
 @login_required
-def settings(request):
-    profile, _ = CustomerProfile.objects.get_or_create(user=request.user)
+def settings(request: HttpRequest) -> HttpResponse:
+    user = cast(User, request.user)
+    profile, _ = CustomerProfile.objects.get_or_create(user=user)
 
     if request.method == "POST":
         profile_form = ProfileForm(request.POST, instance=profile)
@@ -37,21 +44,23 @@ def settings(request):
 
 
 @login_required
-def address_list(request):
-    addresses = Address.objects.filter(user=request.user)
+def address_list(request: HttpRequest) -> HttpResponse:
+    user = cast(User, request.user)
+    addresses = Address.objects.filter(user=user)
     return render(request, "accounts/addresses_list.html", {"addresses": addresses})
 
 
 @login_required
-def address_create(request):
+def address_create(request: HttpRequest) -> HttpResponse:
+    user = cast(User, request.user)
     if request.method == "POST":
         form = AddressForm(request.POST)
         if form.is_valid():
             addr: Address = form.save(commit=False)
-            addr.user = request.user
+            addr.user = user
 
             if addr.is_default:
-                Address.objects.filter(user=request.user, is_default=True).update(
+                Address.objects.filter(user=user, is_default=True).update(
                     is_default=False
                 )
 
@@ -67,7 +76,8 @@ def address_create(request):
 
 
 @login_required
-def address_update(request, pk: int):
+def address_update(request: HttpRequest, pk: int) -> HttpResponse:
+    user = cast(User, request.user)
     addr = _get_owned_address(request=request, pk=pk)
 
     if request.method == "POST":
@@ -75,7 +85,7 @@ def address_update(request, pk: int):
         if form.is_valid():
             addr = form.save(commit=False)
             if addr.is_default:
-                Address.objects.filter(user=request.user, is_default=True).exclude(
+                Address.objects.filter(user=user, is_default=True).exclude(
                     pk=addr.pk
                 ).update(is_default=False)
             addr.save()
@@ -90,7 +100,7 @@ def address_update(request, pk: int):
 
 
 @login_required
-def address_delete(request, pk: int):
+def address_delete(request: HttpRequest, pk: int) -> HttpResponse:
     addr = _get_owned_address(request=request, pk=pk)
 
     if request.method == "POST":
@@ -102,15 +112,16 @@ def address_delete(request, pk: int):
 
 
 @login_required
-def email_change(request):
+def email_change(request: HttpRequest) -> HttpResponse:
     return render(request, "accounts/email_change.html")
 
 
 @login_required
-def danger_zone(request):
+def danger_zone(request: HttpRequest) -> HttpResponse:
     if request.method == "POST":
         if request.POST.get("confirmation") == "DELETE":
-            user = request.user
+            # Capture user before logout
+            user = cast(User, request.user)
             from django.contrib.auth import logout
 
             logout(request)

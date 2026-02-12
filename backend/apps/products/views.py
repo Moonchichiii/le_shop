@@ -1,11 +1,12 @@
 from django.core.paginator import Paginator
+from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, render
 
 from .models import Product
 from .selectors import get_active_categories, get_filtered_products
 
 
-def product_list(request):
+def product_list(request: HttpRequest) -> HttpResponse:
     category_slug = (request.GET.get("category") or "").strip()
     q = (request.GET.get("q") or "").strip()
 
@@ -40,6 +41,6 @@ def product_list(request):
     return render(request, template, context)
 
 
-def product_detail(request, slug: str):
+def product_detail(request: HttpRequest, slug: str) -> HttpResponse:
     product = get_object_or_404(Product, slug=slug, is_active=True)
     return render(request, "products/product_detail.html", {"product": product})

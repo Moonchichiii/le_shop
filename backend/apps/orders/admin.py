@@ -1,4 +1,7 @@
+from typing import Any
+
 from django.contrib import admin
+from django.http import HttpRequest
 from unfold.admin import ModelAdmin  # type: ignore
 
 from .models import Order, OrderItem, OrderTracking, OrderTrackingEvent
@@ -43,7 +46,7 @@ class OrderTrackingEventInline(admin.TabularInline):
     can_delete = False
     readonly_fields = ("from_status", "to_status", "actor", "note", "created_at")
 
-    def has_add_permission(self, request, obj=None) -> bool:
+    def has_add_permission(self, request: HttpRequest, obj: Any | None = None) -> bool:
         return False
 
 
