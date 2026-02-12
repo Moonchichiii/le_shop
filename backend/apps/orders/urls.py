@@ -1,5 +1,3 @@
-# backend/apps/orders/urls.py  (no changes)
-
 from django.urls import path
 
 from . import views

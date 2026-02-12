@@ -1,0 +1,173 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}
+  {% if mode == "update" %}Edit address{% else %}New address{% endif %} | Art Leptis
+{% endblock %}
+
+{% block content %}
+<section class="artleptis">
+  <div class="mx-auto max-w-lg px-4 sm:px-6 py-section-sm">
+
+    <div class="reveal-up">
+      <span class="label">Account</span>
+      <h1 class="headline-serif mt-3 text-4xl">
+        {% if mode == "update" %}Edit address{% else %}New address{% endif %}
+      </h1>
+    </div>
+
+    <div
+      class="mt-8 bg-surface shadow-sm p-6 sm:p-8 reveal-up"
+      style="border-radius: var(--radius-lg)"
+    >
+      <form
+        method="post"
+        class="space-y-5"
+      >
+        {% csrf_token %}
+
+        {% if form.non_field_errors %}
+          <div
+            class="border-l-[3px] border-red-600 bg-cream/60 px-4 py-3"
+            style="border-radius: var(--radius-md)"
+          >
+            <p class="text-sm font-medium text-red-700">
+              {{ form.non_field_errors }}
+            </p>
+          </div>
+        {% endif %}
+
+        {# Label #}
+        <div>
+          <label class="block text-sm font-medium text-ink-60 mb-1.5"
+                 for="{{ form.label.id_for_label }}">
+            Label <span class="text-ink-40">(e.g. Home, Work)</span>
+          </label>
+          {{ form.label }}
+          {% if form.label.errors %}
+            <p class="mt-1 text-xs text-red-600">{{ form.label.errors.0 }}</p>
+          {% endif %}
+        </div>
+
+        {# Name row #}
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-ink-60 mb-1.5"
+                   for="{{ form.first_name.id_for_label }}">
+              First name
+            </label>
+            {{ form.first_name }}
+            {% if form.first_name.errors %}
+              <p class="mt-1 text-xs text-red-600">{{ form.first_name.errors.0 }}</p>
+            {% endif %}
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-ink-60 mb-1.5"
+                   for="{{ form.last_name.id_for_label }}">
+              Last name
+            </label>
+            {{ form.last_name }}
+            {% if form.last_name.errors %}
+              <p class="mt-1 text-xs text-red-600">{{ form.last_name.errors.0 }}</p>
+            {% endif %}
+          </div>
+        </div>
+
+        {# Phone #}
+        <div>
+          <label class="block text-sm font-medium text-ink-60 mb-1.5"
+                 for="{{ form.phone.id_for_label }}">
+            Phone
+          </label>
+          {{ form.phone }}
+          {% if form.phone.errors %}
+            <p class="mt-1 text-xs text-red-600">{{ form.phone.errors.0 }}</p>
+          {% endif %}
+        </div>
+
+        {# Address lines #}
+        <div>
+          <label class="block text-sm font-medium text-ink-60 mb-1.5"
+                 for="{{ form.line1.id_for_label }}">
+            Address line 1
+          </label>
+          {{ form.line1 }}
+          {% if form.line1.errors %}
+            <p class="mt-1 text-xs text-red-600">{{ form.line1.errors.0 }}</p>
+          {% endif %}
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-ink-60 mb-1.5"
+                 for="{{ form.line2.id_for_label }}">
+            Address line 2 <span class="text-ink-40">(optional)</span>
+          </label>
+          {{ form.line2 }}
+        </div>
+
+        {# City / Postal #}
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-ink-60 mb-1.5"
+                   for="{{ form.city.id_for_label }}">
+              City
+            </label>
+            {{ form.city }}
+            {% if form.city.errors %}
+              <p class="mt-1 text-xs text-red-600">{{ form.city.errors.0 }}</p>
+            {% endif %}
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-ink-60 mb-1.5"
+                   for="{{ form.postal_code.id_for_label }}">
+              Postal code
+            </label>
+            {{ form.postal_code }}
+            {% if form.postal_code.errors %}
+              <p class="mt-1 text-xs text-red-600">{{ form.postal_code.errors.0 }}</p>
+            {% endif %}
+          </div>
+        </div>
+
+        {# Region / Country #}
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-ink-60 mb-1.5"
+                   for="{{ form.region.id_for_label }}">
+              Region <span class="text-ink-40">(optional)</span>
+            </label>
+            {{ form.region }}
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-ink-60 mb-1.5"
+                   for="{{ form.country.id_for_label }}">
+              Country
+            </label>
+            {{ form.country }}
+            {% if form.country.errors %}
+              <p class="mt-1 text-xs text-red-600">{{ form.country.errors.0 }}</p>
+            {% endif %}
+          </div>
+        </div>
+
+        {# Default toggle #}
+        <label class="flex items-center gap-3 cursor-pointer">
+          {{ form.is_default }}
+          <span class="text-sm text-ink-60">Set as default address</span>
+        </label>
+
+        <div class="flex flex-col sm:flex-row gap-3 pt-2">
+          <button type="submit" class="btn-primary">
+            {% if mode == "update" %}Update address{% else %}Save address{% endif %}
+          </button>
+          <a href="{% url 'accounts:address-list' %}"
+             class="btn-outline text-center inline-flex justify-center">
+            Cancel
+          </a>
+        </div>
+      </form>
+    </div>
+
+  </div>
+</section>
+{% endblock %}

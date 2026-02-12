@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}Change email | Art Leptis{% endblock %}
+
+{% block content %}
+<section class="artleptis">
+  <div class="mx-auto max-w-md px-4 sm:px-6 py-section-sm">
+
+    <div class="reveal-up">
+      <span class="label">Account</span>
+      <h1 class="headline-serif mt-3 text-4xl">Change email</h1>
+    </div>
+
+    <div
+      class="mt-8 bg-surface shadow-sm p-6 sm:p-8 reveal-up"
+      style="border-radius: var(--radius-lg)"
+    >
+      <p class="text-sm text-ink-60 leading-relaxed">
+        Your current email is
+        <strong class="text-ink font-semibold">{{ request.user.email }}</strong>.
+      </p>
+
+      <p class="text-sm text-ink-60 leading-relaxed mt-3">
+        To change your email, use the allauth email management page:
+      </p>
+
+      <a
+        href="{% url 'account_email' %}"
+        class="btn-primary w-full text-center inline-flex justify-center mt-6"
+      >
+        Manage email addresses
+      </a>
+
+      <div class="rule mt-6 mb-5"></div>
+
+      <a href="{% url 'accounts:settings' %}"
+         class="text-sm font-medium text-ink-60 hover:text-ink transition-colors">
+        ← Back to settings
+      </a>
+    </div>
+
+  </div>
+</section>
+{% endblock %}

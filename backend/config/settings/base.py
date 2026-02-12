@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     "cloudinary",
     "cloudinary_storage",
     "csp",
-    "backend.apps.accounts",
+    "backend.apps.accounts.apps.AccountsConfig",
     "backend.apps.core",
     "backend.apps.products",
     "backend.apps.cart",
@@ -64,11 +64,11 @@ MIDDLEWARE = [
 
 # Internationalization
 LANGUAGE_CODE = "en"
-USE_I18N = True
-LANGUAGES = [
-    ("en", "English"),
-    ("fr", "Français"),
-]
+# USE_I18N = True
+# LANGUAGES = [
+#     ("en", "English"),
+#     ("fr", "Français"),
+# ]
 
 # URLs / Templates
 ROOT_URLCONF = "backend.config.urls"
@@ -103,6 +103,9 @@ DATABASES = {
 # Authentication & Allauth
 SITE_ID = 1
 
+ACCOUNT_LOGIN_BY_CODE_ENABLED = True
+AUTH_USER_MODEL = "accounts.User"
+
 AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
     "allauth.account.auth_backends.AuthenticationBackend",
@@ -129,6 +132,8 @@ ACCOUNT_LOGOUT_REDIRECT_URL = "core:home"
 ACCOUNT_FORMS = {
     "login": "backend.apps.core.forms.StyledLoginForm",
     "signup": "backend.apps.core.forms.StyledSignupForm",
+    "request_login_code": "backend.apps.core.forms.StyledRequestLoginCodeForm",
+    "confirm_login_code": "backend.apps.core.forms.StyledConfirmLoginCodeForm",
 }
 
 ACCOUNT_RATE_LIMITS = {

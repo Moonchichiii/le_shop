@@ -1,6 +1,11 @@
 import logging
 
-from allauth.account.forms import LoginForm, SignupForm
+from allauth.account.forms import (
+    ConfirmLoginCodeForm,
+    LoginForm,
+    RequestLoginCodeForm,
+    SignupForm,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -51,4 +56,34 @@ class StyledSignupForm(SignupForm):
             logger.debug(
                 f"Removed password fields from signup form: {removed_fields}. "
                 "Ensure passwordless auth is configured correctly."
+            )
+
+
+class StyledRequestLoginCodeForm(RequestLoginCodeForm):
+    """Styled form for requesting a login code."""
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs["class"] = INPUT
+        if "email" in self.fields:
+            self.fields["email"].widget.attrs["placeholder"] = "you@example.com"
+        if "login" in self.fields:
+            self.fields["login"].widget.attrs["placeholder"] = "you@example.com"
+
+
+class StyledConfirmLoginCodeForm(ConfirmLoginCodeForm):
+    """Styled form for confirming a login code."""
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs["class"] = INPUT
+        if "code" in self.fields:
+            self.fields["code"].widget.attrs.update(
+                {
+                    "placeholder": "123456",
+                    "inputmode": "numeric",
+                    "autocomplete": "one-time-code",
+                }
             )

@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Enter sign-in code" %} | Art Leptis{% endblock %}
+
+{% block content %}
+<section class="artleptis">
+  <div class="mx-auto max-w-md px-4 sm:px-6 py-section-sm">
+
+    <div class="reveal-up text-center">
+      <span class="label">{% trans "Account" %}</span>
+      <h1 class="headline-serif mt-3 text-4xl">{% trans "Enter sign-in code" %}</h1>
+    </div>
+
+    <div class="mt-8 bg-surface shadow-sm p-6 sm:p-8 reveal-up" style="border-radius: var(--radius-lg)">
+      {% if form.non_field_errors %}
+        <div class="border-l-[3px] border-red-600 bg-cream/60 px-4 py-3" style="border-radius: var(--radius-md)">
+          <p class="text-sm font-medium text-red-700">{{ form.non_field_errors }}</p>
+        </div>
+      {% endif %}
+
+      <p class="text-sm text-ink-60 leading-relaxed">
+        {% trans "We emailed you a one-time code. Enter it below to sign in." %}
+      </p>
+
+      <div class="rule mt-6 mb-6"></div>
+
+      <form method="post" class="space-y-5">
+        {% csrf_token %}
+
+        {% if redirect_field_value %}
+          <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}">
+        {% endif %}
+
+        {# Render all hidden fields (allauth sometimes stores state here) #}
+        {% for hidden in form.hidden_fields %}
+          {{ hidden }}
+        {% endfor %}
+
+        <div>
+          <label class="block text-sm font-medium text-ink-60 mb-1.5" for="{{ form.code.id_for_label }}">
+            {% trans "Code" %}
+          </label>
+
+          {# Manual render to guarantee styling regardless of form widget attrs #}
+          <input
+            type="text"
+            name="{{ form.code.html_name }}"
+            id="{{ form.code.id_for_label }}"
+            value="{{ form.code.value|default_if_none:'' }}"
+            inputmode="numeric"
+            autocomplete="one-time-code"
+            class="w-full rounded-2xl border border-arti-dark/15 bg-white px-4 py-3 text-sm focus:border-arti-dark focus:ring-0"
+            placeholder="123456"
+          />
+
+          {% if form.code.errors %}
+            <p class="mt-1 text-xs text-red-600">{{ form.code.errors.0 }}</p>
+          {% endif %}
+        </div>
+
+        <button type="submit" class="btn-primary w-full">
+          {% trans "Verify & sign in" %}
+        </button>
+
+        <div class="flex items-center justify-between pt-2">
+          <a href="{% url 'account_login' %}"
+             class="text-[11px] font-bold uppercase tracking-[0.12em] text-ink-60 border-b border-rule pb-0.5 hover:text-ink hover:border-ink transition-colors">
+            {% trans "Back" %}
+          </a>
+
+          <a href="{% url 'account_request_login_code' %}"
+             class="text-[11px] font-bold uppercase tracking-[0.12em] text-ink-60 border-b border-rule pb-0.5 hover:text-ink hover:border-ink transition-colors">
+            {% trans "Resend code" %}
+          </a>
+        </div>
+      </form>
+    </div>
+
+    <div class="mt-4 flex items-center justify-between">
+      <span class="text-meta">SEC. AUTH</span>
+      <span class="text-meta">Art Leptis</span>
+    </div>
+
+  </div>
+</section>
+{% endblock %}

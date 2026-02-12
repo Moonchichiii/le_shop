@@ -1,0 +1,16 @@
+{% extends "account/email/base_message.txt" %}
+{% load i18n %}
+
+{% block content %}{% autoescape off %}
+{% blocktrans %}You are receiving this email because you or someone else tried to create an account using:
+
+{{ email }}
+
+An account with this email already exists.
+
+To sign in, request a one-time sign-in code here:{% endblocktrans %}
+
+{{ login_url }}
+
+{% blocktrans %}If you did not initiate this request, you can safely ignore this email.{% endblocktrans %}
+{% endautoescape %}{% endblock content %}

@@ -1,12 +1,13 @@
 from .base import *  # noqa: F401,F403
-from .base import DATABASES  # noqa: F811
+from .base import BASE_DIR, DATABASES  # noqa: F811
 
 # Local development
 DEBUG = True
 ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
 
-# Email
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+# Email (file-based so links are clickable and not weirdly encoded)
+EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
+EMAIL_FILE_PATH = BASE_DIR / "tmp" / "emails"
 
 # Static storage (no manifest hashing)
 STORAGES = {

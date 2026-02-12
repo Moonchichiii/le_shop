@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}Addresses | Art Leptis{% endblock %}
+
+{% block content %}
+<section class="artleptis">
+  <div class="mx-auto max-w-2xl px-4 sm:px-6 py-section-sm">
+
+    <div class="flex items-end justify-between reveal-up">
+      <div>
+        <span class="label">Account</span>
+        <h1 class="headline-serif mt-3 text-4xl">Addresses</h1>
+      </div>
+      <a href="{% url 'accounts:address-create' %}" class="btn-primary text-sm">
+        + New address
+      </a>
+    </div>
+
+    {% if addresses %}
+      <ul class="mt-8 space-y-4">
+        {% for addr in addresses %}
+          <li
+            class="bg-surface shadow-sm p-5 sm:p-6 reveal-up"
+            style="border-radius: var(--radius-lg)"
+          >
+            <div class="flex items-start justify-between gap-4">
+              <div class="min-w-0">
+                <div class="flex items-center gap-2 mb-1">
+                  {% if addr.label %}
+                    <span class="text-xs font-semibold text-ink-40 uppercase tracking-widest">
+                      {{ addr.label }}
+                    </span>
+                  {% endif %}
+                  {% if addr.is_default %}
+                    <span
+                      class="inline-flex items-center px-2 py-0.5
+                             bg-moss-600/10 text-moss-600 text-[10px]
+                             font-bold uppercase tracking-widest"
+                      style="border-radius: var(--radius-sm)"
+                    >
+                      Default
+                    </span>
+                  {% endif %}
+                </div>
+
+                <p class="text-sm font-medium text-ink">
+                  {{ addr.first_name }} {{ addr.last_name }}
+                </p>
+                <p class="text-sm text-ink-60 mt-0.5">
+                  {{ addr.line1 }}{% if addr.line2 %}, {{ addr.line2 }}{% endif %}
+                </p>
+                <p class="text-sm text-ink-60">
+                  {{ addr.postal_code }} {{ addr.city }}{% if addr.region %}, {{ addr.region }}{% endif %}
+                </p>
+                {% if addr.phone %}
+                  <p class="text-sm text-ink-40 mt-1">{{ addr.phone }}</p>
+                {% endif %}
+              </div>
+
+              <div class="flex items-center gap-2 shrink-0">
+                <a href="{% url 'accounts:address-update' addr.pk %}"
+                   class="btn-outline text-xs px-3 py-1.5">
+                  Edit
+                </a>
+                <a href="{% url 'accounts:address-delete' addr.pk %}"
+                   class="text-xs font-medium text-red-600
+                          hover:text-red-700 transition-colors px-2 py-1.5">
+                  Delete
+                </a>
+              </div>
+            </div>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <div
+        class="mt-8 bg-surface shadow-sm p-8 text-center reveal-up"
+        style="border-radius: var(--radius-lg)"
+      >
+        <p class="text-sm text-ink-60">No addresses yet.</p>
+        <a href="{% url 'accounts:address-create' %}"
+           class="btn-primary mt-4 inline-flex">
+          Add your first address
+        </a>
+      </div>
+    {% endif %}
+
+    <div class="mt-6 reveal-up">
+      <a href="{% url 'accounts:settings' %}"
+         class="text-sm font-medium text-ink-60 hover:text-ink transition-colors">
+        ← Back to settings
+      </a>
+    </div>
+
+  </div>
+</section>
+{% endblock %}

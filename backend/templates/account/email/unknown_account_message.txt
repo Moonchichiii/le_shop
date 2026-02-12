@@ -1,0 +1,14 @@
+{% extends "account/email/base_message.txt" %}
+{% load i18n %}
+
+{% block content %}{% autoescape off %}
+{% blocktranslate %}A sign-in attempt was made using {{ email }}.{% endblocktranslate %}
+
+{% blocktranslate %}If you have an account, you can request a one-time sign-in code here:{% endblocktranslate %}
+{{ protocol }}://{{ domain }}{% url 'account_request_login_code' %}
+
+{% blocktranslate %}If you are new, you can create an account here:{% endblocktranslate %}
+{{ signup_url }}
+
+{% blocktranslate %}If you did not initiate this request, you can safely ignore this email.{% endblocktranslate %}
+{% endautoescape %}{% endblock content %}

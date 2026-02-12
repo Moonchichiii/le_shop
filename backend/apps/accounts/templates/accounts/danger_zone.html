@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}Delete account | Art Leptis{% endblock %}
+
+{% block content %}
+<section class="artleptis">
+  <div class="mx-auto max-w-md px-4 sm:px-6 py-section-sm">
+
+    <div class="reveal-up text-center">
+      <span class="label text-red-600">Danger zone</span>
+      <h1 class="headline-serif mt-3 text-4xl">Delete account</h1>
+    </div>
+
+    <div
+      class="mt-8 bg-surface shadow-sm p-6 sm:p-8 reveal-up"
+      style="border-radius: var(--radius-lg)"
+    >
+      <div class="flex justify-center mb-5">
+        <div class="w-12 h-12 bg-red-50 flex items-center justify-center rounded-full">
+          <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor"
+               stroke-width="1.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M12 9v3.75m-9.303 3.376c-.866
+                     1.5.217 3.374 1.948
+                     3.374h14.71c1.73 0
+                     2.813-1.874
+                     1.948-3.374L13.949
+                     3.378c-.866-1.5-3.032-1.5-3.898
+                     0L2.697 16.126zM12
+                     15.75h.007v.008H12v-.008z"/>
+          </svg>
+        </div>
+      </div>
+
+      <p class="text-sm leading-relaxed text-ink-60 text-center">
+        This will <strong class="text-red-600 font-semibold">permanently delete</strong>
+        your account, addresses, order history, and all associated data.
+        This action cannot be undone.
+      </p>
+
+      <form
+        method="post"
+        action="{% url 'accounts:danger-zone' %}"
+        class="mt-6"
+        x-data="{ confirm: '' }"
+      >
+        {% csrf_token %}
+
+        <label class="block text-sm font-medium text-ink-60 mb-1.5">
+          Type <strong class="text-ink">DELETE</strong> to confirm
+        </label>
+        <input
+          type="text"
+          name="confirmation"
+          x-model="confirm"
+          autocomplete="off"
+          class="w-full px-3 py-2.5 border border-rule text-sm
+                 focus:outline-none focus:ring-2 focus:ring-red-500/30
+                 focus:border-red-500"
+          style="border-radius: var(--radius-md)"
+          placeholder="DELETE"
+        />
+
+        <button
+          type="submit"
+          class="w-full mt-4 px-5 py-2.5 bg-red-600 text-white text-sm
+                 font-semibold transition-colors
+                 disabled:opacity-40 disabled:cursor-not-allowed
+                 hover:bg-red-700"
+          style="border-radius: var(--radius-md)"
+          :disabled="confirm !== 'DELETE'"
+        >
+          Permanently delete my account
+        </button>
+      </form>
+
+      <div class="rule mt-6 mb-5"></div>
+
+      <a href="{% url 'accounts:settings' %}"
+         class="text-sm font-medium text-ink-60 hover:text-ink transition-colors">
+        ← Back to settings
+      </a>
+    </div>
+
+  </div>
+</section>
+{% endblock %}

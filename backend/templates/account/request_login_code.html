@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Sign in" %} | Art Leptis{% endblock %}
+
+{% block content %}
+<section class="artleptis">
+  <div class="mx-auto max-w-md px-4 sm:px-6 py-section-sm">
+
+    <div class="reveal-up text-center">
+      <span class="label">{% trans "Account" %}</span>
+      <h1 class="headline-serif mt-3 text-4xl">{% trans "Sign in" %}</h1>
+    </div>
+
+    <div class="mt-8 bg-surface shadow-sm p-6 sm:p-8 reveal-up" style="border-radius: var(--radius-lg)">
+      {% if form.non_field_errors %}
+        <div class="border-l-[3px] border-red-600 bg-cream/60 px-4 py-3" style="border-radius: var(--radius-md)">
+          <p class="text-sm font-medium text-red-700">{{ form.non_field_errors }}</p>
+        </div>
+      {% endif %}
+
+      <p class="text-sm text-ink-60 leading-relaxed">
+        {% trans "Enter your email and we’ll send you a sign-in code." %}
+      </p>
+
+      <div class="rule mt-6 mb-6"></div>
+
+      <form method="post" class="space-y-5">
+        {% csrf_token %}
+
+        {% if redirect_field_value %}
+          <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}">
+        {% endif %}
+
+        {# allauth uses RequestLoginCodeForm; field may be 'email' or 'login' depending on config #}
+        {% with email_field=form.login|default:form.email %}
+          <div>
+            <label class="block text-sm font-medium text-ink-60 mb-1.5" for="{{ email_field.id_for_label }}">
+              {% trans "Email" %}
+            </label>
+            {{ email_field }}
+            {% if email_field.errors %}
+              <p class="mt-1 text-xs text-red-600">{{ email_field.errors.0 }}</p>
+            {% endif %}
+          </div>
+        {% endwith %}
+
+        <button type="submit" class="btn-primary w-full">
+          {% trans "Email me a sign-in code" %}
+        </button>
+
+        <div class="flex items-center justify-between pt-2">
+          <a href="{% url 'account_signup' %}"
+             class="text-[11px] font-bold uppercase tracking-[0.12em] text-ink-60 border-b border-rule pb-0.5 hover:text-ink hover:border-ink transition-colors">
+            {% trans "Create account" %}
+          </a>
+          <a href="{% url 'account_login' %}"
+             class="text-[11px] font-bold uppercase tracking-[0.12em] text-ink-60 border-b border-rule pb-0.5 hover:text-ink hover:border-ink transition-colors">
+            {% trans "Back to sign-in" %}
+          </a>
+        </div>
+      </form>
+    </div>
+
+    <div class="mt-4 flex items-center justify-between">
+      <span class="text-meta">SEC. AUTH</span>
+      <span class="text-meta">Art Leptis</span>
+    </div>
+
+  </div>
+</section>
+{% endblock %}
