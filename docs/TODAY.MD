@@ -1,22 +1,53 @@
-# Today's Implementation Tasks
+# Development Roadmap
 
-## Implementation Order
+## ✅ Completed
 
-1. Add CustomerProfile + Address models
-2. Migrate
-3. Add forms (AddressForm + ProfileForm)
-4. Add minimal views:
-    - `/account/settings/` (name + phone)
-    - `/account/addresses/` (list/create)
-    - `/account/addresses/<id>/edit`
-    - `/account/addresses/<id>/delete`
-    - `/account/danger-zone/` (delete account)
-5. Tests (start small but real):
-    - model: default address behavior
-    - view: login required
-    - view: user cannot access another user's address
-6. Smoke run: signup → login → add address → logout → login again
+- CustomerProfile + Address models, forms, views, tests
+- Payment provider refactor: extracted `orders/payments/` → dedicated
+  `payments` app
+- All checks green: `mypy .`, `ruff check .`, `pytest`
 
-## Next Steps
+## 🔧 Phase 1 — Unit Tests (per app)
 
-If you want, paste your current `accounts/models.py` (even if empty) and I'll adapt it to fit your existing style + your test structure (`factories.py`, `conftest.py`, `test_models.py`, `test_views.py`) without bloating anything.
+Go through each app and ensure tests are water-tight:
+
+1. **accounts** — models, views, signals, address logic
+2. **products** — models, managers, selectors, views
+3. **cart** — services, context processors, views
+4. **orders** — services, signing, tracking, views
+5. **payments** — provider base, PayPal provider, service loader
+6. **core** — middleware, views, sitemaps
+
+## 🔗 Phase 2 — Cross-App Integration Tests
+
+Verify contracts between apps hold under real conditions:
+
+- Cart → Orders (stock reservation, race conditions)
+- Orders → Payments (provider creation, capture, failure handling)
+- Orders → Tracking (paid-only creation, status transitions)
+- Accounts → Orders (user orders, guest orders, signed links)
+
+## 🧪 Phase 3 — E2E Tests
+
+Full user flows with Playwright/browser:
+
+- Auth flow (signup → verify → login → logout)
+- Shop + checkout flow (browse → cart → pay → confirmation)
+- Guest checkout flow (email → pay → signed receipt link)
+- Account management (addresses, settings, danger zone)
+- UI + accessibility checks
+
+## 🐳 Phase 4 — Docker + Nginx
+
+- Dockerfile (multi-stage: deps → static build → runtime)
+- docker-compose (Django + Postgres + Nginx)
+- Nginx config (static serving, reverse proxy, headers)
+- CI pipeline update (run tests inside container)
+
+## 🎨 Phase 5 — Final Polish
+
+- Template styling pass (consistency, responsive, dark edges)
+- Error pages (400, 403, 404, 500)
+- Loading states, empty states, toast messages
+- Lighthouse audit (performance, a11y, SEO)
+- README update with setup instructions
