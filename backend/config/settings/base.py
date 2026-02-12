@@ -228,7 +228,7 @@ CLOUDINARY_STORAGE = {
 }
 
 # Payments
-PAYMENT_PROVIDER = "backend.apps.orders.payments.providers.paypal.PayPalProvider"
+PAYMENT_PROVIDER = "backend.apps.payments.providers.paypal.PayPalProvider"
 
 PAYPAL_ENV = config("PAYPAL_ENV", default="sandbox")
 PAYPAL_CLIENT_ID = config("PAYPAL_CLIENT_ID", default="")

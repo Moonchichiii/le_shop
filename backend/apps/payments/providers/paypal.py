@@ -7,11 +7,7 @@ import requests
 from django.conf import settings
 
 from backend.apps.orders.models import Order
-from backend.apps.orders.payments.base import (
-    CaptureResult,
-    PaymentProvider,
-    PaymentResult,
-)
+from backend.apps.payments.base import CaptureResult, PaymentProvider, PaymentResult
 
 
 @dataclass(frozen=True)
@@ -124,7 +120,6 @@ class PayPalProvider(PaymentProvider):
 
         paypal_id = data["id"]
 
-        # Find the approval redirect link
         redirect_url: str | None = None
         for link in data.get("links", []):
             if link.get("rel") == "approve":

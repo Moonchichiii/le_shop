@@ -5,7 +5,7 @@ from django.contrib.messages import get_messages
 from django.urls import reverse
 
 from backend.apps.orders.models import Order
-from backend.apps.orders.payments.base import CaptureResult, PaymentResult
+from backend.apps.payments.base import CaptureResult, PaymentResult
 
 
 @pytest.mark.django_db

@@ -11,9 +11,9 @@ from django.views.decorators.http import require_http_methods
 
 from backend.apps.accounts.models import User
 from backend.apps.cart.services import Cart
+from backend.apps.payments.services import get_payment_provider
 
 from .models import Order
-from .payments.services import get_payment_provider
 from .services import reserve_stock_and_create_pending_order
 from .signing import sign_order_id, unsign_order_id, unsign_order_track_id
 from .tracking_services import get_or_create_tracking
