@@ -11,7 +11,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent.parent
 SECRET_KEY = config("SECRET_KEY", default="django-insecure-dev-key")
 ALLOWED_HOSTS = config(
     "ALLOWED_HOSTS",
-    default="127.0.0.1,localhost",
+    default="127.0.0.1,localhost,le-shop.onrender.com",
     cast=Csv(),
 )
 
