@@ -63,3 +63,5 @@ build/
 .env
 backend/static/css/output.css
 output.css
+
+tmp/
